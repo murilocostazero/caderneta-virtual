@@ -1,0 +1,71 @@
+/* HomeScreen.css */
+
+/* Estilos gerais */
+.home-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* Barra de navegação lateral */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    background-color: #007bff;
+    color: white;
+    padding-top: 20px;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 15px 0;
+    cursor: pointer;
+    color: #FFF;
+}
+
+.nav-item label {
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.icon {
+    font-size: 24px;
+    fill: #FFF;
+    margin-left: 8px;
+}
+
+/* Conteúdo principal */
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
+/* Barra de navegação inferior em telas pequenas */
+@media (max-width: 768px) {
+    .home-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+        height: 60px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        padding: 0;
+        z-index: 1000;
+    }
+
+    .nav-item {
+        margin: 0;
+        font-size: 10px;
+    }
+}

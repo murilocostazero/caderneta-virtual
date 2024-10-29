@@ -1,0 +1,52 @@
+/* NavBar.css */
+
+.navbar {
+    width: 100%;
+    height: 60px;
+    background-color: #fafafa;
+    padding: 10px 20px; /* Espaçamento interno */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para efeito de profundidade */
+  }
+  
+  .navbar-content {
+    display: flex;
+    justify-content: flex-end; /* Espaça o conteúdo */
+    align-items: center; /* Alinha verticalmente */
+    max-width: 1200px; /* Largura máxima da NavBar */
+    margin: 0 auto; /* Centraliza a NavBar */
+  }
+
+  .right-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .icon-container {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+  }
+
+  .icon {
+    fill: #FFF;
+    font-size: 20px;
+  }
+
+  .user-container p {
+    text-decoration: underline;
+    color: rgba(0, 0, 0, 0.8);
+    cursor: pointer;
+  }
+  
+  .username {
+    color: #000; /* Cor do texto do nome do usuário */
+    font-size: 16px; /* Tamanho da fonte */
+  }
+
+  
