@@ -6,7 +6,7 @@ import Login from './pages/Login/Login';
 const routes = (
   <Router>
     <Routes>
-    <Route path="/" exact element={<Home />} />
+      <Route path="/" exact element={<Home />} />
       <Route path="/login" exact element={<Login />} />
     </Routes>
   </Router>

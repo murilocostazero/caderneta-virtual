@@ -1,9 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Home.css'
 import { FaSchool, FaUserTie, FaBook, FaChalkboardTeacher, FaUserGraduate, FaClipboard } from 'react-icons/fa';
 import NavBar from '../../components/NavBar/NavBar';
+import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../../utils/axiosInstance';
 
 const Home = () => {
+  const [userInfo, setUserInfo] = useState(null);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getUserInfo();
+  },[]);
+
+  const getUserInfo = async () => {
+    try {
+      const response = await axiosInstance.get('/get-user');
+      if (response.data.user) {
+        setUserInfo(response.data.user);
+      }
+    } catch (error) {
+      if (error.response.status === 401) {
+        localStorage.clear();
+        navigate('/login');
+      }
+    }
+  }
+
   return (
     <div>
       <NavBar />

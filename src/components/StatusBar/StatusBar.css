@@ -1,0 +1,21 @@
+.status-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+    opacity: 0.9;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+.status-success {
+    background-color: #28a745; /* verde */
+}
+
+.status-error {
+    background-color: #dc3545; /* vermelho */
+}
