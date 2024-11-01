@@ -8,7 +8,7 @@ import StatusBar from '../StatusBar/StatusBar';
 const School = ({ userInfo }) => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [statusMessage, setStatusMessage] = useState(null);
-    const [schoolToEdit, setSchoolToEdit] = useState(null);
+    const [selectedSchool, setSelectedSchool] = useState(null);
     const [schools, setSchools] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -55,6 +55,39 @@ const School = ({ userInfo }) => {
         setLoading(false);
     }
 
+    const onEditSchool = async (school) => {
+        setLoading(true);
+        try {
+            const response = await axiosInstance.put(`/school/${school._id}`, {
+                name: school.name,
+                email: school.email,
+                phone: school.phone,
+                inepCode: school.inepCode,
+                address: school.address,
+                cnpj: school.cnpj,
+                userId: userInfo._id
+            }, {
+                timeout: 10000
+            });
+
+            if (response.status >= 400 && response.status <= 501) {
+                showStatusBar({ message: response.data.message, type: 'error' });
+            } else {
+                onCloseModal();
+                showStatusBar({ message: 'Alterações feitas', type: 'success' });
+                getSchools();
+            }
+        } catch (error) {
+            console.log(error)
+            if (error.code === 'ERR_NETWORK') {
+                showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+            } else {
+                showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+            }
+        }
+        setLoading(false);
+    }
+
     const getSchools = async () => {
         setLoading(true);
         try {
@@ -79,12 +112,38 @@ const School = ({ userInfo }) => {
         setLoading(false);
     }
 
-    const onSelectSchool = (school) => {
+    const onSelectSchool = async (school) => {
+        await setSelectedSchool(school);
+        setModalOpen(true);
+    }
 
+    const onRemoveSchool = async (schoolId) => {
+        setLoading(true);
+        try {
+            const response = await axiosInstance.delete(`/school/${schoolId}`, {
+                timeout: 10000
+            });
+
+            if (response.status >= 400 && response.status <= 501) {
+                showStatusBar({ message: response.data.message, type: 'error' });
+            } else {
+                onCloseModal();
+                showStatusBar({ message: 'Alterações feitas', type: 'success' });
+                getSchools();
+            }
+        } catch (error) {
+            console.log(error)
+            if (error.code === 'ERR_NETWORK') {
+                showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+            } else {
+                showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+            }
+        }
+        setLoading(false);
     }
 
     const onCloseModal = () => {
-        setSchoolToEdit(null);
+        setSelectedSchool(null);
         setModalOpen(false);
     }
 
@@ -96,7 +155,10 @@ const School = ({ userInfo }) => {
                         isModalOpen={isModalOpen}
                         onClose={() => onCloseModal()}
                         onSubmit={(school) => onAddSchool(school)}
+                        onEdit={(school) => onEditSchool(school)}
+                        onRemove={(schoolId) => onRemoveSchool(schoolId)}
                         isAdding={loading}
+                        selectedSchool={selectedSchool}
                     /> :
                     <div />
             }

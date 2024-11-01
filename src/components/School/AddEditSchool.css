@@ -19,6 +19,8 @@
     max-width: 400px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-height: 400px; /* Defina a altura máxima desejada */
+    overflow-y: auto; /* Adiciona scroll vertical quando necessário */
 }
 
 .modal h2 {
@@ -81,6 +83,12 @@
     color: #333;
 }
 
+.cancel-button:hover {
+    background-color: #f02327;
+    color: white;
+    font-weight: bold;
+}
+
 .modal-buttons button:hover {
     opacity: 0.9;
 }
@@ -90,4 +98,52 @@
     font-weight: bold;
     text-align: center;
     font-size: 14px;
+}
+
+.close-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.trash-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.trash-button {
+    flex: 1;
+    margin-top: 8px;
+    background-color: #f02327;
+    color: white;
+    font-weight: bold;
+    padding: 10px; /* Adiciona um pouco de preenchimento para que a borda fique mais evidente */
+    box-sizing: border-box; /* Garante que o padding não afete a largura total do botão */
+    cursor: pointer; /* Muda o cursor para indicar que é clicável */
+}
+
+.cancel-trash-button {
+    margin-right: 8px;
+    flex: 1;
+    margin-top: 8px;
+    background-color: #ccc;
+    color: white;
+    font-weight: bold;
+    padding: 10px; /* Adiciona um pouco de preenchimento para que a borda fique mais evidente */
+    box-sizing: border-box; /* Garante que o padding não afete a largura total do botão */
+    cursor: pointer; /* Muda o cursor para indicar que é clicável */
+}
+
+.trash-buttons-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.close-icon {
+    fill: rgba(0, 0, 0, 0.2);
+    font-size: 20px;
+    cursor: pointer
 }

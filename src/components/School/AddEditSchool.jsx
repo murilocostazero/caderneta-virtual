@@ -2,17 +2,19 @@ import React, { useState } from 'react';
 import InputMask from "react-input-mask";
 import { validateEmail } from '../../utils/helper';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import { MdOutlineClose } from "react-icons/md";
 import './AddEditSchool.css';
 
-const AddSchoolModal = ({ isModalOpen, onClose, onSubmit, isAdding }) => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
-    const [inepCode, setInepCode] = useState('');
-    const [address, setAddress] = useState('');
-    const [cnpj, setCnpj] = useState('');
+const AddSchoolModal = ({ isModalOpen, onClose, onSubmit, onEdit, onRemove, isAdding, selectedSchool }) => {
+    const [name, setName] = useState(selectedSchool ? selectedSchool.name : '');
+    const [email, setEmail] = useState(selectedSchool ? selectedSchool.email : '');
+    const [phone, setPhone] = useState(selectedSchool ? selectedSchool.phone : '');
+    const [inepCode, setInepCode] = useState(selectedSchool ? selectedSchool.inepCode : '');
+    const [address, setAddress] = useState(selectedSchool ? selectedSchool.address : '');
+    const [cnpj, setCnpj] = useState(selectedSchool ? selectedSchool.cnpj : '');
     const [isErrorVisible, setErrorVisible] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState('');
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
     const showError = (message) => {
         setErrorMessage(message);
@@ -34,8 +36,18 @@ const AddSchoolModal = ({ isModalOpen, onClose, onSubmit, isAdding }) => {
             showError('Todos os campos são obrigatórios');
         } else if (!validateEmail(email)) {
             showError('Insira um email válido');
-        } else {
+        } else if (!selectedSchool) {
             onSubmit({
+                name: name,
+                email: email,
+                phone: phone,
+                inepCode: inepCode,
+                address: address,
+                cnpj: cnpj
+            });
+        } else {
+            onEdit({
+                _id: selectedSchool._id,
                 name: name,
                 email: email,
                 phone: phone,
@@ -51,7 +63,11 @@ const AddSchoolModal = ({ isModalOpen, onClose, onSubmit, isAdding }) => {
     return (
         <div className="modal-overlay">
             <div className="modal">
-                <h2>Adicionar nova escola</h2>
+                <div className='close-container'>
+                    <MdOutlineClose className='close-icon' onClick={() => onClose()} />
+
+                </div>
+                <h2>{selectedSchool ? 'Editar dados da escola' : 'Adicionar nova escola'}</h2>
                 <div>
                     <label>
                         Nome
@@ -83,11 +99,29 @@ const AddSchoolModal = ({ isModalOpen, onClose, onSubmit, isAdding }) => {
                         isErrorVisible ?
                             <p className='error-message'>{errorMessage}</p> :
                             isAdding ?
-                            <LoadingSpinner /> :
-                            <>
-                                <button onClick={onClose} className="cancel-button">Cancelar</button>
-                                <button onClick={handleSubmit} className="add-button">Adicionar</button>
-                            </>
+                                <LoadingSpinner /> :
+                                showConfirmation ?
+                                    <div className='trash-container'>
+                                        <p>Será impossível desfazer a exclusão da escola. Deseja prosseguir?</p>
+                                        <div className='trash-buttons-container'>
+                                            <button className='cancel-trash-button' onClick={() => setShowConfirmation(false)}>
+                                                Cancelar
+                                            </button>
+                                            <button className='trash-button' onClick={() => onRemove(selectedSchool._id)}>
+                                                PROSSEGUIR
+                                            </button>
+                                        </div>
+                                    </div> :
+                                    <>
+                                        <button onClick={() => setShowConfirmation(true)} className="cancel-button">Excluir escola</button>
+                                        <button onClick={handleSubmit} className="add-button">
+                                            {
+                                                selectedSchool ?
+                                                    'Salvar alterações' :
+                                                    'Adicionar'
+                                            }
+                                        </button>
+                                    </>
                     }
                 </div>
             </div>
