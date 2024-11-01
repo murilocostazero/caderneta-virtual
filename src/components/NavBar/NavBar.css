@@ -1,10 +1,10 @@
 /* NavBar.css */
 
 .navbar {
+  padding: 8px;
     width: 100%;
     height: 60px;
     background-color: #fafafa;
-    padding: 10px 20px; /* Espaçamento interno */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para efeito de profundidade */
   }
   
@@ -12,8 +12,6 @@
     display: flex;
     justify-content: flex-end; /* Espaça o conteúdo */
     align-items: center; /* Alinha verticalmente */
-    max-width: 1200px; /* Largura máxima da NavBar */
-    margin: 0 auto; /* Centraliza a NavBar */
   }
 
   .right-container {
@@ -30,7 +28,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 8px;
+    margin-left: 16px;
   }
 
   .icon {
@@ -42,6 +40,7 @@
     text-decoration: underline;
     color: rgba(0, 0, 0, 0.8);
     cursor: pointer;
+    text-align: right;
   }
   
   .username {

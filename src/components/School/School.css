@@ -1,0 +1,97 @@
+.school-container {
+    height: 100vh;
+    display: flex;
+    /* Usado para centralizar o conteúdo, se necessário */
+    flex-direction: column;
+    /* Direção do conteúdo, pode ajustar conforme necessário */
+    align-items: center;
+    /* Alinhamento horizontal do conteúdo */
+    justify-content: center;
+    /* Alinhamento vertical do conteúdo */
+    background-color: white;
+    /* Cor de fundo (pode ajustar) */
+    overflow: hidden;
+    /* Esconde qualquer excesso de conteúdo que ultrapasse a tela */
+    position: relative;
+    /* Mantém o contexto de posição para elementos filhos, como o botão fixo */
+    padding: 20px;
+    /* Ajuste de padding conforme necessário */
+    box-sizing: border-box;
+}
+
+.circular-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #0166ff;
+    /* Cor de fundo azul */
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    position: fixed;
+    /* Para fixar no canto inferior direito */
+    bottom: 20px;
+    right: 20px;
+}
+
+.circular-button:hover {
+    background-color: #0056b3;
+    /* Cor de fundo ao passar o mouse */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+.circular-button:active {
+    background-color: #004494;
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+}
+
+.icon {
+    fill: white;
+    font-size: 22px;
+}
+
+/* Estilo do contêiner da lista de escolas */
+.school-list {
+    display: flex;
+    overflow-x: auto;
+    padding: 10px;
+    gap: 15px;
+    scroll-snap-type: x mandatory;
+}
+
+/* Estilo de cada cartão de escola */
+.school-card {
+    flex: 0 0 auto;
+    min-width: 200px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    scroll-snap-align: start;
+}
+
+/* Animação ao passar o mouse sobre o cartão */
+.school-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Estilo do texto */
+.school-card h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+}
+
+.school-card p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #555;
+}

@@ -43,7 +43,6 @@
 /* Conteúdo principal */
 .content {
     flex: 1;
-    padding: 20px;
 }
 
 /* Barra de navegação inferior em telas pequenas */

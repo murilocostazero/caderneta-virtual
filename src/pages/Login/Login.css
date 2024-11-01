@@ -49,7 +49,7 @@
   }
   
   .input-group:focus-within {
-    border-bottom: 1px solid #007bff;
+    border-bottom: 1px solid #0166ff;
   }
   
   .icon {
@@ -83,7 +83,7 @@
   .login-form button {
     margin-top: 20px;
     padding: 10px;
-    background-color: #007bff;
+    background-color: #0166ff;
     color: white;
     font-weight: bold;
     font-size: 14px;
