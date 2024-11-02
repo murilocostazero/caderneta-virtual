@@ -8,7 +8,7 @@ const StatusBar = ({ message, type, onClose }) => {
         const timer = setTimeout(() => {
             setIsVisible(false);
             if (onClose) onClose();
-        }, 4000); // 4 segundos
+        }, 2000); // 2 segundos
 
         return () => clearTimeout(timer);
     }, [onClose]);

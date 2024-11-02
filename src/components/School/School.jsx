@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './School.css';
-import { MdOutlineAdd, MdCheckCircle, MdEdit } from "react-icons/md";
+import { MdOutlineAdd, MdCheckCircle, MdEdit, MdClose } from "react-icons/md";
 import AddEditSchool from './AddEditSchool';
 import axiosInstance from '../../utils/axiosInstance';
 import StatusBar from '../StatusBar/StatusBar';
 
-const School = ({ userInfo }) => {
+const School = ({ userInfo, setGlobalSchool }) => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [statusMessage, setStatusMessage] = useState(null);
     const [selectedSchool, setSelectedSchool] = useState(null);
     const [schools, setSchools] = useState([]);
     const [loading, setLoading] = useState(false);
-
-    const [lastSelectedSchool, setLastSelectedSchool] = useState(null);
-    const [hoveredSchool, setHoveredSchool] = useState(null); // Estado para rastrear qual escola está sendo "hovered"
+    const [searchQuery, setSearchQuery] = useState('');
+    const [hoveredSchool, setHoveredSchool] = useState(null);
 
     useEffect(() => {
         getSchools();
@@ -149,7 +148,7 @@ const School = ({ userInfo }) => {
         setModalOpen(false);
     }
 
-    const handleSelectSchool = async (schoolId) => {
+    const handleSelectSchool = async (school) => {
         //Diferende do onSelectSchool, que seleciona a escola e abre a modal para editá-la. 
         //o handleSelectSchool serve pra mandarmos pro banco qual será a escola a carregar os dados
         //de turmas, alunos e etc.
@@ -157,7 +156,7 @@ const School = ({ userInfo }) => {
         setLoading(true);
         try {
             const response = await axiosInstance.put(`/update-last-school/${userInfo._id}`, {
-                schoolId: schoolId
+                schoolId: school._id
             }, {
                 timeout: 10000
             });
@@ -165,9 +164,7 @@ const School = ({ userInfo }) => {
             if (response.status >= 400 && response.status <= 501) {
                 showStatusBar({ message: response.data.message, type: 'error' });
             } else {
-                setLastSelectedSchool(schoolId);
-                getSchools();
-                showStatusBar({ message: response.data.message, type: 'success' });
+                setGlobalSchool(school);
             }
         } catch (error) {
             console.log(error)
@@ -179,6 +176,10 @@ const School = ({ userInfo }) => {
         }
         setLoading(false);
     };
+
+    const filteredSchools = schools.filter(school =>
+        school.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
         <div className='school-container'>
@@ -196,14 +197,30 @@ const School = ({ userInfo }) => {
                     <div />
             }
 
+            {/* Barra de Pesquisa com Botão de Limpeza */}
+            <div className="search-bar-container">
+                <input
+                    type="text"
+                    className="search-bar"
+                    placeholder="Buscar escola..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                {searchQuery && (
+                    <button className="clear-search" onClick={() => setSearchQuery('')}>
+                        <MdClose size={20} />
+                    </button>
+                )}
+            </div>
+
             <div className="school-list">
-                {schools.map((school) => (
+                {filteredSchools.map((school) => (
                     <div
                         key={school._id}
                         className="school-card"
                         onMouseEnter={() => setHoveredSchool(school._id)}
                         onMouseLeave={() => setHoveredSchool(null)}
-                        style={{ backgroundColor: !userInfo.lastSelectedSchool || userInfo.lastSelectedSchool !== school._id ? '#FFF' : 'rgba(0, 123, 255, 0.17)'}}
+                        style={{ backgroundColor: !userInfo.lastSelectedSchool || userInfo.lastSelectedSchool !== school._id ? '#FFF' : 'rgba(0, 123, 255, 0.17)' }}
                     >
                         <div className='school-data'>
                             <h3>{school.name}</h3>
@@ -215,7 +232,7 @@ const School = ({ userInfo }) => {
                             <div className='school-buttons'>
                                 <button
                                     className="check-button"
-                                    onClick={() => handleSelectSchool(school._id)}
+                                    onClick={() => handleSelectSchool(school)}
                                 >
                                     <MdCheckCircle size={24} />
                                 </button>

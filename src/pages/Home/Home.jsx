@@ -10,12 +10,13 @@ import Teacher from '../../components/Teacher/Teacher';
 const Home = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [selectedPage, setSelectedPage] = useState('school');
+  const [globalSchool, setGlobalSchool] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     getUserInfo();
-  }, []);
+  }, [userInfo]);
 
   const getUserInfo = async () => {
     try {
@@ -40,13 +41,13 @@ const Home = () => {
             className="nav-item"
             onClick={() => setSelectedPage('school')}>
             <FaSchool className="icon" />
-            <label>Escola</label>
+            <label>Escolas</label>
           </div>
           <div
             className="nav-item"
             onClick={() => setSelectedPage('teacher')}>
             <FaUserTie className="icon" />
-            <label>Professor</label>
+            <label>Professores</label>
           </div>
           <div
             className="nav-item"
@@ -78,7 +79,7 @@ const Home = () => {
             !userInfo ?
               <div /> :
               selectedPage === 'school' ?
-                <School userInfo={userInfo} /> :
+                <School userInfo={userInfo} setGlobalSchool={(school) => setGlobalSchool(school)} /> :
                 <Teacher />
           }
         </main>

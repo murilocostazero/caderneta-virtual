@@ -109,20 +109,62 @@
     background-color: transparent;
     border: none;
     cursor: pointer;
-    color: #4CAF50; /* Cor do ícone de check */
+    color: #4CAF50;
+    /* Cor do ícone de check */
 }
 
 .check-button:hover {
-    color: #388E3C; /* Cor quando o mouse estiver sobre o botão */
+    color: #388E3C;
+    /* Cor quando o mouse estiver sobre o botão */
 }
 
 .edit-button {
     background-color: transparent;
     border: none;
     cursor: pointer;
-    color: #fdcc16; /* Cor do ícone de edit */
+    color: #fdcc16;
+    /* Cor do ícone de edit */
 }
 
 .edit-button:hover {
-    color: #fbd449; /* Cor quando o mouse estiver sobre o botão */
+    color: #fbd449;
+    /* Cor quando o mouse estiver sobre o botão */
+}
+
+.search-bar-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 16px;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: box-shadow 0.3s ease;
+    padding-right: 36px; /* Espaço para o botão de limpeza */
+}
+
+.search-bar:focus {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.clear-search {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888;
+}
+
+.clear-search:hover {
+    color: #000;
 }
