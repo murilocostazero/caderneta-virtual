@@ -57,31 +57,27 @@
     font-size: 22px;
 }
 
-/* Estilo do contêiner da lista de escolas */
 .school-list {
     display: flex;
     overflow-x: auto;
-    padding: 10px;
-    gap: 15px;
-    scroll-snap-type: x mandatory;
+    gap: 16px;
+    padding: 16px;
 }
 
 /* Estilo de cada cartão de escola */
 .school-card {
-    flex: 0 0 auto;
-    min-width: 200px;
-    padding: 15px;
-    background-color: #fff;
+    position: relative;
+    padding: 16px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out;
-    scroll-snap-align: start;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
-/* Animação ao passar o mouse sobre o cartão */
 .school-card:hover {
-    transform: translateY(-5px);
+    transform: scale(1.02);
 }
 
 /* Estilo do texto */
@@ -94,4 +90,39 @@
     margin: 5px 0;
     font-size: 14px;
     color: #555;
+}
+
+.school-data {
+    flex: 1;
+}
+
+.school-buttons {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 8px;
+}
+
+.check-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #4CAF50; /* Cor do ícone de check */
+}
+
+.check-button:hover {
+    color: #388E3C; /* Cor quando o mouse estiver sobre o botão */
+}
+
+.edit-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #fdcc16; /* Cor do ícone de edit */
+}
+
+.edit-button:hover {
+    color: #fbd449; /* Cor quando o mouse estiver sobre o botão */
 }

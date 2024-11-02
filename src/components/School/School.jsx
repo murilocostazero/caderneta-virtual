@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './School.css';
-import { MdOutlineAdd } from "react-icons/md";
+import { MdOutlineAdd, MdCheckCircle, MdEdit } from "react-icons/md";
 import AddEditSchool from './AddEditSchool';
 import axiosInstance from '../../utils/axiosInstance';
 import StatusBar from '../StatusBar/StatusBar';
@@ -11,6 +11,9 @@ const School = ({ userInfo }) => {
     const [selectedSchool, setSelectedSchool] = useState(null);
     const [schools, setSchools] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const [lastSelectedSchool, setLastSelectedSchool] = useState(null);
+    const [hoveredSchool, setHoveredSchool] = useState(null); // Estado para rastrear qual escola está sendo "hovered"
 
     useEffect(() => {
         getSchools();
@@ -98,7 +101,6 @@ const School = ({ userInfo }) => {
             if (response.status !== 200) {
                 showStatusBar({ message: 'Erro ao buscar escolas', type: 'error' });
             } else {
-                console.log('GET SCHOOLs',response.data)
                 setSchools(response.data);
             }
         } catch (error) {
@@ -147,6 +149,37 @@ const School = ({ userInfo }) => {
         setModalOpen(false);
     }
 
+    const handleSelectSchool = async (schoolId) => {
+        //Diferende do onSelectSchool, que seleciona a escola e abre a modal para editá-la. 
+        //o handleSelectSchool serve pra mandarmos pro banco qual será a escola a carregar os dados
+        //de turmas, alunos e etc.
+
+        setLoading(true);
+        try {
+            const response = await axiosInstance.put(`/update-last-school/${userInfo._id}`, {
+                schoolId: schoolId
+            }, {
+                timeout: 10000
+            });
+
+            if (response.status >= 400 && response.status <= 501) {
+                showStatusBar({ message: response.data.message, type: 'error' });
+            } else {
+                setLastSelectedSchool(schoolId);
+                getSchools();
+                showStatusBar({ message: response.data.message, type: 'success' });
+            }
+        } catch (error) {
+            console.log(error)
+            if (error.code === 'ERR_NETWORK') {
+                showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+            } else {
+                showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+            }
+        }
+        setLoading(false);
+    };
+
     return (
         <div className='school-container'>
             {
@@ -168,11 +201,32 @@ const School = ({ userInfo }) => {
                     <div
                         key={school._id}
                         className="school-card"
-                        onClick={() => onSelectSchool(school)}
+                        onMouseEnter={() => setHoveredSchool(school._id)}
+                        onMouseLeave={() => setHoveredSchool(null)}
+                        style={{ backgroundColor: !userInfo.lastSelectedSchool || userInfo.lastSelectedSchool !== school._id ? '#FFF' : 'rgba(0, 123, 255, 0.17)'}}
                     >
-                        <h3>{school.name}</h3>
-                        <p>Email: {school.email}</p>
-                        <p>Telefone: {school.phone}</p>
+                        <div className='school-data'>
+                            <h3>{school.name}</h3>
+                            <p>Email: {school.email}</p>
+                            <p>Telefone: {school.phone}</p>
+                        </div>
+
+                        {hoveredSchool === school._id && (
+                            <div className='school-buttons'>
+                                <button
+                                    className="check-button"
+                                    onClick={() => handleSelectSchool(school._id)}
+                                >
+                                    <MdCheckCircle size={24} />
+                                </button>
+                                <button
+                                    className="edit-button"
+                                    onClick={() => onSelectSchool(school)}
+                                >
+                                    <MdEdit size={24} />
+                                </button>
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>
