@@ -6,13 +6,18 @@ import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosInstance';
 import School from '../../components/School/School';
 import Teacher from '../../components/Teacher/Teacher';
+import StatusBar from '../../components/StatusBar/StatusBar';
+import NoSelectedSchool from '../../components/NoSelectedSchool/NoSelectedSchool';
 
 const Home = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [selectedPage, setSelectedPage] = useState('school');
   const [globalSchool, setGlobalSchool] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [statusMessage, setStatusMessage] = useState(null);
 
   const navigate = useNavigate();
+  const showStatusBar = (status) => setStatusMessage({ message: status.message, type: status.type });
 
   useEffect(() => {
     getUserInfo();
@@ -23,6 +28,7 @@ const Home = () => {
       const response = await axiosInstance.get('/get-user');
       if (response.data.user) {
         setUserInfo(response.data.user);
+        if (response.data.user.lastSelectedSchool) getLastSelectedSchool(response.data.user.lastSelectedSchool);
       }
     } catch (error) {
       if (error.status === 401) {
@@ -30,6 +36,29 @@ const Home = () => {
         navigate('/login');
       }
     }
+  }
+
+  const getLastSelectedSchool = async (schoolId) => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get(`/school/${schoolId}`, {
+        timeout: 10000
+      });
+
+      if (response.status !== 200) {
+        showStatusBar({ message: 'Erro ao buscar escola', type: 'error' });
+      } else {
+        setGlobalSchool(response.data);
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+      } else {
+        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+      }
+    }
+    setLoading(false);
   }
 
   return (
@@ -43,12 +72,16 @@ const Home = () => {
             <FaSchool className="icon" />
             <label>Escolas</label>
           </div>
-          <div
-            className="nav-item"
-            onClick={() => setSelectedPage('teacher')}>
-            <FaUserTie className="icon" />
-            <label>Professores</label>
-          </div>
+          {
+            userInfo && userInfo.userType === 'manager' ?
+              <div
+                className="nav-item"
+                onClick={() => setSelectedPage('teacher')}>
+                <FaUserTie className="icon" />
+                <label>Professores</label>
+              </div> :
+              <div />
+          }
           <div
             className="nav-item"
             onClick={() => setSelectedPage('subject')}>
@@ -80,10 +113,19 @@ const Home = () => {
               <div /> :
               selectedPage === 'school' ?
                 <School userInfo={userInfo} setGlobalSchool={(school) => setGlobalSchool(school)} /> :
-                <Teacher />
+                selectedPage === 'teacher' && userInfo.lastSelectedSchool ?
+                  <Teacher globalSchool={globalSchool}  /> :
+                  <NoSelectedSchool />
           }
         </main>
       </div>
+      {statusMessage && (
+        <StatusBar
+          message={statusMessage.message}
+          type={statusMessage.type}
+          onClose={() => setStatusMessage(null)}
+        />
+      )}
     </div>
   )
 }

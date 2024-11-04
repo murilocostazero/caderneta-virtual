@@ -168,3 +168,9 @@
 .clear-search:hover {
     color: #000;
 }
+
+.school-title {
+    position: absolute;
+    top: 12px;
+    
+}

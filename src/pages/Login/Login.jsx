@@ -3,15 +3,17 @@ import teacherimg from '../../assets/images/image-teacher.jpg';
 import checkok from '../../assets/images/check-ok.png';
 import { useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaLock, FaUser } from 'react-icons/fa'; // Biblioteca de ícones react-icons
+import { MdPersonAdd } from "react-icons/md";
 import './Login.css';
 import StatusBar from '../../components/StatusBar/StatusBar';
 import axiosInstance from '../../utils/axiosInstance';
 import { validateEmail } from '../../utils/helper';
 
 const Login = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [areaOfExpertise, setAreaOfExpertise] = useState('');
+  const [userType, setUserType] = useState('');
   const [isLogin, setIsLogin] = useState(true);
   const [statusMessage, setStatusMessage] = useState(null);
 
@@ -53,16 +55,17 @@ const Login = () => {
   }
 
   const handleSingup = async () => {
-    if (!email || !password || !areaOfExpertise) {
+    if (!name || !email || !password || !userType) {
       showStatusBar({ message: 'Preencha todos os campos', type: 'error' })
     } else if (!validateEmail(email)) {
       showStatusBar({ message: 'Insira um email válido', type: 'error' })
     } else {
       try {
         const response = await axiosInstance.post('/create-account', {
+          name: name,
           email: email,
           password: password,
-          areaOfExpertise: areaOfExpertise
+          userType: userType
         }, {
           timeout: 10000
         });
@@ -99,8 +102,22 @@ const Login = () => {
         <div className="login-form">
           <p className='title'>Olá, professor(a)</p>
           <p className='subtitle'>Por favor, insira suas credenciais</p>
+
+          {
+            !isLogin ?
+              <div className="input-group">
+                <MdPersonAdd className="login-icon" />
+                <input
+                  type="name"
+                  placeholder="Digite seu nome e sobrenome"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)} />
+              </div> :
+              <div />
+          }
+
           <div className="input-group">
-            <FaEnvelope className="icon" />
+            <FaEnvelope className="login-icon" />
             <input
               type="email"
               placeholder="Digite seu email"
@@ -108,7 +125,7 @@ const Login = () => {
               onChange={(e) => setEmail(e.target.value)} />
           </div>
           <div className="input-group">
-            <FaLock className="icon" />
+            <FaLock className="login-icon" />
             <input
               type="password"
               placeholder="Digite sua senha"
@@ -119,8 +136,8 @@ const Login = () => {
           {
             !isLogin ?
               <div className="input-group">
-                <FaUser className="icon" />
-                <select value={areaOfExpertise} onChange={(e) => setAreaOfExpertise(e.target.value)}>
+                <FaUser className="login-icon" />
+                <select value={userType} onChange={(e) => setUserType(e.target.value)}>
                   <option value="">Selecione sua função</option>
                   <option value="teacher">Professor</option>
                   <option value="manager">Gestor</option>

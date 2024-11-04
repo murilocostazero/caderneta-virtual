@@ -52,9 +52,13 @@
     border-bottom: 1px solid #0166ff;
   }
   
-  .icon {
+  .login-icon {
     margin-right: 10px;
-    color: #aaa;
+    fill: #aaa;
+  }
+
+  .login-icon:hover {
+    fill: #0166ff;
   }
   
   .input-group input {

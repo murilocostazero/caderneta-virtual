@@ -10,7 +10,7 @@ const NavBar = ({ userInfo }) => {
     const onLogout = () => {
         localStorage.clear();
         navigate('/login');
-      }
+    }
 
     return (
         <div className="navbar">
@@ -18,7 +18,7 @@ const NavBar = ({ userInfo }) => {
                 <div className='right-container'>
                     <div className='user-container'>
                         <span className="username">{!userInfo ? 'Carregando' : userInfo.email}</span>
-                        <p onClick={()=> onLogout()}>Sair</p>
+                        <p onClick={() => onLogout()}>Sair</p>
                     </div>
                     <div className='icon-container'>
                         <FaUser className='icon' />

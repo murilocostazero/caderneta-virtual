@@ -198,59 +198,77 @@ const School = ({ userInfo, setGlobalSchool }) => {
             }
 
             {/* Barra de Pesquisa com Botão de Limpeza */}
-            <div className="search-bar-container">
-                <input
-                    type="text"
-                    className="search-bar"
-                    placeholder="Buscar escola..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                {searchQuery && (
-                    <button className="clear-search" onClick={() => setSearchQuery('')}>
-                        <MdClose size={20} />
-                    </button>
-                )}
-            </div>
+            {
+                filteredSchools.length > 0 ?
+                    <div className="search-bar-container">
+                        <input
+                            type="text"
+                            className="search-bar"
+                            placeholder="Buscar escola..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                        {searchQuery && (
+                            <button className="clear-search" onClick={() => setSearchQuery('')}>
+                                <MdClose size={20} />
+                            </button>
+                        )}
+                    </div> :
+                    <div />
+            }
 
             <div className="school-list">
-                {filteredSchools.map((school) => (
-                    <div
-                        key={school._id}
-                        className="school-card"
-                        onMouseEnter={() => setHoveredSchool(school._id)}
-                        onMouseLeave={() => setHoveredSchool(null)}
-                        style={{ backgroundColor: !userInfo.lastSelectedSchool || userInfo.lastSelectedSchool !== school._id ? '#FFF' : 'rgba(0, 123, 255, 0.17)' }}
-                    >
-                        <div className='school-data'>
-                            <h3>{school.name}</h3>
-                            <p>Email: {school.email}</p>
-                            <p>Telefone: {school.phone}</p>
-                        </div>
+                {
+                    filteredSchools.length < 1 ?
+                        <p className='no-school-message'>
+                            {userInfo.userType === 'manager' ? 'Clique no botão + para cadastrar sua escola.' : 'Você ainda não tem acesso à sua escola. Entre em contato com o seu gestor escolar.'}
+                        </p> :
+                        filteredSchools.map((school) => (
+                            <div
+                                key={school._id}
+                                className="school-card"
+                                onMouseEnter={() => setHoveredSchool(school._id)}
+                                onMouseLeave={() => setHoveredSchool(null)}
+                                style={{ backgroundColor: !userInfo.lastSelectedSchool || userInfo.lastSelectedSchool !== school._id ? '#FFF' : 'rgba(0, 123, 255, 0.17)' }}
+                            >
+                                <div className='school-data'>
+                                    <h3>{school.name}</h3>
+                                    <p>Email: {school.email}</p>
+                                    <p>Telefone: {school.phone}</p>
+                                </div>
 
-                        {hoveredSchool === school._id && (
-                            <div className='school-buttons'>
-                                <button
-                                    className="check-button"
-                                    onClick={() => handleSelectSchool(school)}
-                                >
-                                    <MdCheckCircle size={24} />
-                                </button>
-                                <button
-                                    className="edit-button"
-                                    onClick={() => onSelectSchool(school)}
-                                >
-                                    <MdEdit size={24} />
-                                </button>
+                                {
+                                    hoveredSchool === school._id &&
+                                    <div className='school-buttons'>
+                                        <button
+                                            className="check-button"
+                                            onClick={() => handleSelectSchool(school)}
+                                        >
+                                            <MdCheckCircle size={24} />
+                                        </button>
+                                        {
+                                            userInfo.userType === 'manager' ?
+                                                <button
+                                                    className="edit-button"
+                                                    onClick={() => onSelectSchool(school)}
+                                                >
+                                                    <MdEdit size={24} />
+                                                </button> :
+                                                <div />
+                                        }
+                                    </div>
+                                }
                             </div>
-                        )}
-                    </div>
-                ))}
+                        ))}
             </div>
 
-            <button className="circular-button" onClick={handleOpenModal}>
-                <MdOutlineAdd className='icon' />
-            </button>
+            {
+                userInfo.userType !== 'teacher' ?
+                    <button className="circular-button" onClick={handleOpenModal}>
+                        <MdOutlineAdd className='icon' />
+                    </button> :
+                    <div />
+            }
 
             {statusMessage && (
                 <StatusBar
