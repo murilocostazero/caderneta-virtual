@@ -84,4 +84,68 @@
     padding: 12px;
     margin: 8px 0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.teacher-to-edit {
+    flex: 1
+}
+
+.my-teacher-icon {
+    font-size: 24px;
+    fill: #333
+}
+
+.my-teacher-icon:hover {
+    font-size: 24px;
+    fill: #dc3545;
+    cursor: pointer;
+}
+
+.confirm-container {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.confirm-remove-teacher {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff; /* Fundo branco */
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    padding: 16px; /* Espaçamento interno */
+    max-width: 320px;
+}
+
+.confirm-remove-teacher p{
+    text-align: justify;
+}
+
+.confirm-remove-teacher button{
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 800;
+    margin-top: 4px;
+    cursor: pointer;
+}
+
+.ok-button {
+    background-color: #aaa;
+}
+
+.ok-button:hover {
+    background-color: #38b43c;
+}
+
+.cancel-button {
+    background-color: #dc3545;
 }
