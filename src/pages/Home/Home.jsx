@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosInstance';
 import School from '../../components/School/School';
 import Teacher from '../../components/Teacher/Teacher';
+import SchoolSubject from '../../components/SchoolSubject/SchoolSubject';
 import StatusBar from '../../components/StatusBar/StatusBar';
 import NoSelectedSchool from '../../components/NoSelectedSchool/NoSelectedSchool';
 
@@ -84,7 +85,7 @@ const Home = () => {
           }
           <div
             className="nav-item"
-            onClick={() => setSelectedPage('subject')}>
+            onClick={() => setSelectedPage('schoolSubject')}>
             <FaBook className="icon" />
             <label>Disciplinas</label>
           </div>
@@ -115,6 +116,8 @@ const Home = () => {
                 <School userInfo={userInfo} setGlobalSchool={(school) => setGlobalSchool(school)} /> :
                 selectedPage === 'teacher' && userInfo.lastSelectedSchool ?
                   <Teacher globalSchool={globalSchool}  /> :
+                  selectedPage === 'schoolSubject' && userInfo.lastSelectedSchool ?
+                  <SchoolSubject globalSchool={globalSchool}  /> :
                   <NoSelectedSchool />
           }
         </main>
