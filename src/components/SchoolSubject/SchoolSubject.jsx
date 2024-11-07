@@ -5,6 +5,8 @@ import StatusBar from '../StatusBar/StatusBar';
 import './SchoolSubject.css';
 import axiosInstance from '../../utils/axiosInstance';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import { MdAdd, MdClose } from "react-icons/md";
+import TeachersToSelect from '../TeachersToSelect/TeachersToSelect';
 
 const SchoolSubject = ({ globalSchool }) => {
     const [subjects, setSubjects] = useState([]);
@@ -15,7 +17,9 @@ const SchoolSubject = ({ globalSchool }) => {
     const [editMode, setEditMode] = useState(false);
     const [subjectToRemove, setSubjectToRemove] = useState(null);
     const [statusMessage, setStatusMessage] = useState('');
-    const [confirmDelete, setConfirmDelete] = useState(true);
+    const [myTeachers, setMyTeachers] = useState([]);
+    const [showTeachersToSelect, setShowTeachersToSelect] = useState(false);
+    const [selectedSubject, setSelectedSubject] = useState(null);
 
     useEffect(() => {
         getSubjects();
@@ -147,6 +151,67 @@ const SchoolSubject = ({ globalSchool }) => {
         setLoading(false);
     }
 
+    const getSchoolTeachers = async (subject) => {
+        setLoading(true);
+        try {
+            const response = await axiosInstance.get(`/school/teachers/${globalSchool._id}`, {
+                timeout: 10000
+            });
+            // console.log(response.data.teachers)
+            setSelectedSubject(subject);
+            setMyTeachers(response.data.teachers);
+            setShowTeachersToSelect(true);
+        } catch (error) {
+            console.error('Erro ao buscar professores:', error);
+        }
+        setLoading(false);
+    }
+
+    const addTeacher = async (teacher) => {
+        setLoading(true);
+        try {
+            const response = await axiosInstance.put(`/subject/${selectedSubject._id}/add-teacher/${teacher._id}`, {
+                timeout: 10000
+            });
+
+            if (response.status >= 400 && response.status <= 500) {
+                showStatusBar({ message: response.data.message, type: 'error' });
+            } else {
+                getSubjects();
+            }
+        } catch (error) {
+            console.error('Erro ao buscar professores:', error);
+            showStatusBar({ message: 'Erro ao buscar professores', type: 'error' });
+        }
+        setLoading(false);
+        handleCancelModal();
+    }
+
+    const removeTeacher = async (subjectId, teacherId) => {
+        setLoading(true);
+        try {
+            const response = await axiosInstance.put(`/subject/${subjectId}/remove-teacher/${teacherId}`, {
+                timeout: 10000
+            });
+
+            if (response.status >= 400 && response.status <= 500) {
+                showStatusBar({ message: response.data.message, type: 'error' });
+            } else {
+                getSubjects();
+            }
+        } catch (error) {
+            console.error('Erro ao buscar professores:', error);
+            showStatusBar({ message: 'Erro ao buscar professores', type: 'error' });
+        }
+        setLoading(false);
+        handleCancelModal();
+    }
+
+    const handleCancelModal = () => {
+        setSelectedSubject(null);
+        setShowTeachersToSelect(false);
+    }
+
     return (
         <div className="school-subject-container">
             <input
@@ -170,16 +235,38 @@ const SchoolSubject = ({ globalSchool }) => {
                             </div> :
                             filteredSubjects.map(subject => (
                                 <li key={subject._id} className="subject-item">
-                                    <div className="subject-info">
-                                        <h4>{subject.name}</h4>
-                                        <p>Carga Horária: {subject.workload} horas</p>
-                                    </div>
-                                    <div className="subject-actions">
-                                        <button onClick={() => {
-                                            setEditMode(true);
-                                            openModal(subject);
-                                        }}>Editar</button>
-                                        <button onClick={() => setSubjectToRemove(subject)}>Excluir</button>
+                                    <div className='subject-item-container'>
+                                        <div className='row-container'>
+                                            <div className="subject-info">
+                                                <h4>{subject.name}</h4>
+                                                <p>Carga Horária: {subject.workload} horas</p>
+                                            </div>
+                                            <div className="subject-actions">
+                                                <button onClick={() => {
+                                                    setEditMode(true);
+                                                    openModal(subject);
+                                                }}>Editar</button>
+                                                <button onClick={() => setSubjectToRemove(subject)}>Excluir</button>
+                                            </div>
+                                        </div>
+                                        <div className='add-teacher-container'>
+                                            <button className='ok-button' onClick={() => getSchoolTeachers(subject)}>Adicionar professor</button>
+
+                                            <div className='subject-teachers'>
+                                                {
+                                                    subject.teachers.length < 1 ?
+                                                        <p>Nenhum professor adicionado nessa disciplina</p> :
+                                                        subject.teachers.map((teacher) =>
+                                                            <div className='remove-teacher-container' key={teacher._id}>
+                                                                <p>{teacher.name}</p>
+                                                                <button onClick={() => removeTeacher(subject._id, teacher._id)}>
+                                                                    <MdClose className='remove-icon' />
+                                                                </button>
+                                                            </div>
+                                                        )
+                                                }
+                                            </div>
+                                        </div>
                                     </div>
                                 </li>
                             ))}
@@ -188,8 +275,20 @@ const SchoolSubject = ({ globalSchool }) => {
                 setEditMode(false);
                 openModal();
             }}>
-                +
+                <MdAdd />
             </button>
+
+            {/* Modal para selecionar um professor */}
+
+            {
+                showTeachersToSelect &&
+                myTeachers &&
+                <TeachersToSelect
+                    myTeachers={myTeachers}
+                    loading={loading}
+                    addTeacher={(teacher) => addTeacher(teacher)}
+                    handleCancel={() => handleCancelModal()} />
+            }
 
             {/* Modal para adicionar/editar disciplina */}
             {isModalOpen && (

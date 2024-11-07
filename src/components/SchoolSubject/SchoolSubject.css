@@ -26,11 +26,36 @@
     background-color: #fff;
 }
 
+.subject-item-container {
+    flex: 1;
+
+}
+
+.add-teacher-container {}
+
+.add-teacher-container button {
+    border: 0px solid;
+    border-radius: 4px;
+    padding: 8px;
+    margin-top: 8px;
+    background-color: #0166ff;
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.row-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .subject-info h4 {
     margin: 0;
 }
 
-.subject-actions{
+.subject-actions {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -39,7 +64,7 @@
 }
 
 .subject-actions button {
-    margin: 0px 4px; 
+    margin: 0px 4px;
     padding: 8px 12px;
     border: none;
     border-radius: 5px;
@@ -63,7 +88,7 @@
     right: 20px;
     width: 50px;
     height: 50px;
-    background-color: #4caf50;
+    background-color: #0166ff;
     color: #fff;
     font-size: 24px;
     border: none;
@@ -91,7 +116,7 @@
     max-width: 90%;
 }
 
-.modal-content input{
+.modal-content input {
     width: 100%;
     padding: 6px;
     margin: 4px 0px;
@@ -107,7 +132,7 @@
     align-items: center;
 }
 
-.load-hour-input input{
+.load-hour-input input {
     margin-right: 4px;
 }
 
@@ -119,4 +144,28 @@
 
 .error-message {
     text-align: center;
+}
+
+.subject-teachers {
+    margin: 8px;
+}
+
+.remove-teacher-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.remove-teacher-container button {
+    background-color: transparent;
+    border: 0px;
+}
+
+.remove-icon {
+    fill: #666
+}
+
+.remove-icon:hover {
+    fill: #f44336;
+    font-size: 16px;
 }

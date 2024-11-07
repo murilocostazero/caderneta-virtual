@@ -1,0 +1,39 @@
+.select-teacher-cancel-button {
+    border: 0px solid;
+    border-radius: 4px;
+    padding: 8px;
+    font-weight: 800;
+    font-size: 14px;
+    color: #fff;
+    background-color: #f44336;
+    width: 100%;
+    margin-top: 12px;
+    cursor: pointer;
+}
+
+.select-teacher-cancel-button:hover {
+    background-color: #ff3333;
+}
+
+.select-teacher-item {
+    border: 0px solid;
+    padding: 8px;
+    cursor: pointer;
+    margin-bottom: 8px;
+}
+
+.select-teacher-item:hover {
+    background-color: rgba(112, 210, 255, 0.34);
+}
+
+.select-teacher-item p {
+    text-align: center;
+}
+
+.select-teacher-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: black;
+    text-align: center;
+    margin-bottom: 12px;
+}
