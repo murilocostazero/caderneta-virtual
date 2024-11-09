@@ -9,6 +9,7 @@ import Teacher from '../../components/Teacher/Teacher';
 import SchoolSubject from '../../components/SchoolSubject/SchoolSubject';
 import StatusBar from '../../components/StatusBar/StatusBar';
 import NoSelectedSchool from '../../components/NoSelectedSchool/NoSelectedSchool';
+import Classroom from '../../components/Classroom/Classroom';
 
 const Home = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -115,10 +116,12 @@ const Home = () => {
               selectedPage === 'school' ?
                 <School userInfo={userInfo} setGlobalSchool={(school) => setGlobalSchool(school)} /> :
                 selectedPage === 'teacher' && userInfo.lastSelectedSchool ?
-                  <Teacher globalSchool={globalSchool}  /> :
+                  <Teacher globalSchool={globalSchool} /> :
                   selectedPage === 'schoolSubject' && userInfo.lastSelectedSchool ?
-                  <SchoolSubject globalSchool={globalSchool}  /> :
-                  <NoSelectedSchool />
+                    <SchoolSubject globalSchool={globalSchool} /> :
+                    selectedPage === 'classes' && userInfo.lastSelectedSchool ?
+                      <Classroom globalSchool={globalSchool} /> :
+                      <NoSelectedSchool />
           }
         </main>
       </div>
