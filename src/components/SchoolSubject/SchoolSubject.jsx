@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import SchoolSubjectModal from './SchoolSubjectModal';
 import StatusBar from '../StatusBar/StatusBar';
 import './SchoolSubject.css';

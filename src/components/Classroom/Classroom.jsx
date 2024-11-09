@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ClassroomModal from './ClassroomModal'; // Supondo que você tenha um componente Modal
 import axiosInstance from '../../utils/axiosInstance';
-import { MdEdit, MdDelete } from "react-icons/md";
+import { MdEdit, MdDelete, MdAdd } from "react-icons/md";
 import './Classroom.css';
 import StatusBar from '../StatusBar/StatusBar';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
@@ -191,12 +191,12 @@ const Classroom = ({ globalSchool }) => {
             </div>
 
             <button className="add-button" onClick={() => handleOpenModal()}>
-                +
+                <MdAdd />
             </button>
 
             {isModalOpen && (
-                <ClassroomModal 
-                    onClose={handleCloseModal} 
+                <ClassroomModal
+                    onClose={handleCloseModal}
                     handleSaveClassroom={(classroomData) => handleSaveClassroom(classroomData)}
                     currentClassroom={currentClassroom}
                     handleEditClassroom={(classroomData) => handleEditClassroom(classroomData)} />

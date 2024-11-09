@@ -10,6 +10,7 @@ import SchoolSubject from '../../components/SchoolSubject/SchoolSubject';
 import StatusBar from '../../components/StatusBar/StatusBar';
 import NoSelectedSchool from '../../components/NoSelectedSchool/NoSelectedSchool';
 import Classroom from '../../components/Classroom/Classroom';
+import Student from '../../components/Student/Student';
 
 const Home = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -121,7 +122,9 @@ const Home = () => {
                     <SchoolSubject globalSchool={globalSchool} /> :
                     selectedPage === 'classes' && userInfo.lastSelectedSchool ?
                       <Classroom globalSchool={globalSchool} /> :
-                      <NoSelectedSchool />
+                      selectedPage === 'students' && userInfo.lastSelectedSchool ?
+                        <Student globalSchool={globalSchool} /> :
+                        <NoSelectedSchool />
           }
         </main>
       </div>

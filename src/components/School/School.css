@@ -41,6 +41,12 @@
     right: 20px;
 }
 
+@media (max-width: 768px) {
+    .circular-button {
+        bottom: 70px;
+    }
+}
+
 .circular-button:hover {
     background-color: #0056b3;
     /* Cor de fundo ao passar o mouse */
