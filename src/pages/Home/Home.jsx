@@ -11,6 +11,7 @@ import StatusBar from '../../components/StatusBar/StatusBar';
 import NoSelectedSchool from '../../components/NoSelectedSchool/NoSelectedSchool';
 import Classroom from '../../components/Classroom/Classroom';
 import Student from '../../components/Student/Student';
+import Gradebook from '../../components/Gradebook/Gradebook';
 
 const Home = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -124,6 +125,8 @@ const Home = () => {
                       <Classroom globalSchool={globalSchool} /> :
                       selectedPage === 'students' && userInfo.lastSelectedSchool ?
                         <Student globalSchool={globalSchool} /> :
+                        selectedPage === 'gradebook' && userInfo.lastSelectedSchool ?
+                        <Gradebook globalSchool={globalSchool} /> :
                         <NoSelectedSchool />
           }
         </main>

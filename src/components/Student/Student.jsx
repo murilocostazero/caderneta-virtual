@@ -31,6 +31,11 @@ const Student = ({ globalSchool }) => {
         setIsModalVisible(true);
     }
 
+    const handleEditStudent = (student) => {
+        setSelectedStudent(student);
+        setIsModalVisible(true);
+    }
+
     const onCloseModal = () => {
         setSelectedStudent(null);
         setIsModalVisible(false);
@@ -99,7 +104,7 @@ const Student = ({ globalSchool }) => {
 
             if (response.status === 201) {
                 onCloseModal();
-                getStudents();
+                getStudents(selectedClassroom);
             } else {
                 showStatusBar({ message: 'Erro ao salvar novo(a) aluno(a)', type: 'error' });
             }
@@ -115,7 +120,34 @@ const Student = ({ globalSchool }) => {
     }
 
     const onEditStudent = async (student) => {
-        console.log(student)
+        setLoading(true);
+        try {
+            const response = await axiosInstance.put(`/student/${student._id}`, {
+                name: student.name,
+                cpf: student.cpf,
+                birthDate: stringToDate(student.birthDate),
+                contact: student.contact,
+                address: student.address,
+                guardian: student.guardian
+            }, {
+                timeout: 10000
+            });
+
+            if (response.status === 200) {
+                onCloseModal();
+                getStudents(selectedClassroom);
+            } else {
+                showStatusBar({ message: 'Erro ao salvar aluno(a)', type: 'error' });
+            }
+        } catch (error) {
+            console.log(error)
+            if (error.code === 'ERR_NETWORK') {
+                showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+            } else {
+                showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+            }
+        }
+        setLoading(false);
     }
 
     const filteredStudents = students.filter(student =>
@@ -175,7 +207,7 @@ const Student = ({ globalSchool }) => {
                     filteredStudents.length < 1 ?
                         <p>Nenhum aluno cadastrado nessa turma</p> :
                         filteredStudents.map((student) => (
-                            <div key={student._id} className='students-list-item'>
+                            <div key={student._id} className='students-list-item' onClick={() => handleEditStudent(student)}>
                                 <p>{student.name}</p>
                                 <p>Responsável: <span className='guardian-contact' onClick={() => openWhatsApp(student.guardian.contact)}>{student.guardian.contact}</span></p>
                             </div>

@@ -3,17 +3,18 @@ import InputMask from "react-input-mask";
 import './Student.css';
 import { MdClose } from 'react-icons/md';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import { dateToString } from '../../utils/helper';
 
 const StudentModal = ({ onCloseModal, onSaveStudent, onEditStudent, selectedStudent, loading }) => {
     const [name, setName] = useState(selectedStudent ? selectedStudent.name : '');
     const [cpf, setCpf] = useState(selectedStudent ? selectedStudent.cpf : '');
-    const [birthDate, setBirthDate] = useState(selectedStudent ? selectedStudent.birthDate : '');
+    const [birthDate, setBirthDate] = useState(selectedStudent ? dateToString(selectedStudent.birthDate) : '');
     const [contact, setContact] = useState(selectedStudent ? selectedStudent.contact : '');
     const [address, setAddress] = useState(selectedStudent ? selectedStudent.address : '');
-    const [guardianName, setGuardianName] = useState(selectedStudent ? selectedStudent.guardianName : '');
-    const [guardianContact, setGuardianContact] = useState(selectedStudent ? selectedStudent.guardianContact : '');
-    const [guardianRelationship, setGuardianRelationship] = useState(selectedStudent ? selectedStudent.guardianRelationship : 'father-mother');
-    const [guardianAddress, setGuardianAddress] = useState(selectedStudent ? selectedStudent.guardianAddress : '');
+    const [guardianName, setGuardianName] = useState(selectedStudent ? selectedStudent.guardian.name : '');
+    const [guardianContact, setGuardianContact] = useState(selectedStudent ? selectedStudent.guardian.contact : '');
+    const [guardianRelationship, setGuardianRelationship] = useState(selectedStudent ? selectedStudent.guardian.relationship : 'father-mother');
+    const [guardianAddress, setGuardianAddress] = useState(selectedStudent ? selectedStudent.guardian.address : '');
     const [error, setError] = useState('');
 
     const handleError = (message) => {
@@ -42,6 +43,7 @@ const StudentModal = ({ onCloseModal, onSaveStudent, onEditStudent, selectedStud
             });
         } else {
             onEditStudent({
+                _id: selectedStudent._id,
                 name,
                 cpf,
                 birthDate,
@@ -63,7 +65,7 @@ const StudentModal = ({ onCloseModal, onSaveStudent, onEditStudent, selectedStud
                 <div className='modal-close-button-container'>
                     <MdClose className='modal-close-button' onClick={() => onCloseModal()} />
                 </div>
-                <h3>Adicionar novo aluno</h3>
+                <h3>{selectedStudent ? 'Alterar estudante' : 'Salvar novo estudante'}</h3>
 
                 <div className='student-form'>
                     <label>Nome</label>

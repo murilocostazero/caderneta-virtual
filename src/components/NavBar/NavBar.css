@@ -10,8 +10,13 @@
   
   .navbar-content {
     display: flex;
-    justify-content: flex-end; /* Espaça o conteúdo */
+    justify-content: space-between; /* Espaça o conteúdo */
     align-items: center; /* Alinha verticalmente */
+  }
+
+  .navbar-content > :first-child {
+    font-weight: 600;
+    font-size: 20px;
   }
 
   .right-container {

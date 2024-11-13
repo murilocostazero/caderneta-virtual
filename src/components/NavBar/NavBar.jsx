@@ -15,6 +15,7 @@ const NavBar = ({ userInfo }) => {
     return (
         <div className="navbar">
             <div className="navbar-content">
+                <span>Caderneta Virtual</span>
                 <div className='right-container'>
                     <div className='user-container'>
                         <span className="username">{!userInfo ? 'Carregando' : userInfo.email}</span>

@@ -9,8 +9,10 @@ export function stringToDate(dateString) {
 }
 
 export function dateToString(date) {
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() é zero-indexado
-    const year = date.getFullYear();
+    const validDate = date instanceof Date ? date : new Date(date);
+
+    const day = String(validDate.getDate()).padStart(2, '0');
+    const month = String(validDate.getMonth() + 1).padStart(2, '0'); // getMonth() é zero-indexado
+    const year = validDate.getFullYear();
     return `${day}/${month}/${year}`;
 }
