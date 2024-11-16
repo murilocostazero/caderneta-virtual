@@ -150,3 +150,28 @@
   align-items: center;
   justify-content: flex-start;
 }
+
+.skill-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+}
+
+.skill-container textarea {
+  margin: 4px 0px;
+  min-height: 100px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 4px;
+}
+
+.skill-container button {
+  background-color: #0166ff;
+  color: #FFF;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 4px;
+  padding: 8px;
+  border: 0px;
+  cursor: pointer;
+}

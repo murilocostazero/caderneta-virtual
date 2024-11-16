@@ -6,7 +6,7 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 const GradebookModal = ({ onCloseModal, globalSchool, onSaveGradebook, loadingSave }) => {
 
-    const [year, setYear] = useState('');
+    const [academicYear, setAcademicYear] = useState('');
     const [classroom, setClassroom] = useState(null);
     const [classrooms, setClassrooms] = useState([]);
     const [teacher, setTeacher] = useState(null);
@@ -17,7 +17,7 @@ const GradebookModal = ({ onCloseModal, globalSchool, onSaveGradebook, loadingSa
     const [error, setError] = useState('');
 
     useEffect(() => {
-        setYear(new Date().getFullYear());
+        setAcademicYear(new Date().getFullYear());
         getClassrooms();
         getSchoolTeachers();
         getSubjects();
@@ -92,11 +92,11 @@ const GradebookModal = ({ onCloseModal, globalSchool, onSaveGradebook, loadingSa
 
     const handleSaveGradebook = () => {
 
-        if (!year || !classroom || !teacher || !subject) {
+        if (!academicYear || !classroom || !teacher || !subject) {
             handleError('Preencha todos os campos');
         } else {
             onSaveGradebook({
-                year,
+                academicYear,
                 classroom,
                 teacher,
                 subject
@@ -113,7 +113,7 @@ const GradebookModal = ({ onCloseModal, globalSchool, onSaveGradebook, loadingSa
                 <h3>Nova caderneta</h3>
                 <div className='gradebook-form'>
                     <label>Ano letivo</label>
-                    <input type="text" name="name" value={year} onChange={(e) => setYear(e.target.value)} />
+                    <input type="text" name="name" value={academicYear} onChange={(e) => setAcademicYear(e.target.value)} />
 
                     <label>Turma</label>
                     <select

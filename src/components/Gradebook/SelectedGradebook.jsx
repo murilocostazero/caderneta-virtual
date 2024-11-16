@@ -11,13 +11,44 @@ import gbef from '../../assets/images/subjects/gb-ef.jpg';
 import gbefc from '../../assets/images/subjects/gb-efc.jpg';
 import './Gradebook.css';
 import { normalizeString } from '../../utils/helper';
+import StatusBar from '../StatusBar/StatusBar';
+import axiosInstance from '../../utils/axiosInstance';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [subjectImg, setSubjectImg] = useState(null);
+  const [skill, setSkill] = useState(gradebook.skill ? gradebook.skill : '');
+  const [statusMessage, setStatusMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const showStatusBar = (status) => setStatusMessage({ message: status.message, type: status.type });
 
   useEffect(() => {
     selectSubjectImage();
   }, []);
+
+  const getGradebook = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get(`/gradebook/${gradebook._id}`, {
+        timeout: 10000
+      });
+
+      if (response.status === 200) {
+        handleSelectGradebook(response.data);
+      } else {
+        showStatusBar({ message: 'Erro ao buscar cadernetas', type: 'error' });
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+      } else {
+        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+      }
+    }
+    setLoading(false);
+  }
 
   const selectSubjectImage = () => {
     switch (normalizeString(gradebook.subject.name)) {
@@ -51,6 +82,30 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     }
   }
 
+  const handleSaveSkill = async () => {
+    if (!skill) {
+      showStatusBar({ message: 'Critério não pode ser vazio', type: 'error' });
+    } else {
+      setLoading(true);
+      try {
+        const response = await axiosInstance.put(`/gradebook/${gradebook._id}` , {
+          skill: skill
+        }, {
+          timeout: 10000
+        });
+        if (response.status >= 400 && response.status <= 500) {
+          showStatusBar({ message: response.data.message, type: 'error' });
+        } else {
+          handleSelectGradebook(gradebook);
+        }
+      } catch (error) {
+        console.error('Erro ao alterar critério', error);
+        showStatusBar({ message: 'Erro ao alterar critério', type: 'error' });
+      }
+      setLoading(false);
+    }
+  }
+
   return (
     <div className='gradebook-container'>
       <div className='subject-header'>
@@ -68,6 +123,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
 
             <div className='subject-info-container'>
               <h2>{gradebook.subject.name}</h2>
+              <h3>{gradebook.academicYear}</h3>
               <h3>{gradebook.classroom.grade}º ano {gradebook.classroom.name} - {gradebook.classroom.shift}</h3>
             </div>
           </div>
@@ -78,9 +134,23 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
         <h3>Professor: {gradebook.teacher.name}</h3>
       </div>
 
-      <div className='gradebook-section'>
-        <h3>Critérios</h3>
-      </div>
+      {
+        loading ?
+          <LoadingSpinner /> :
+          <div className='gradebook-section'>
+            <h3>Critérios</h3>
+
+            <div className='skill-container'>
+              <textarea
+                value={skill}
+                onChange={(e) => setSkill(e.target.value)} />
+
+              <button onClick={() => handleSaveSkill()}>
+                Salvar
+              </button>
+            </div>
+          </div>
+      }
 
       <div className='gradebook-section'>
         <h3>1º bimestre</h3>
@@ -97,6 +167,15 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
       <div className='gradebook-section'>
         <h3>4º bimestre</h3>
       </div>
+
+
+      {statusMessage && (
+        <StatusBar
+          message={statusMessage.message}
+          type={statusMessage.type}
+          onClose={() => setStatusMessage(null)}
+        />
+      )}
     </div>
   )
 }

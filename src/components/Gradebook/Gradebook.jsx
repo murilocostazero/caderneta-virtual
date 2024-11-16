@@ -17,7 +17,7 @@ const Gradebook = ({ globalSchool }) => {
 
   useEffect(() => {
     getGradebooks();
-  }, []);
+  }, [selectedGradebook]);
 
   const showStatusBar = (status) => setStatusMessage({ message: status.message, type: status.type });
 
@@ -29,7 +29,7 @@ const Gradebook = ({ globalSchool }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.post(`/gradebook`, {
-        year: gradebook.year,
+        academicYear: gradebook.academicYear,
         school: globalSchool._id,
         classroom: gradebook.classroom,
         teacher: gradebook.teacher,
@@ -63,7 +63,6 @@ const Gradebook = ({ globalSchool }) => {
       });
 
       if (response.status === 200) {
-        console.log(response.data)
         setGradebooks(response.data);
       } else {
         showStatusBar({ message: 'Erro ao buscar cadernetas', type: 'error' });
@@ -91,7 +90,9 @@ const Gradebook = ({ globalSchool }) => {
 
   return (
     selectedGradebook ?
-    <SelectedGradebook handleSelectGradebook={(gradebook) => handleSelectGradebook(gradebook)} gradebook={selectedGradebook} /> : 
+    <SelectedGradebook 
+      handleSelectGradebook={(gradebook) => handleSelectGradebook(gradebook)} 
+      gradebook={selectedGradebook} /> : 
     <div className='gradebook-container'>
       {
         loading ?
