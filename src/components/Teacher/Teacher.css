@@ -35,6 +35,11 @@
     
 }
 
+.teacher-card-container {
+    display: flex;
+    flex-direction: column;
+}
+
 .teacher-list {
     display: flex;
     gap: 8px; /* Espaçamento entre os itens da lista */
@@ -55,22 +60,6 @@
 
 .teacher-card:hover {
     transform: scale(1.02);
-}
-
-.access-button {
-    margin-top: 10px;
-    background-color: rgba(1, 102, 255, 0.7);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-weight: 700;
-}
-
-.access-button:hover {
-    background-color: #0166ff;
 }
 
 .my-teachers-container {

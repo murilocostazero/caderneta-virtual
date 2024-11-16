@@ -105,7 +105,7 @@
   /* Altura da imagem */
   overflow: hidden;
   /* Para garantir que nada "vaze" fora do container */
-  background-color: red;
+  background-color: green;
   border-top-right-radius: 12px;
   border-top-left-radius: 12px;
 }
@@ -114,7 +114,7 @@
   width: 100%;
   height: auto;
   position: absolute;
-  top: -200px;
+  top: 0px;
   left: 0px;
 }
 
@@ -165,13 +165,8 @@
   padding: 4px;
 }
 
-.skill-container button {
-  background-color: #0166ff;
-  color: #FFF;
-  font-weight: bold;
-  font-size: 14px;
-  border-radius: 4px;
-  padding: 8px;
-  border: 0px;
-  cursor: pointer;
+.term-form {
+  display: flex;
+  flex-direction: column;
+  
 }

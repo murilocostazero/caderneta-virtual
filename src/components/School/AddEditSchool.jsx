@@ -71,27 +71,27 @@ const AddSchoolModal = ({ isModalOpen, onClose, onSubmit, onEdit, onRemove, isAd
                 <div>
                     <label>
                         Nome
-                        <input type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} />
+                        <input placeholder='Centro de Ensino Fulano' type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} />
                     </label>
                     <label>
                         Email
-                        <input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input placeholder='centro_ensino@gmail.com' type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </label>
                     <label>
                         Telefone
-                        <InputMask className='input-mask' mask="(99)99999-9999" onChange={(e) => setPhone(e.target.value)} value={phone} />
+                        <InputMask placeholder='(99)98787-9090' className='input-mask' mask="(99)99999-9999" onChange={(e) => setPhone(e.target.value)} value={phone} />
                     </label>
                     <label>
                         Código do INEP
-                        <input type="text" name="inepCode" value={inepCode} onChange={(e) => setInepCode(e.target.value)} />
+                        <input placeholder='20547859' type="text" name="inepCode" value={inepCode} onChange={(e) => setInepCode(e.target.value)} />
                     </label>
                     <label>
                         Endereço
-                        <input type="text" name="address" value={address} onChange={(e) => setAddress(e.target.value)} />
+                        <input placeholder='Rua Fulano Pereira, 43, Liberdade, Colinas-Ma' type="text" name="address" value={address} onChange={(e) => setAddress(e.target.value)} />
                     </label>
                     <label>
                         CNPJ
-                        <InputMask className='input-mask' mask="999.999.999/999-99" onChange={(e) => setCnpj(e.target.value)} value={cnpj} />
+                        <InputMask placeholder='999.999.999/999-99' className='input-mask' mask="999.999.999/999-99" onChange={(e) => setCnpj(e.target.value)} value={cnpj} />
                     </label>
                 </div>
                 <div className="modal-buttons">

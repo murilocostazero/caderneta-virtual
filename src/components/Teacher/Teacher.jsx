@@ -142,7 +142,7 @@ const Teacher = ({ globalSchool }) => {
                                     {
                                         hoveredTeacher === teacher &&
                                         <button
-                                            className="access-button"
+                                            className='primary-button'
                                             onClick={() => handleAddTeacher(teacher)}
                                         >
                                             {

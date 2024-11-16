@@ -31,7 +31,6 @@
 .modal label {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
     font-size: 14px;
     color: #555;
 }
@@ -41,7 +40,8 @@
     font-size: 14px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    margin-top: 5px;
+    margin-top: 4px;
+    margin-bottom: 8px;
     transition: border-color 0.2s ease;
 }
 

@@ -10,16 +10,18 @@ import gbet from '../../assets/images/subjects/gb-et.png';
 import gbef from '../../assets/images/subjects/gb-ef.jpg';
 import gbefc from '../../assets/images/subjects/gb-efc.jpg';
 import './Gradebook.css';
-import { normalizeString } from '../../utils/helper';
+import { normalizeString, stringToDate } from '../../utils/helper';
 import StatusBar from '../StatusBar/StatusBar';
 import axiosInstance from '../../utils/axiosInstance';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import TermModal from './TermModal';
 
 const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [subjectImg, setSubjectImg] = useState(null);
   const [skill, setSkill] = useState(gradebook.skill ? gradebook.skill : '');
   const [statusMessage, setStatusMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [termModal, setTermModal] = useState(false);
 
   const showStatusBar = (status) => setStatusMessage({ message: status.message, type: status.type });
 
@@ -88,7 +90,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     } else {
       setLoading(true);
       try {
-        const response = await axiosInstance.put(`/gradebook/${gradebook._id}` , {
+        const response = await axiosInstance.put(`/gradebook/${gradebook._id}`, {
           skill: skill
         }, {
           timeout: 10000
@@ -104,6 +106,39 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
       }
       setLoading(false);
     }
+  }
+
+  const handleTermModal = (isOpen) => {
+    setTermModal(isOpen);
+  }
+
+  const onSaveTerm = async (term) => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post(`/gradebook/${gradebook._id}/term`, {
+        name: term.name,
+        startDate: stringToDate(term.startDate),
+        endDate: stringToDate(term.endDate) 
+      }, {
+        timeout: 10000
+      });
+
+      if (response.status === 201) {
+        handleSelectGradebook(response.data.gradebook); //AAAQUI
+      } else {
+        showStatusBar({ message: 'Erro ao adicionar novo bimestre', type: 'error' });
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+      } else {
+        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+      }
+    }
+    setLoading(false);
+
+    handleTermModal(false);
   }
 
   return (
@@ -145,7 +180,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
                 value={skill}
                 onChange={(e) => setSkill(e.target.value)} />
 
-              <button onClick={() => handleSaveSkill()}>
+              <button className='primary-button' onClick={() => handleSaveSkill()}>
                 Salvar
               </button>
             </div>
@@ -153,21 +188,31 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
       }
 
       <div className='gradebook-section'>
-        <h3>1º bimestre</h3>
-      </div>
+        <div className='row-container'>
+          <h3>Bimestres</h3>
+          <button
+            onClick={() => handleTermModal(true)}
+            className='primary-button'>
+            Novo bimestre
+          </button>
+        </div>
 
-      <div className='gradebook-section'>
-        <h3>2º bimestre</h3>
-      </div>
+        {
+          gradebook.terms.map((term) => 
+            <div key={term._id}>
+              <h3>{term.name}</h3>
+            </div>
+          )
+        }
 
-      <div className='gradebook-section'>
-        <h3>3º bimestre</h3>
+        {
+          termModal ?
+            <TermModal
+              handleTermModal={(isOpen) => handleTermModal(isOpen)}
+              onSaveTerm={(term) => onSaveTerm(term)} /> :
+            <div />
+        }
       </div>
-
-      <div className='gradebook-section'>
-        <h3>4º bimestre</h3>
-      </div>
-
 
       {statusMessage && (
         <StatusBar

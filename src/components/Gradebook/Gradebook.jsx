@@ -85,6 +85,7 @@ const Gradebook = ({ globalSchool }) => {
   );
 
   const handleSelectGradebook = (gradebook) => {
+    console.log(gradebook);
     setSelectedGradebook(gradebook);
   }
 
