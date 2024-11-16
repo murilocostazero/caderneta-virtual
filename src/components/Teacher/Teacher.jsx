@@ -121,39 +121,41 @@ const Teacher = ({ globalSchool }) => {
             </div>
 
             {/* Lista de Professores Disponíveis */}
-            <div className="teacher-list">
-                {loading ? (
-                    <p>Loading...</p>
-                ) : (
-                    filteredTeachers.map((teacher) => (
-                        <div
-                            key={teacher._id}
-                            className='teacher-card-container'
-                            onMouseEnter={() => handleMouseEnter(teacher)}
-                            onMouseLeave={handleMouseLeave}>
-                            <div
-                                className="teacher-card">
-                                <h3>{teacher.name}</h3>
-                                <p>Email: {teacher.email}</p>
-                                <p>Telefone: {!teacher.phone ? 'Desconhecido' : teacher.phone}</p>
-                            </div>
+            <div class="teacher-list-wrapper">
+                <div className="teacher-list">
+                    {
+                        loading ?
+                            <p>Loading...</p> :
 
-                            {
-                                hoveredTeacher === teacher &&
-                                <button
-                                    className="access-button"
-                                    onClick={() => handleAddTeacher(teacher)}
-                                >
+                            filteredTeachers.map((teacher) => (
+                                <div
+                                    key={teacher._id}
+                                    className='teacher-card-container'
+                                    onMouseEnter={() => handleMouseEnter(teacher)}
+                                    onMouseLeave={handleMouseLeave}>
+                                    <div
+                                        className="teacher-card">
+                                        <h3>{teacher.name}</h3>
+                                        <p>{teacher.email}</p>
+                                    </div>
+
                                     {
-                                        loading ?
-                                            <LoadingSpinner /> :
-                                            `Fornecer acesso à(o) ${globalSchool.name}`
+                                        hoveredTeacher === teacher &&
+                                        <button
+                                            className="access-button"
+                                            onClick={() => handleAddTeacher(teacher)}
+                                        >
+                                            {
+                                                loading ?
+                                                    <LoadingSpinner /> :
+                                                    `Fornecer acesso à(o) ${globalSchool.name}`
+                                            }
+                                        </button>
                                     }
-                                </button>
-                            }
-                        </div>
-                    ))
-                )}
+                                </div>
+                            ))
+                    }
+                </div>
             </div>
 
             {/* Lista de Meus Professores */}

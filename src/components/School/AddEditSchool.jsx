@@ -113,8 +113,8 @@ const AddSchoolModal = ({ isModalOpen, onClose, onSubmit, onEdit, onRemove, isAd
                                         </div>
                                     </div> :
                                     <>
-                                        <button onClick={() => setShowConfirmation(true)} className="cancel-button">Excluir escola</button>
-                                        <button onClick={handleSubmit} className="add-button">
+                                        <button onClick={() => setShowConfirmation(true)} className="cancel-school-button">Excluir escola</button>
+                                        <button onClick={handleSubmit} className="add-school-button">
                                             {
                                                 selectedSchool ?
                                                     'Salvar alterações' :

@@ -16,3 +16,10 @@ export function dateToString(date) {
     const year = validDate.getFullYear();
     return `${day}/${month}/${year}`;
 }
+
+export function normalizeString(input) {
+    return input
+        .toLowerCase() // Transforma em letras minúsculas
+        .normalize("NFD") // Decompõe caracteres com acentos
+        .replace(/[\u0300-\u036f]/g, ""); // Remove marcas de acentos
+}

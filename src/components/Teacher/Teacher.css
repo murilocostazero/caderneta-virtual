@@ -1,9 +1,9 @@
 .teacher-container {
     padding: 20px;
-    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+
+    width: calc(100vw - 60px);
 }
 
 .search-bar {
@@ -31,16 +31,15 @@
     cursor: pointer;
 }
 
-.teacher-list {
-    display: flex;
-    overflow-x: auto; /* Permite rolagem horizontal */
-    margin-bottom: 20px;
+.teacher-list-wrapper {
+    
 }
 
-.teacher-card-container {
+.teacher-list {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    gap: 8px; /* Espaçamento entre os itens da lista */
+    padding: 8px 0;
+    overflow-x: scroll;
 }
 
 .teacher-card {
@@ -50,6 +49,8 @@
     margin: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
+    min-width: 150px; /* Largura mínima para os itens */
+    margin-right: 10px;
 }
 
 .teacher-card:hover {
@@ -75,7 +76,6 @@
 .my-teachers-container {
     margin-top: 20px;
     padding: 10px;
-    border-top: 2px solid #ccc;
 }
 
 .my-teacher-card {
@@ -116,18 +116,22 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #ffffff; /* Fundo branco */
-    border-radius: 8px; /* Bordas arredondadas */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
-    padding: 16px; /* Espaçamento interno */
+    background-color: #ffffff;
+    /* Fundo branco */
+    border-radius: 8px;
+    /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra leve */
+    padding: 16px;
+    /* Espaçamento interno */
     max-width: 320px;
 }
 
-.confirm-remove-teacher p{
+.confirm-remove-teacher p {
     text-align: justify;
 }
 
-.confirm-remove-teacher button{
+.confirm-remove-teacher button {
     width: 100%;
     padding: 12px;
     border: none;

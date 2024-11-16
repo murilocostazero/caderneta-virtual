@@ -5,6 +5,7 @@ import GradebookModal from './GradebookModal';
 import axiosInstance from '../../utils/axiosInstance';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import StatusBar from '../StatusBar/StatusBar';
+import SelectedGradebook from './SelectedGradebook';
 
 const Gradebook = ({ globalSchool }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,6 +13,7 @@ const Gradebook = ({ globalSchool }) => {
   const [gradebooks, setGradebooks] = useState([]);
   const [statusMessage, setStatusMessage] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedGradebook, setSelectedGradebook] = useState(null);
 
   useEffect(() => {
     getGradebooks();
@@ -83,9 +85,14 @@ const Gradebook = ({ globalSchool }) => {
     gradebook.classroom.shift.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  return (
-    <div className='gradebook-container'>
+  const handleSelectGradebook = (gradebook) => {
+    setSelectedGradebook(gradebook);
+  }
 
+  return (
+    selectedGradebook ?
+    <SelectedGradebook handleSelectGradebook={(gradebook) => handleSelectGradebook(gradebook)} gradebook={selectedGradebook} /> : 
+    <div className='gradebook-container'>
       {
         loading ?
           <LoadingSpinner /> :
@@ -106,7 +113,7 @@ const Gradebook = ({ globalSchool }) => {
               <p>Professor</p>
             </div>
             {filteredGradebooks.map((gradebook) => (
-              <div key={gradebook._id} className="gradebook-list-item">
+              <div key={gradebook._id} className="gradebook-list-item" onClick={() => handleSelectGradebook(gradebook)}>
                 <p>{gradebook.classroom.grade}º ano {gradebook.classroom.name} - {gradebook.classroom.shift}</p>
                 <p>{gradebook.subject.name}</p>
                 <p>{gradebook.teacher.name}</p>

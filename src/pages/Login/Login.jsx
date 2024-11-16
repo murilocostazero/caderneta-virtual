@@ -8,6 +8,7 @@ import './Login.css';
 import StatusBar from '../../components/StatusBar/StatusBar';
 import axiosInstance from '../../utils/axiosInstance';
 import { validateEmail } from '../../utils/helper';
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 
 const Login = () => {
   const [name, setName] = useState('');
@@ -16,6 +17,7 @@ const Login = () => {
   const [userType, setUserType] = useState('');
   const [isLogin, setIsLogin] = useState(true);
   const [statusMessage, setStatusMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -27,6 +29,7 @@ const Login = () => {
     } else if (!validateEmail(email)) {
       showStatusBar({ message: 'Insira um email válido', type: 'error' })
     } else {
+      setLoading(true);
       try {
         const response = await axiosInstance.post('/login', {
           email: email,
@@ -51,6 +54,7 @@ const Login = () => {
           showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
         }
       }
+      setLoading(false);
     }
   }
 
@@ -60,6 +64,7 @@ const Login = () => {
     } else if (!validateEmail(email)) {
       showStatusBar({ message: 'Insira um email válido', type: 'error' })
     } else {
+      setLoading(true);
       try {
         const response = await axiosInstance.post('/create-account', {
           name: name,
@@ -88,6 +93,7 @@ const Login = () => {
           showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
         }
       }
+      setLoading(false);
     }
   }
 
@@ -100,7 +106,7 @@ const Login = () => {
         </div>
 
         <div className="login-form">
-          <p className='title'>Olá, professor(a)</p>
+          <p className='title'>Olá. Seja bem-vindo!</p>
           <p className='subtitle'>Por favor, insira suas credenciais</p>
 
           {
@@ -146,13 +152,18 @@ const Login = () => {
               :
               <div />
           }
-          <button type="submit" onClick={isLogin ? handleLogin : handleSingup}>
-            {
-              isLogin ?
-                'Entrar' :
-                'Cadastrar'
-            }
-          </button>
+
+          {
+            loading ?
+              <LoadingSpinner /> :
+              <button type="submit" onClick={isLogin ? handleLogin : handleSingup}>
+                {
+                  isLogin ?
+                    'Entrar' :
+                    'Cadastrar'
+                }
+              </button>
+          }
 
           <div className='singup-msg-container'>
             {
