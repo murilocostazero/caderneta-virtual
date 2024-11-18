@@ -170,3 +170,64 @@
   flex-direction: column;
   
 }
+
+.lesson-container {
+  margin: 4px;
+  padding: 4px;
+  border-top: 1px solid rgba(0, 0, 0, 0.2); /* Definição completa da borda */
+}
+
+.drop-icon {
+  font-size: 26px;
+  fill: #333;
+  cursor: pointer;
+}
+
+.drop-icon:hover{
+  fill: #0166ff;
+}
+
+.add-lesson-button {
+  background-color: transparent;
+  border: none;
+  fill: #0166ff;
+  color: #0166ff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.single-lesson-container {
+  padding: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.single-lesson-container.even {
+  background-color: rgba(1, 102, 255, 0.1);
+}
+
+.single-lesson-container.odd {
+  background-color: rgba(1, 102, 255, 0.2);
+}
+
+.lesson-actions button{
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  color: #fff;
+  color: #FFF;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.lesson-actions > :first-child {
+  background-color: #777;
+  margin-right: 4px;
+}
+
+.lesson-actions > :nth-child(2) {
+  background-color: #d200d2;
+}

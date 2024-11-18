@@ -23,3 +23,12 @@ export function normalizeString(input) {
         .normalize("NFD") // Decompõe caracteres com acentos
         .replace(/[\u0300-\u036f]/g, ""); // Remove marcas de acentos
 }
+
+export function getCurrentDate() {
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0'); // Adiciona o zero à esquerda, se necessário
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Os meses são indexados a partir de 0
+    const year = today.getFullYear();
+
+    return `${day}/${month}/${year}`;
+}

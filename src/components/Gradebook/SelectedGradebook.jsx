@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MdArrowBack } from 'react-icons/md';
+import { MdAdd, MdArrowBack, MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
 import gbpt from '../../assets/images/subjects/gb-pt.png';
 import gbmt from '../../assets/images/subjects/gb-mt.png';
 import gbht from '../../assets/images/subjects/gb-ht.png';
@@ -10,11 +10,12 @@ import gbet from '../../assets/images/subjects/gb-et.png';
 import gbef from '../../assets/images/subjects/gb-ef.jpg';
 import gbefc from '../../assets/images/subjects/gb-efc.jpg';
 import './Gradebook.css';
-import { normalizeString, stringToDate } from '../../utils/helper';
+import { dateToString, normalizeString, stringToDate } from '../../utils/helper';
 import StatusBar from '../StatusBar/StatusBar';
 import axiosInstance from '../../utils/axiosInstance';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import TermModal from './TermModal';
+import Lesson from './Lesson';
 
 const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [subjectImg, setSubjectImg] = useState(null);
@@ -22,35 +23,17 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [statusMessage, setStatusMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [termModal, setTermModal] = useState(false);
+  const [showSkill, setShowSkill] = useState(false);
+  const [showLesson, setShowLesson] = useState(false);
+  const [editingLesson, setEditingLesson] = useState(false); //Editando a aula?
+  const [selectedTerm, setSelectedTerm] = useState(null);
+  const [selectedLesson, setSelectedLesson] = useState(null);
 
   const showStatusBar = (status) => setStatusMessage({ message: status.message, type: status.type });
 
   useEffect(() => {
     selectSubjectImage();
   }, []);
-
-  const getGradebook = async () => {
-    setLoading(true);
-    try {
-      const response = await axiosInstance.get(`/gradebook/${gradebook._id}`, {
-        timeout: 10000
-      });
-
-      if (response.status === 200) {
-        handleSelectGradebook(response.data);
-      } else {
-        showStatusBar({ message: 'Erro ao buscar cadernetas', type: 'error' });
-      }
-    } catch (error) {
-      console.log(error)
-      if (error.code === 'ERR_NETWORK') {
-        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
-      } else {
-        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
-      }
-    }
-    setLoading(false);
-  }
 
   const selectSubjectImage = () => {
     switch (normalizeString(gradebook.subject.name)) {
@@ -118,7 +101,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
       const response = await axiosInstance.post(`/gradebook/${gradebook._id}/term`, {
         name: term.name,
         startDate: stringToDate(term.startDate),
-        endDate: stringToDate(term.endDate) 
+        endDate: stringToDate(term.endDate)
       }, {
         timeout: 10000
       });
@@ -139,6 +122,78 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     setLoading(false);
 
     handleTermModal(false);
+  }
+
+  const handleOpenLesson = (term) => {
+    setSelectedTerm(term);
+    setShowLesson(true);
+  }
+  
+  const handleEditLesson = (term, lesson) => {
+    setSelectedLesson(lesson);
+    setEditingLesson(true);
+
+    handleOpenLesson(term);
+  }
+
+  const handleCloseLesson = () => {
+    setShowLesson(false);
+  }
+
+  const onAddLesson = async (lesson) => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post(`/gradebook/${gradebook._id}/term/${selectedTerm._id}/lesson`, {
+        topic: lesson.topic,
+        date: stringToDate(lesson.date)
+      }, {
+        timeout: 10000
+      });
+
+      if (response.status >= 400 && response.status <= 500) {
+        showStatusBar({ message: response.data.message, type: 'error' });
+      } else {
+        handleSelectGradebook(response.data.gradebook); 
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+      } else {
+        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+      }
+    }
+    setLoading(false);
+
+    handleCloseLesson();
+  }
+
+  const onEditLesson = async (lesson) => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.put(`/gradebook/${gradebook._id}/term/${selectedTerm._id}/lesson/${lesson.id}`, {
+        topic: lesson.topic,
+        date: stringToDate(lesson.date)
+      }, {
+        timeout: 10000
+      });
+
+      if (response.status >= 400 && response.status <= 500) {
+        showStatusBar({ message: response.data.message, type: 'error' });
+      } else {
+        handleSelectGradebook(response.data.gradebook); 
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+      } else {
+        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+      }
+    }
+    setLoading(false);
+
+    handleCloseLesson();
   }
 
   return (
@@ -173,17 +228,28 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
         loading ?
           <LoadingSpinner /> :
           <div className='gradebook-section'>
-            <h3>Critérios</h3>
-
-            <div className='skill-container'>
-              <textarea
-                value={skill}
-                onChange={(e) => setSkill(e.target.value)} />
-
-              <button className='primary-button' onClick={() => handleSaveSkill()}>
-                Salvar
-              </button>
+            <div className='row-container'>
+              <h3>Critérios</h3>
+              {
+                !showSkill ?
+                  <MdArrowDropDown className='drop-icon' onClick={() => setShowSkill(true)} /> :
+                  <MdArrowDropUp className='drop-icon' onClick={() => setShowSkill(false)} />
+              }
             </div>
+
+            {
+              showSkill ?
+                <div className='skill-container'>
+                  <textarea
+                    value={skill}
+                    onChange={(e) => setSkill(e.target.value)} />
+
+                  <button className='primary-button' onClick={() => handleSaveSkill()}>
+                    Salvar
+                  </button>
+                </div> :
+                <div />
+            }
           </div>
       }
 
@@ -193,14 +259,47 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
           <button
             onClick={() => handleTermModal(true)}
             className='primary-button'>
-            Novo bimestre
+            NOVO BIMESTRE
           </button>
         </div>
 
         {
-          gradebook.terms.map((term) => 
-            <div key={term._id}>
-              <h3>{term.name}</h3>
+          gradebook.terms.map((term) =>
+            <div key={term._id} className='lesson-container'>
+              <div className='row-container'>
+                <h4>{term.name}</h4>
+                <button className='add-lesson-button' onClick={() => handleOpenLesson(term)}>
+                  <MdAdd />
+                </button>
+              </div>
+
+              {
+                showLesson ?
+                  <Lesson
+                    term={term}
+                    handleCloseLesson={() => handleCloseLesson()}
+                    onAddLesson={(lesson) => onAddLesson(lesson)}
+                    onEditLesson={(lesson) => onEditLesson(lesson)}
+                    selectedLesson={selectedLesson}
+                    editingLesson={editingLesson}
+                    loading={loading} /> :
+                  <div />
+              }
+
+              {
+                !term.lessons || term.lessons.length < 1 ?
+                <p>Nenhuma aula registrada nesse bimestre</p> :
+                
+                term.lessons.map((lesson, index) => 
+                  <div className={`single-lesson-container  ${index % 2 === 0 ? "even" : "odd"}`}>
+                    <p>{dateToString(lesson.date)}: {lesson.topic}</p>
+                    <div className='lesson-actions'>
+                      <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
+                      <button>Chamada</button>
+                    </div>
+                  </div>
+                )
+              }
             </div>
           )
         }
