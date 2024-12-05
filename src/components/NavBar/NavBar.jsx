@@ -2,6 +2,7 @@ import React from 'react';
 import { FaUser } from "react-icons/fa";
 import './NavBar.css';
 import { useNavigate } from 'react-router-dom';
+import teacherOk from '../../assets/images/teacher-ok.png';
 
 
 const NavBar = ({ userInfo }) => {
@@ -15,7 +16,7 @@ const NavBar = ({ userInfo }) => {
     return (
         <div className="navbar">
             <div className="navbar-content">
-                <span>Caderneta Virtual</span>
+                <img src={teacherOk} alt='Figurinha professor' className='teacher-sticker' />
                 <div className='right-container'>
                     <div className='user-container'>
                         <span className="username">{!userInfo ? 'Carregando' : userInfo.email}</span>

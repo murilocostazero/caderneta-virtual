@@ -16,6 +16,7 @@ import axiosInstance from '../../utils/axiosInstance';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import TermModal from './TermModal';
 import Lesson from './Lesson';
+import Attendance from './Attendance';
 
 const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [subjectImg, setSubjectImg] = useState(null);
@@ -28,6 +29,8 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [editingLesson, setEditingLesson] = useState(false); //Editando a aula?
   const [selectedTerm, setSelectedTerm] = useState(null);
   const [selectedLesson, setSelectedLesson] = useState(null);
+  const [showAttendance, setShowAttendance] = useState(false);
+  const [isEditingAttendance, setIsEditingAttendance] = useState(false);
 
   const showStatusBar = (status) => setStatusMessage({ message: status.message, type: status.type });
 
@@ -91,6 +94,8 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     }
   }
 
+  //---------- TERM
+
   const handleTermModal = (isOpen) => {
     setTermModal(isOpen);
   }
@@ -124,11 +129,13 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     handleTermModal(false);
   }
 
+  //---------- LESSON
+
   const handleOpenLesson = (term) => {
     setSelectedTerm(term);
     setShowLesson(true);
   }
-  
+
   const handleEditLesson = (term, lesson) => {
     setSelectedLesson(lesson);
     setEditingLesson(true);
@@ -153,7 +160,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
       if (response.status >= 400 && response.status <= 500) {
         showStatusBar({ message: response.data.message, type: 'error' });
       } else {
-        handleSelectGradebook(response.data.gradebook); 
+        handleSelectGradebook(response.data.gradebook);
       }
     } catch (error) {
       console.log(error)
@@ -181,7 +188,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
       if (response.status >= 400 && response.status <= 500) {
         showStatusBar({ message: response.data.message, type: 'error' });
       } else {
-        handleSelectGradebook(response.data.gradebook); 
+        handleSelectGradebook(response.data.gradebook);
       }
     } catch (error) {
       console.log(error)
@@ -194,6 +201,13 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     setLoading(false);
 
     handleCloseLesson();
+  }
+
+  //---------- ATTENDENCE
+  const handleOpenAttendance = (lesson, isEditing) => {
+    setIsEditingAttendance(isEditing);
+    setSelectedLesson(lesson);
+    setShowAttendance(true);
   }
 
   return (
@@ -288,17 +302,39 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
 
               {
                 !term.lessons || term.lessons.length < 1 ?
-                <p>Nenhuma aula registrada nesse bimestre</p> :
-                
-                term.lessons.map((lesson, index) => 
-                  <div className={`single-lesson-container  ${index % 2 === 0 ? "even" : "odd"}`}>
-                    <p>{dateToString(lesson.date)}: {lesson.topic}</p>
-                    <div className='lesson-actions'>
-                      <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
-                      <button>Chamada</button>
+                  <p>Nenhuma aula registrada nesse bimestre</p> :
+
+                  term.lessons.map((lesson, index) =>
+                    <div key={lesson._id} className={`single-lesson-container  ${index % 2 === 0 ? "even" : "odd"}`}>
+                      <p>{dateToString(lesson.date)} - Assunto: {lesson.topic}</p>
+                      <div className='lesson-actions'>
+                        <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
+
+                        {
+                          lesson.attendance.length > 0 ?
+                          <button onClick={() => handleOpenAttendance(lesson, true)}>Editar chamada</button> :
+                          <button onClick={() => handleOpenAttendance(lesson, false)}>Nova chamada</button>
+                        }
+
+                      </div>
+
+                      {
+                        showAttendance &&
+                        <Attendance
+                          gradebook={gradebook}
+                          term={term}
+                          lesson={selectedLesson}
+                          handleSelectGradebook={(gradebook) => {
+                            handleSelectGradebook(gradebook);
+                            setShowAttendance(false);
+                          }}
+                          handleCloseAttendance={() => setShowAttendance(false)}
+                          isEditingAttendance={isEditingAttendance}
+                        />
+                      }
+
                     </div>
-                  </div>
-                )
+                  )
               }
             </div>
           )

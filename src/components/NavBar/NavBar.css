@@ -57,3 +57,8 @@
   font-size: 16px;
   /* Tamanho da fonte */
 }
+
+.teacher-sticker {
+  height: 50px;
+  width: 50px
+}

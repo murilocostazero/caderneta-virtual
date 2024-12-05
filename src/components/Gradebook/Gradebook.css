@@ -231,3 +231,53 @@
 .lesson-actions > :nth-child(2) {
   background-color: #d200d2;
 }
+
+.bottom-attendance-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 12px;
+}
+
+.attendance-form p{
+  margin-bottom: 12px;
+}
+
+.attendance-student {
+  align-items: center;
+  padding: 4px;
+}
+
+.attendance-student.even {
+  background-color: rgba(1, 102, 255, 0.1);
+}
+
+.attendance-student.odd {
+  background-color: rgba(1, 102, 255, 0.2);
+}
+
+.absent-button {
+  border: none;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  background-color: #e41313;
+}
+
+.presence-button {
+  border: none;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  background-color: #18A205;
+}
+
+.student-attendance-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}

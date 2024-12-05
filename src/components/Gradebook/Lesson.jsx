@@ -6,8 +6,8 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 const Lesson = ({ term, handleCloseLesson, onAddLesson, editingLesson, loading, selectedLesson, onEditLesson }) => {
 
-    const [topic, setTopic] = useState(selectedLesson.topic ? selectedLesson.topic : '');
-    const [date, setDate] = useState(selectedLesson.date ? dateToString(selectedLesson.date) : '');
+    const [topic, setTopic] = useState(selectedLesson ? selectedLesson.topic : '');
+    const [date, setDate] = useState(selectedLesson ? dateToString(selectedLesson.date) : '');
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -28,16 +28,25 @@ const Lesson = ({ term, handleCloseLesson, onAddLesson, editingLesson, loading, 
             handleError('Preencha todos os campos');
         } else if (!editingLesson) {
             onAddLesson({ topic, date });
+            clearFields();
         } else {
             onEditLesson({ id: selectedLesson._id, topic, date });
+            clearFields();
         }
+    }
+
+    const clearFields = () => {
+        setTopic('');
     }
 
     return (
         <div className='modal-overlay'>
             <div className='modal'>
                 <div className='align-right'>
-                    <button className="close-button" onClick={() => handleCloseLesson(false)}>
+                    <button className="close-button" onClick={() => {
+                        clearFields();
+                        handleCloseLesson(false);
+                    }}>
                         <MdClose className='close-icon' />
                     </button>
                 </div>
