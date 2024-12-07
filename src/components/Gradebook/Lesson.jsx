@@ -3,16 +3,21 @@ import { MdClose } from 'react-icons/md'
 import InputMask from 'react-input-mask';
 import { dateToString, getCurrentDate } from '../../utils/helper';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import './Gradebook.css';
 
 const Lesson = ({ term, handleCloseLesson, onAddLesson, editingLesson, loading, selectedLesson, onEditLesson }) => {
 
-    const [topic, setTopic] = useState(selectedLesson ? selectedLesson.topic : '');
-    const [date, setDate] = useState(selectedLesson ? dateToString(selectedLesson.date) : '');
+    const [topic, setTopic] = useState('');
+    const [date, setDate] = useState('');
     const [error, setError] = useState('');
+    const [lessonType, setLessonType] = useState('');
 
     useEffect(() => {
         if (editingLesson === false) {
             setDate(getCurrentDate());
+        } else {
+            setTopic(selectedLesson.topic);
+            setDate(dateToString(selectedLesson.date));
         }
     }, []);
 
@@ -63,6 +68,16 @@ const Lesson = ({ term, handleCloseLesson, onAddLesson, editingLesson, loading, 
                             onChange={(e) => setTopic(e.target.value)} />
                     </label>
 
+                    {/* <label>Tipo de aula</label>
+                    <select
+                        id="lessonType"
+                        name="lessonType"
+                        value={lessonType}
+                        onChange={(e) => setLessonType(e.target.value)}>
+                        <option value="regular">Normal</option>
+                        <option value="evaluative">Avaliativa</option>
+                    </select> */}
+
                     <label>Data da aula</label>
                     <InputMask
                         placeholder='13/01/2025'
@@ -81,8 +96,8 @@ const Lesson = ({ term, handleCloseLesson, onAddLesson, editingLesson, loading, 
                                     className='primary-button'>
                                     {
                                         editingLesson ?
-                                        'Salvar alterações' :
-                                        'Adicionar aula'
+                                            'Salvar alterações' :
+                                            'Adicionar aula'
                                     }
                                 </button>
                     }

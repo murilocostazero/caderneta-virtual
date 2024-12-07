@@ -171,6 +171,18 @@
   
 }
 
+.term-form select{
+  padding: 8px;
+  margin-bottom: 4px;
+}
+
+.term-bottom-button {
+  margin: 4px 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
 .lesson-container {
   margin: 4px;
   padding: 4px;
@@ -281,3 +293,69 @@
   align-items: center;
   justify-content: center;
 }
+
+.student-grades-modal {
+  background-color: white;
+  padding: 16px;
+  border-radius: 8px;
+  max-width: 70%;
+}
+
+.evaluations-list {
+  max-width: 100%; /* Defina a largura máxima do contêiner */
+  overflow-x: auto; /* Habilita a rolagem horizontal */
+  margin: 0 auto; /* Centraliza a div, se necessário */
+  border-radius: 8px; /* Arredonda as bordas do contêiner */
+}
+
+/* Estilos para a tabela */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+  margin-top: 20px;
+  font-size: 14px;
+  text-align: center;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+  background-color: #0166ff;
+  color: white;
+}
+
+thead th {
+  padding: 12px 15px;
+}
+
+tbody tr {
+  border-bottom: 1px solid #ddd;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+tbody td {
+  padding: 12px 15px;
+}
+
+/* Estilo dos cantos arredondados */
+table th:first-child,
+table td:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+table th:last-child,
+table td:last-child {
+  border-radius: 0 8px 8px 0;
+}
+

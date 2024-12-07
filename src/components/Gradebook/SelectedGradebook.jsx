@@ -17,6 +17,7 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import TermModal from './TermModal';
 import Lesson from './Lesson';
 import Attendance from './Attendance';
+import StudentGrades from './StudentGrades';
 
 const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [subjectImg, setSubjectImg] = useState(null);
@@ -31,6 +32,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [showAttendance, setShowAttendance] = useState(false);
   const [isEditingAttendance, setIsEditingAttendance] = useState(false);
+  const [isStudentGradesVisible, setIsStudentGradesVisible] = useState(false);
 
   const showStatusBar = (status) => setStatusMessage({ message: status.message, type: status.type });
 
@@ -132,6 +134,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   //---------- LESSON
 
   const handleOpenLesson = (term) => {
+    setEditingLesson(false);
     setSelectedTerm(term);
     setShowLesson(true);
   }
@@ -139,8 +142,9 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const handleEditLesson = (term, lesson) => {
     setSelectedLesson(lesson);
     setEditingLesson(true);
+    setSelectedTerm(term);
 
-    handleOpenLesson(term);
+    setShowLesson(true);
   }
 
   const handleCloseLesson = () => {
@@ -208,6 +212,11 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     setIsEditingAttendance(isEditing);
     setSelectedLesson(lesson);
     setShowAttendance(true);
+  }
+
+  //---------- STUDENT GRADES
+  const handleOpenStudentGrades = () => {
+    setIsStudentGradesVisible(true);
   }
 
   return (
@@ -312,8 +321,8 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
 
                         {
                           lesson.attendance.length > 0 ?
-                          <button onClick={() => handleOpenAttendance(lesson, true)}>Editar chamada</button> :
-                          <button onClick={() => handleOpenAttendance(lesson, false)}>Nova chamada</button>
+                            <button onClick={() => handleOpenAttendance(lesson, true)}>Editar chamada</button> :
+                            <button onClick={() => handleOpenAttendance(lesson, false)}>Nova chamada</button>
                         }
 
                       </div>
@@ -333,9 +342,19 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
                         />
                       }
 
+                      {isStudentGradesVisible &&
+                        <StudentGrades
+                          handleClose={() => setIsStudentGradesVisible(false)}
+                          gradebook={gradebook}
+                          term={term} />}
                     </div>
+
                   )
               }
+
+              <div className='term-bottom-button'>
+                <button className='primary-button' onClick={() => handleOpenStudentGrades()}>INSTRUMENTO DE AVALIAÇÃO DO PROFESSOR</button>
+              </div>
             </div>
           )
         }
