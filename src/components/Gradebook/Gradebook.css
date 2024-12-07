@@ -133,7 +133,7 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
   text-align: center;
 
-  background-color: rgba(0,0,0,0.6);
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .subject-info-container {
@@ -168,10 +168,10 @@
 .term-form {
   display: flex;
   flex-direction: column;
-  
+
 }
 
-.term-form select{
+.term-form select {
   padding: 8px;
   margin-bottom: 4px;
 }
@@ -186,7 +186,8 @@
 .lesson-container {
   margin: 4px;
   padding: 4px;
-  border-top: 1px solid rgba(0, 0, 0, 0.2); /* Definição completa da borda */
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  /* Definição completa da borda */
 }
 
 .drop-icon {
@@ -195,7 +196,7 @@
   cursor: pointer;
 }
 
-.drop-icon:hover{
+.drop-icon:hover {
   fill: #0166ff;
 }
 
@@ -224,7 +225,7 @@
   background-color: rgba(1, 102, 255, 0.2);
 }
 
-.lesson-actions button{
+.lesson-actions button {
   border: none;
   padding: 8px;
   border-radius: 4px;
@@ -235,12 +236,12 @@
   cursor: pointer;
 }
 
-.lesson-actions > :first-child {
+.lesson-actions> :first-child {
   background-color: #777;
   margin-right: 4px;
 }
 
-.lesson-actions > :nth-child(2) {
+.lesson-actions> :nth-child(2) {
   background-color: #d200d2;
 }
 
@@ -250,7 +251,7 @@
   margin-top: 12px;
 }
 
-.attendance-form p{
+.attendance-form p {
   margin-bottom: 12px;
 }
 
@@ -302,10 +303,14 @@
 }
 
 .evaluations-list {
-  max-width: 100%; /* Defina a largura máxima do contêiner */
-  overflow-x: auto; /* Habilita a rolagem horizontal */
-  margin: 0 auto; /* Centraliza a div, se necessário */
-  border-radius: 8px; /* Arredonda as bordas do contêiner */
+  max-width: 100%;
+  /* Defina a largura máxima do contêiner */
+  overflow-x: auto;
+  /* Habilita a rolagem horizontal */
+  margin: 0 auto;
+  /* Centraliza a div, se necessário */
+  border-radius: 8px;
+  /* Arredonda as bordas do contêiner */
 }
 
 /* Estilos para a tabela */
@@ -359,3 +364,17 @@ table td:last-child {
   border-radius: 0 8px 8px 0;
 }
 
+table input {
+  width: 80%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.evaluations-button {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}

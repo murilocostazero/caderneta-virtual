@@ -3,9 +3,11 @@ import './Gradebook.css';
 import { MdClose } from 'react-icons/md';
 import { dateToString } from '../../utils/helper';
 import axiosInstance from '../../utils/axiosInstance';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 const StudentGrades = ({ handleClose, term, gradebook }) => {
   const [loading, setLoading] = useState(false);
+  const [loadingSave, setLoadingSave] = useState(false);
   const [error, setError] = useState('');
   const [evaluations, setEvaluations] = useState([]);
 
@@ -29,7 +31,6 @@ const StudentGrades = ({ handleClose, term, gradebook }) => {
 
       if (response.status === 200) {
         setEvaluations(response.data);
-        console.log('---EV', response.data)
       } else {
         handleError('Erro ao buscar notas');
       }
@@ -43,6 +44,41 @@ const StudentGrades = ({ handleClose, term, gradebook }) => {
     }
     setLoading(false);
   }
+
+  // Função para manipular alterações em um campo da tabela
+  const handleInputChange = (index, field, value) => {
+    const updatedEvaluations = evaluations.map((evaluation, i) =>
+      i === index ? { ...evaluation, [field]: value } : evaluation
+    );
+    setEvaluations(updatedEvaluations);
+  };
+
+  // Função para salvar alterações (simula o envio para o backend)
+  const handleSave = async () => {
+    setLoadingSave(true);
+    try {
+      const response = await axiosInstance.put(`/gradebook/${gradebook._id}/term/${term._id}/evaluations`, {
+        evaluations: evaluations
+      }, {
+        timeout: 10000
+      });
+
+      if (response.status === 200) {
+        // setEvaluations(response.data);
+        getEvaluation();
+      } else {
+        handleError('Erro ao salvar notas');
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'ERR_NETWORK') {
+        handleError('Verifique sua conexão com a internet');
+      } else {
+        handleError('Um erro inesperado aconteceu. Tente novamente.');
+      }
+    }
+    setLoadingSave(false);
+  };
 
   return (
     <div className='modal-overlay'>
@@ -66,7 +102,7 @@ const StudentGrades = ({ handleClose, term, gradebook }) => {
 
             {
               loading ?
-                <h4>Carregando notas</h4> :
+                <LoadingSpinner /> :
                 !evaluations ?
                   <p>Erro ao carregar notas dos alunos</p> :
 
@@ -87,18 +123,82 @@ const StudentGrades = ({ handleClose, term, gradebook }) => {
                       <tbody>
                         {evaluations.map((evaluation, index) => (
                           <tr key={index}>
-                            <td>{evaluation.student}</td>
-                            <td>{evaluation.monthlyExam}</td>
-                            <td>{evaluation.bimonthlyExam}</td>
-                            <td>{evaluation.qualitativeAssessment}</td>
-                            <td>{evaluation.bimonthlyGrade}</td>
-                            <td>{evaluation.bimonthlyRecovery}</td>
-                            <td>{evaluation.bimonthlyAverage}</td>
-                            <td>{evaluation.totalAbsences}</td>
+                            <td>{evaluation.student.name}</td>
+                            <td>
+                              <input
+                                type="number"
+                                value={evaluation.monthlyExam}
+                                onChange={(e) =>
+                                  handleInputChange(index, "monthlyExam", e.target.value)
+                                }
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="number"
+                                value={evaluation.bimonthlyExam}
+                                onChange={(e) =>
+                                  handleInputChange(index, "bimonthlyExam", e.target.value)
+                                }
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="number"
+                                value={evaluation.qualitativeAssessment}
+                                onChange={(e) =>
+                                  handleInputChange(index, "qualitativeAssessment", e.target.value)
+                                }
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="number"
+                                value={evaluation.bimonthlyGrade}
+                                onChange={(e) =>
+                                  handleInputChange(index, "bimonthlyGrade", e.target.value)
+                                }
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="number"
+                                value={evaluation.bimonthlyRecovery}
+                                onChange={(e) =>
+                                  handleInputChange(index, "bimonthlyRecovery", e.target.value)
+                                }
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="number"
+                                value={evaluation.bimonthlyAverage}
+                                onChange={(e) =>
+                                  handleInputChange(index, "bimonthlyAverage", e.target.value)
+                                }
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="number"
+                                value={evaluation.totalAbsences}
+                                onChange={(e) =>
+                                  handleInputChange(index, "totalAbsences", e.target.value)
+                                }
+                              />
+                            </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
+
+                    <div className='evaluations-button'>
+                      {
+                        loadingSave ?
+                          <LoadingSpinner /> :
+                          <button onClick={() => handleSave()} className='primary-button'>Salvar alterações</button>
+                      }
+                    </div>
                   </div>
             }
           </div>
