@@ -45,13 +45,39 @@ const StudentGrades = ({ handleClose, term, gradebook }) => {
     setLoading(false);
   }
 
-  // Função para manipular alterações em um campo da tabela
+  // Função para lidar com a alteração dos campos
   const handleInputChange = (index, field, value) => {
     const updatedEvaluations = evaluations.map((evaluation, i) =>
       i === index ? { ...evaluation, [field]: value } : evaluation
     );
     setEvaluations(updatedEvaluations);
-  };
+  }
+
+  const isValidNumber = (value) => {
+    // Verifica se o valor é numérico ou está vazio
+    return !isNaN(value) && value !== '';
+  }
+
+  const onSave = () => {
+    // Verifica se todas as avaliações têm valores válidos
+    const allValid = evaluations.every((evaluation) => {
+      return (
+        isValidNumber(evaluation.monthlyExam) &&
+        isValidNumber(evaluation.bimonthlyExam) &&
+        isValidNumber(evaluation.qualitativeAssessment) &&
+        isValidNumber(evaluation.bimonthlyGrade) &&
+        isValidNumber(evaluation.bimonthlyRecovery) &&
+        isValidNumber(evaluation.bimonthlyAverage) &&
+        isValidNumber(evaluation.totalAbsences)
+      );
+    });
+
+    if (!allValid) {
+      handleError('Os campos das notas devem ser preenchidos com números');
+    } else {
+      handleSave();
+    }
+  }
 
   // Função para salvar alterações (simula o envio para o backend)
   const handleSave = async () => {
@@ -78,7 +104,7 @@ const StudentGrades = ({ handleClose, term, gradebook }) => {
       }
     }
     setLoadingSave(false);
-  };
+  }
 
   return (
     <div className='modal-overlay'>
@@ -185,6 +211,7 @@ const StudentGrades = ({ handleClose, term, gradebook }) => {
                                 onChange={(e) =>
                                   handleInputChange(index, "totalAbsences", e.target.value)
                                 }
+                                disabled={true}
                               />
                             </td>
                           </tr>
@@ -194,19 +221,21 @@ const StudentGrades = ({ handleClose, term, gradebook }) => {
 
                     <div className='evaluations-button'>
                       {
-                        loadingSave ?
-                          <LoadingSpinner /> :
-                          <button onClick={() => handleSave()} className='primary-button'>Salvar alterações</button>
+                        error ?
+                          <p className='error-message'>{error}</p> :
+                          loadingSave ?
+                            <LoadingSpinner /> :
+                            <button
+                              onClick={() => onSave()}
+                              className='primary-button'>
+                              Salvar alterações
+                            </button>
                       }
                     </div>
                   </div>
             }
           </div>
         </div>
-
-        {
-          error && <p className='error-container'>{error}</p>
-        }
       </div>
     </div>
   )
