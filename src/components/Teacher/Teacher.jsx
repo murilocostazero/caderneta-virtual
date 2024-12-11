@@ -14,7 +14,12 @@ const Teacher = ({ globalSchool }) => {
     const [statusMessage, setStatusMessage] = useState(null);
     const [selectedTeacher, setSelectedTeacher] = useState(null);
 
-    const showStatusBar = (status) => setStatusMessage({ message: status.message, type: status.type });
+    const showStatusBar = (status) => {
+        setStatusMessage({ message: status.message, type: status.type });
+        setTimeout(() => {
+            setStatusMessage(null);
+        }, 2000);
+    };
 
     useEffect(() => {
         getTeachers();

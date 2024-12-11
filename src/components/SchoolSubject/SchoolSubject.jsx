@@ -15,7 +15,7 @@ const SchoolSubject = ({ globalSchool }) => {
     const [loading, setLoading] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [subjectToRemove, setSubjectToRemove] = useState(null);
-    const [statusMessage, setStatusMessage] = useState('');
+    const [statusMessage, setStatusMessage] = useState(null);
     const [myTeachers, setMyTeachers] = useState([]);
     const [showTeachersToSelect, setShowTeachersToSelect] = useState(false);
     const [selectedSubject, setSelectedSubject] = useState(null);
@@ -24,7 +24,12 @@ const SchoolSubject = ({ globalSchool }) => {
         getSubjects();
     }, []);
 
-    const showStatusBar = (status) => setStatusMessage({ message: status.message, type: status.type });
+    const showStatusBar = (status) => {
+        setStatusMessage({ message: status.message, type: status.type });
+        setTimeout(() => {
+            setStatusMessage(null);
+        }, 2000);
+    };
 
     // Filtra as disciplinas conforme o termo de pesquisa
     const filteredSubjects = subjects.filter(subject =>

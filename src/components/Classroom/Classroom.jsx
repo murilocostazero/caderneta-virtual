@@ -19,7 +19,12 @@ const Classroom = ({ globalSchool }) => {
         getClassrooms();
     }, []);
 
-    const showStatusBar = (status) => setStatusMessage({ message: status.message, type: status.type });
+    const showStatusBar = (status) => {
+        setStatusMessage({ message: status.message, type: status.type });
+        setTimeout(() => {
+            setStatusMessage(null);
+        }, 2000);
+    };
 
     const getClassrooms = async () => {
         setLoading(true);
@@ -171,7 +176,7 @@ const Classroom = ({ globalSchool }) => {
                                     <div className="classroom-info">
                                         <h4>{classroom.grade}º ano {classroom.name}</h4>
                                         <p>{classroom.shift}</p>
-                                        <p>Alunos: {classroom.totalStudents}</p>
+                                        <p>Alunos: {classroom.students.length}</p>
                                     </div>
                                     <div className="classroom-actions">
                                         <button

@@ -19,7 +19,12 @@ const Gradebook = ({ globalSchool }) => {
     getGradebooks();
   }, [selectedGradebook]);
 
-  const showStatusBar = (status) => setStatusMessage({ message: status.message, type: status.type });
+  const showStatusBar = (status) => {
+    setStatusMessage({ message: status.message, type: status.type });
+    setTimeout(() => {
+        setStatusMessage(null);
+    }, 2000);
+};
 
   const onCloseModal = () => {
     setIsModalOpen(false);

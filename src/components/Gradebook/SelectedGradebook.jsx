@@ -34,7 +34,12 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [isEditingAttendance, setIsEditingAttendance] = useState(false);
   const [isStudentGradesVisible, setIsStudentGradesVisible] = useState(false);
 
-  const showStatusBar = (status) => setStatusMessage({ message: status.message, type: status.type });
+  const showStatusBar = (status) => {
+    setStatusMessage({ message: status.message, type: status.type });
+    setTimeout(() => {
+        setStatusMessage(null);
+    }, 2000);
+};
 
   useEffect(() => {
     selectSubjectImage();

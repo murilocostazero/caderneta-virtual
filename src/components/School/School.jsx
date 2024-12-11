@@ -22,7 +22,12 @@ const School = ({ userInfo, setGlobalSchool }) => {
         setModalOpen(!isModalOpen);
     }
 
-    const showStatusBar = (status) => setStatusMessage({ message: status.message, type: status.type });
+    const showStatusBar = (status) => {
+        setStatusMessage({ message: status.message, type: status.type });
+        setTimeout(() => {
+            setStatusMessage(null);
+        }, 2000);
+    };
 
     const onAddSchool = async (school) => {
         setLoading(true);

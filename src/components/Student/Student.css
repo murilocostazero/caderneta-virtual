@@ -106,9 +106,10 @@
     padding: 12px;
     border-radius: 8px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 8px;
-    cursor: pointer;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -116,9 +117,12 @@
     background-color: rgba(1, 102, 255, 0.2);
 }
 
-.students-list-item > :first-child {
+.student-info-container {
+    cursor: pointer;
+}
+
+.student-info-container > :first-child {
     font-weight: bold;
-    font-size: 16px;
 }
 
 .guardian-contact:hover {
@@ -126,4 +130,15 @@
     color: #0166ff;
     font-size: 18px;
     text-decoration: underline;
+}
+
+.change-classroom-container select {
+    padding: 8px;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.change-classroom-container button {
+    margin-top: 12px;
+    width: 100%;
 }
