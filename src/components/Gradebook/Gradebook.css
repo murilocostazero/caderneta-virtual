@@ -388,3 +388,13 @@ table input {
   font-weight: bold;
   cursor: not-allowed;
 }
+
+.edit-term-button {
+  margin-left: 4px;
+  fill: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.edit-term-button :hover {
+  fill: #0166ff;
+}

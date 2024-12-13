@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MdAdd, MdArrowBack, MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
+import { MdAdd, MdArrowBack, MdArrowDropDown, MdArrowDropUp, MdEdit } from 'react-icons/md';
 import gbpt from '../../assets/images/subjects/gb-pt.png';
 import gbmt from '../../assets/images/subjects/gb-mt.png';
 import gbht from '../../assets/images/subjects/gb-ht.png';
@@ -37,9 +37,9 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const showStatusBar = (status) => {
     setStatusMessage({ message: status.message, type: status.type });
     setTimeout(() => {
-        setStatusMessage(null);
+      setStatusMessage(null);
     }, 2000);
-};
+  };
 
   useEffect(() => {
     selectSubjectImage();
@@ -120,6 +120,41 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
 
       if (response.status === 201) {
         handleSelectGradebook(response.data.gradebook); //AAAQUI
+      } else {
+        showStatusBar({ message: 'Erro ao adicionar novo bimestre', type: 'error' });
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+      } else {
+        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+      }
+    }
+    setLoading(false);
+
+    handleTermModal(false);
+  }
+
+  const handleEditTerm = (termToEdit) => {
+    setSelectedTerm(termToEdit);
+    setTermModal(true);
+  }
+
+  const onEditTerm = async (term) => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.put(`/gradebook/${gradebook._id}/term/${term._id}`, {
+        name: term.name,
+        startDate: stringToDate(term.startDate),
+        endDate: stringToDate(term.endDate)
+      }, {
+        timeout: 10000
+      });
+
+      if (response.status === 200) {
+        handleSelectGradebook(response.data.gradebook);
+        showStatusBar({message: response.data.message, type: 'success'});
       } else {
         showStatusBar({ message: 'Erro ao adicionar novo bimestre', type: 'error' });
       }
@@ -220,7 +255,8 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   }
 
   //---------- STUDENT GRADES
-  const handleOpenStudentGrades = () => {
+  const handleOpenStudentGrades = (termToGrades) => {
+    setSelectedTerm(termToGrades);
     setIsStudentGradesVisible(true);
   }
 
@@ -295,7 +331,10 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
           gradebook.terms.map((term) =>
             <div key={term._id} className='lesson-container'>
               <div className='row-container'>
-                <h4>{term.name}</h4>
+                <div className='row-container'>
+                  <h4>{term.name}</h4>
+                  <MdEdit onClick={() => handleEditTerm(term)} className='edit-term-button' />
+                </div>
                 <button className='add-lesson-button' onClick={() => handleOpenLesson(term)}>
                   <MdAdd />
                 </button>
@@ -347,19 +386,26 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
                         />
                       }
 
-                      {isStudentGradesVisible &&
+                      {
+                        isStudentGradesVisible
+                        &&
                         <StudentGrades
                           handleClose={() => setIsStudentGradesVisible(false)}
                           gradebook={gradebook}
-                          term={term} />}
-                    </div>
+                          term={selectedTerm} />
+                      }
 
+
+                    </div>
                   )
               }
 
-              <div className='term-bottom-button'>
-                <button className='primary-button' onClick={() => handleOpenStudentGrades()}>INSTRUMENTO DE AVALIAÇÃO DO PROFESSOR</button>
-              </div>
+              {
+                term.lessons.length > 0 &&
+                <div className='term-bottom-button'>
+                  <button className='primary-button' onClick={() => handleOpenStudentGrades(term)}>INSTRUMENTO DE AVALIAÇÃO DO PROFESSOR</button>
+                </div>
+              }
             </div>
           )
         }
@@ -368,9 +414,19 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
           termModal ?
             <TermModal
               handleTermModal={(isOpen) => handleTermModal(isOpen)}
-              onSaveTerm={(term) => onSaveTerm(term)} /> :
+              onSaveTerm={(term) => onSaveTerm(term)}
+              onEditTerm={(term) => onEditTerm(term)}
+              selectedTerm={selectedTerm} /> :
             <div />
         }
+      </div>
+
+      <div className='gradebook-section'>
+        <div className='row-container'>
+          <h3>Registro Geral</h3>
+        </div>
+
+
       </div>
 
       {statusMessage && (

@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { MdClose } from 'react-icons/md';
 import InputMask from "react-input-mask";
 import './Gradebook.css';
+import { dateToString } from '../../utils/helper';
 
-const TermModal = ({ handleTermModal, onSaveTerm }) => {
-    const [name, setName] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+const TermModal = ({ handleTermModal, onSaveTerm, onEditTerm, selectedTerm }) => {
+    const [name, setName] = useState(selectedTerm ? selectedTerm.name : '');
+    const [startDate, setStartDate] = useState(selectedTerm ? dateToString(selectedTerm.startDate) : '');
+    const [endDate, setEndDate] = useState(selectedTerm ? dateToString(selectedTerm.endDate) : '');
     const [error, setError] = useState('');
 
     const handleError = (message) => {
@@ -19,8 +20,10 @@ const TermModal = ({ handleTermModal, onSaveTerm }) => {
     const handleSaveTerm = () => {
         if (!name || !startDate || !endDate) {
             handleError('Preencha todos os campos')
-        } else {
+        } else if(!selectedTerm) {
             onSaveTerm({ name, startDate, endDate });
+        } else {
+            onEditTerm({ _id: selectedTerm._id, name, startDate, endDate });
         }
     }
 
@@ -63,7 +66,13 @@ const TermModal = ({ handleTermModal, onSaveTerm }) => {
                     {
                         error ?
                             <p className='error-message'>{error}</p> :
-                            <button className='primary-button' onClick={() => handleSaveTerm()}>Adicionar bimestre</button>
+                            <button className='primary-button' onClick={() => handleSaveTerm()}>
+                                {
+                                    !selectedTerm ?
+                                    'Adicionar bimestre' :
+                                    'Editar bimestre'
+                                }
+                            </button>
                     }
                 </div>
 
