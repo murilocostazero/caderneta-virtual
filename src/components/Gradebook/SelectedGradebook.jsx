@@ -18,6 +18,7 @@ import TermModal from './TermModal';
 import Lesson from './Lesson';
 import Attendance from './Attendance';
 import StudentGrades from './StudentGrades';
+import AnnualRegistration from './AnnualRegistration';
 
 const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [subjectImg, setSubjectImg] = useState(null);
@@ -33,6 +34,8 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [showAttendance, setShowAttendance] = useState(false);
   const [isEditingAttendance, setIsEditingAttendance] = useState(false);
   const [isStudentGradesVisible, setIsStudentGradesVisible] = useState(false);
+  const [isAnnualRegistrationVisible, setIsAnnualRegistrationVisible] = useState(false);
+  const [learningRecords, setLearningRecords] = useState([]);
 
   const showStatusBar = (status) => {
     setStatusMessage({ message: status.message, type: status.type });
@@ -260,6 +263,35 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     setIsStudentGradesVisible(true);
   }
 
+  //---------- ANNUAL REGISTRATION
+  const handleOpenAnnualRegistration = async () => {
+
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get(`/gradebook/${gradebook._id}/learning-record`,  {
+        timeout: 10000
+      });
+
+      if (response.status === 200) {
+       //RECEBE O REGISTRO GERAL DO BACKEND
+       console.log('-------F', response.data)
+       setLearningRecords(response.data);
+      } else {
+        showStatusBar({ message: 'Erro ao gerar o registro geral', type: 'error' });
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+      } else {
+        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+      }
+    }
+    setLoading(false);
+
+    setIsAnnualRegistrationVisible(true);
+  }
+
   return (
     <div className='gradebook-container'>
       <div className='subject-header'>
@@ -423,8 +455,19 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
 
       <div className='gradebook-section'>
         <div className='row-container'>
-          <h3>Registro Geral</h3>
+          <h3>Registro Geral da avaliação da aprendizagem</h3>
+          <button className='primary-button' onClick={() => handleOpenAnnualRegistration()}>
+            GERAR
+          </button>
         </div>
+
+        {
+          isAnnualRegistrationVisible && learningRecords && 
+          <AnnualRegistration
+            handleCloseAnnualRegistration={() => setIsAnnualRegistrationVisible(false)}
+            learningRecords={learningRecords}
+          />
+        }
 
 
       </div>

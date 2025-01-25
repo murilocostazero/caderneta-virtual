@@ -45,13 +45,43 @@ const StudentGrades = ({ handleClose, term, gradebook }) => {
     setLoading(false);
   }
 
-  // Função para lidar com a alteração dos campos
   const handleInputChange = (index, field, value) => {
-    const updatedEvaluations = evaluations.map((evaluation, i) =>
-      i === index ? { ...evaluation, [field]: value } : evaluation
-    );
+    const updatedEvaluations = evaluations.map((evaluation, i) => {
+      if (i === index) {
+        // Atualizar o campo editado
+        const updatedEvaluation = { ...evaluation, [field]: value };
+  
+        // Calcular bimonthlyGrade (média das três avaliações)
+        const monthlyExam = parseFloat(updatedEvaluation.monthlyExam) || 0;
+        const bimonthlyExam = parseFloat(updatedEvaluation.bimonthlyExam) || 0;
+        const qualitativeAssessment = parseFloat(updatedEvaluation.qualitativeAssessment) || 0;
+        const bimonthlyGrade = (monthlyExam + bimonthlyExam + qualitativeAssessment) / 3;
+  
+        let bimonthlyRecovery = parseFloat(updatedEvaluation.bimonthlyRecovery) || 0;
+        let bimonthlyAverage;
+  
+        if (bimonthlyGrade < 7) {
+          // Se bimonthlyGrade for menor que 7, calcula a média com bimonthlyRecovery
+          bimonthlyAverage = (bimonthlyGrade + bimonthlyRecovery) / 2;
+        } else {
+          // Se bimonthlyGrade for maior ou igual a 7, o aluno não faz recuperação
+          bimonthlyRecovery = 0; // Define recuperação como 0
+          bimonthlyAverage = bimonthlyGrade; // Média igual à bimonthlyGrade
+        }
+  
+        // Retornar o objeto atualizado com as médias recalculadas
+        return {
+          ...updatedEvaluation,
+          bimonthlyGrade: parseFloat(bimonthlyGrade.toFixed(2)), // Arredondar para 2 casas decimais
+          bimonthlyRecovery: parseFloat(bimonthlyRecovery.toFixed(2)), // Define recuperação ajustada
+          bimonthlyAverage: parseFloat(bimonthlyAverage.toFixed(2)), // Arredondar para 2 casas decimais
+        };
+      }
+      return evaluation;
+    });
+  
     setEvaluations(updatedEvaluations);
-  }
+  }  
 
   const isValidNumber = (value) => {
     // Verifica se o valor é numérico ou está vazio
