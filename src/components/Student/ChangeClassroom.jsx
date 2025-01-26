@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import axiosInstance from '../../utils/axiosInstance';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 
 const ChangeClassroom = ({ onCloseModal, selectedClassroom, studentToChange, classrooms, changeClassroom }) => {
@@ -25,7 +26,9 @@ const ChangeClassroom = ({ onCloseModal, selectedClassroom, studentToChange, cla
             setLoading(true);
             try {
                 const response = await axiosInstance.patch(`/student/${studentToChange._id}/change-classroom`, {
-                    newClassroomId: selectedOption
+                    newClassroomId: selectedOption,
+                    oldClassroomId: selectedClassroom._id
+
                 }, {
                     timeout: 10000
                 });
@@ -69,6 +72,8 @@ const ChangeClassroom = ({ onCloseModal, selectedClassroom, studentToChange, cla
                     {
                         error ?
                             <p className='error-message'>{error}</p> :
+                            loading ?
+                            <LoadingSpinner /> :
                             <button
                                 onClick={() => handleChangeStudentClassroom()}
                                 className='primary-button'>

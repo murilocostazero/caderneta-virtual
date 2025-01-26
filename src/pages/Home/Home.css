@@ -42,6 +42,7 @@
 /* Conteúdo principal */
 .content {
     flex: 1;
+    overflow-y: auto;
 }
 
 /* Barra de navegação inferior em telas pequenas */
