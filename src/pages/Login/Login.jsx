@@ -41,6 +41,8 @@ const Login = () => {
         if (response.data && response.data.accessToken) {
           localStorage.setItem('token', response.data.accessToken);
           navigate('/', { replace: true });
+        } else {
+          showStatusBar({ message: 'Login incorreto', type: 'error' });
         }
 
       } catch (error) {

@@ -74,36 +74,39 @@ const Home = () => {
             className="nav-item"
             onClick={() => setSelectedPage('school')}>
             <FaSchool className="icon" />
-            <label>Escolas</label>
+            <label>Escola</label>
           </div>
           {
             userInfo && userInfo.userType === 'manager' ?
-              <div
-                className="nav-item"
-                onClick={() => setSelectedPage('teacher')}>
-                <FaUserTie className="icon" />
-                <label>Professores</label>
-              </div> :
+              <>
+                <div
+                  className="nav-item"
+                  onClick={() => setSelectedPage('teacher')}>
+                  <FaUserTie className="icon" />
+                  <label>Professores</label>
+                </div>
+                <div
+                  className="nav-item"
+                  onClick={() => setSelectedPage('schoolSubject')}>
+                  <FaBook className="icon" />
+                  <label>Disciplinas</label>
+                </div>
+                <div
+                  className="nav-item"
+                  onClick={() => setSelectedPage('classes')}>
+                  <FaChalkboardTeacher className="icon" />
+                  <label>Turmas</label>
+                </div>
+                <div
+                  className="nav-item"
+                  onClick={() => setSelectedPage('students')}>
+                  <FaUserGraduate className="icon" />
+                  <label>Alunos</label>
+                </div>
+              </>
+              :
               <div />
           }
-          <div
-            className="nav-item"
-            onClick={() => setSelectedPage('schoolSubject')}>
-            <FaBook className="icon" />
-            <label>Disciplinas</label>
-          </div>
-          <div
-            className="nav-item"
-            onClick={() => setSelectedPage('classes')}>
-            <FaChalkboardTeacher className="icon" />
-            <label>Turmas</label>
-          </div>
-          <div
-            className="nav-item"
-            onClick={() => setSelectedPage('students')}>
-            <FaUserGraduate className="icon" />
-            <label>Alunos</label>
-          </div>
           <div
             className="nav-item"
             onClick={() => setSelectedPage('gradebook')}>
@@ -126,8 +129,8 @@ const Home = () => {
                       selectedPage === 'students' && userInfo.lastSelectedSchool ?
                         <Student globalSchool={globalSchool} /> :
                         selectedPage === 'gradebook' && userInfo.lastSelectedSchool ?
-                        <Gradebook globalSchool={globalSchool} /> :
-                        <NoSelectedSchool />
+                          <Gradebook globalSchool={globalSchool} userInfo={userInfo} /> :
+                          <NoSelectedSchool />
           }
         </main>
       </div>

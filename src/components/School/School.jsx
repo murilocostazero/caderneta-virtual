@@ -15,7 +15,11 @@ const School = ({ userInfo, setGlobalSchool }) => {
     const [hoveredSchool, setHoveredSchool] = useState(null);
 
     useEffect(() => {
-        getSchools();
+        if (userInfo.userType === 'manager') {
+            getSchools();
+        } else {
+            getSchool();
+        }
     }, []);
 
     const handleOpenModal = () => {
@@ -118,6 +122,30 @@ const School = ({ userInfo, setGlobalSchool }) => {
         setLoading(false);
     }
 
+    const getSchool = async () => {
+        setLoading(true);
+        try {
+            const response = await axiosInstance.get(`/school/${userInfo.lastSelectedSchool}`, {
+                timeout: 10000
+            });
+
+            if (response.status !== 200) {
+                showStatusBar({ message: 'Erro ao buscar escolas', type: 'error' });
+            } else {
+                setSchools([response.data]);
+                setSelectedSchool(response.data);
+            }
+        } catch (error) {
+            console.log(error)
+            if (error.code === 'ERR_NETWORK') {
+                showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+            } else {
+                showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+            }
+        }
+        setLoading(false);
+    }
+
     const onSelectSchool = async (school) => {
         await setSelectedSchool(school);
         setModalOpen(true);
@@ -204,7 +232,7 @@ const School = ({ userInfo, setGlobalSchool }) => {
 
             {/* Barra de Pesquisa com Botão de Limpeza */}
             {
-                filteredSchools.length > 0 ?
+                filteredSchools.length > 0 && userInfo.userType === 'manager' ?
                     <div className="search-bar-container">
                         <input
                             type="text"
@@ -243,7 +271,7 @@ const School = ({ userInfo, setGlobalSchool }) => {
                                 </div>
 
                                 {
-                                    hoveredSchool === school._id &&
+                                    hoveredSchool === school._id && userInfo.userType === 'manager' &&
                                     <div className='school-buttons'>
                                         <button
                                             className="check-button"
@@ -251,16 +279,12 @@ const School = ({ userInfo, setGlobalSchool }) => {
                                         >
                                             <MdCheckCircle size={24} />
                                         </button>
-                                        {
-                                            userInfo.userType === 'manager' ?
-                                                <button
-                                                    className="edit-button"
-                                                    onClick={() => onSelectSchool(school)}
-                                                >
-                                                    <MdEdit size={24} />
-                                                </button> :
-                                                <div />
-                                        }
+                                        <button
+                                            className="edit-button"
+                                            onClick={() => onSelectSchool(school)}
+                                        >
+                                            <MdEdit size={24} />
+                                        </button>
                                     </div>
                                 }
                             </div>
