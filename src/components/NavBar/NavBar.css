@@ -1,7 +1,6 @@
 /* NavBar.css */
 
 .navbar {
-  padding: 8px;
   width: 100%;
   height: 60px;
   background-color: #fafafa;
@@ -17,9 +16,23 @@
   /* Alinha verticalmente */
 }
 
-.navbar-content> :first-child {
-  font-weight: 600;
-  font-size: 20px;
+.logo-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.teacher-sticker {
+  height: 50px;
+  width: 50px
+}
+
+.logo-name {
+  margin-left: 8px;
+  max-width: 100px;
+  word-break: normal;
+  text-align: center;
+  font-weight: bold;
 }
 
 .right-container {
@@ -58,7 +71,3 @@
   /* Tamanho da fonte */
 }
 
-.teacher-sticker {
-  height: 50px;
-  width: 50px
-}

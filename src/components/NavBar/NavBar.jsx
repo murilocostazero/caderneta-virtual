@@ -16,7 +16,12 @@ const NavBar = ({ userInfo }) => {
     return (
         <div className="navbar">
             <div className="navbar-content">
-                <img src={teacherOk} alt='Figurinha professor' className='teacher-sticker' />
+                <div className="logo-container">
+                    <img src={teacherOk} alt='Figurinha professor' className='teacher-sticker' />
+                    <div className="logo-name">
+                        Caderneta Virtual
+                    </div>
+                </div>
                 <div className='right-container'>
                     <div className='user-container'>
                         <span className="username">{!userInfo ? 'Carregando' : userInfo.email}</span>
