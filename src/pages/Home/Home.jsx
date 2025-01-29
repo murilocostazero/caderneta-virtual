@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Home.css'
-import { FaSchool, FaUserTie, FaBook, FaChalkboardTeacher, FaUserGraduate, FaClipboard } from 'react-icons/fa';
+import { FaSchool, FaUserTie, FaBook, FaChalkboardTeacher, FaUserGraduate, FaClipboard, FaWrench } from 'react-icons/fa';
 import NavBar from '../../components/NavBar/NavBar';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosInstance';
@@ -13,6 +13,7 @@ import Classroom from '../../components/Classroom/Classroom';
 import Student from '../../components/Student/Student';
 import Gradebook from '../../components/Gradebook/Gradebook';
 import Team from '../../components/Team/Team';
+import Settings from '../../components/Settings/Settings';
 
 const Home = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -114,6 +115,14 @@ const Home = () => {
             <FaClipboard className="icon" />
             <label>Cadernetas</label>
           </div>
+
+          <div
+            className="nav-item"
+            onClick={() => setSelectedPage('settings')}>
+            <FaWrench className="icon" />
+            <label>Ajustes</label>
+          </div>
+
         </nav>
         <main className="content">
           {
@@ -132,6 +141,8 @@ const Home = () => {
                         <Student globalSchool={globalSchool} /> :
                         selectedPage === 'gradebook' && userInfo.lastSelectedSchool ?
                           <Gradebook globalSchool={globalSchool} userInfo={userInfo} /> :
+                          selectedPage === 'settings' && userInfo.lastSelectedSchool ?
+                          <Settings globalSchool={globalSchool} userInfo={userInfo} /> :
                           <NoSelectedSchool />
           }
         </main>
