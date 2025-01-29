@@ -12,6 +12,7 @@ import NoSelectedSchool from '../../components/NoSelectedSchool/NoSelectedSchool
 import Classroom from '../../components/Classroom/Classroom';
 import Student from '../../components/Student/Student';
 import Gradebook from '../../components/Gradebook/Gradebook';
+import Team from '../../components/Team/Team';
 
 const Home = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -83,7 +84,7 @@ const Home = () => {
                   className="nav-item"
                   onClick={() => setSelectedPage('teacher')}>
                   <FaUserTie className="icon" />
-                  <label>Professores</label>
+                  <label>Colaboradores</label>
                 </div>
                 <div
                   className="nav-item"
@@ -121,7 +122,8 @@ const Home = () => {
               selectedPage === 'school' ?
                 <School userInfo={userInfo} setGlobalSchool={(school) => setGlobalSchool(school)} /> :
                 selectedPage === 'teacher' && userInfo.lastSelectedSchool ?
-                  <Teacher globalSchool={globalSchool} /> :
+                  // <Teacher globalSchool={globalSchool} /> :
+                  <Team globalSchool={globalSchool} /> :
                   selectedPage === 'schoolSubject' && userInfo.lastSelectedSchool ?
                     <SchoolSubject globalSchool={globalSchool} /> :
                     selectedPage === 'classes' && userInfo.lastSelectedSchool ?
