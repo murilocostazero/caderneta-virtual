@@ -9,6 +9,7 @@ import gbeg from '../../assets/images/subjects/gb-eg.jpg';
 import gbet from '../../assets/images/subjects/gb-et.png';
 import gbef from '../../assets/images/subjects/gb-ef.jpg';
 import gbefc from '../../assets/images/subjects/gb-efc.jpg';
+import generatePDF from '../../assets/images/pdf.png';
 import './Gradebook.css';
 import { dateToString, normalizeString, stringToDate } from '../../utils/helper';
 import StatusBar from '../StatusBar/StatusBar';
@@ -19,6 +20,8 @@ import Lesson from './Lesson';
 import Attendance from './Attendance';
 import StudentGrades from './StudentGrades';
 import AnnualRegistration from './AnnualRegistration';
+import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
+import GradebookPDF from './GradebookPdf';
 
 const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [subjectImg, setSubjectImg] = useState(null);
@@ -296,11 +299,23 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     setIsAnnualRegistrationVisible(true);
   }
 
+  const handleDownload = async (gbook) => {
+    const blob = await pdf(<GradebookPDF gradebook={gbook} />).toBlob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "caderneta_escolar.pdf";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <div className='gradebook-container'>
       <div className='subject-header'>
         <div className='subject-image-container'>
-          <img src={subjectImg} alt="Imagem da matéria" />
+          <img src={subjectImg} alt="Imagem da matéria" className='subject-background' />
 
           <div class="subject-name">
             <div className='back-button-container'>
@@ -309,6 +324,11 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
                 fontSize={20}
                 color='#FFF'
                 cursor='pointer' />
+
+              <div className='generate-pdf-bt' onClick={() => handleDownload(gradebook)}>
+                <div className='generate-pdf-text'>Gerar PDF</div>
+                <img src={generatePDF} alt="pdf-image" />
+              </div>
             </div>
 
             <div className='subject-info-container'>
