@@ -9,7 +9,7 @@ const NoSelectedSchool = () => {
       <p className='no-school-subtitle'>Clique no botão de check <button
         className="check-button">
         <MdCheckCircle size={24} />
-      </button> na escola desejada na aba <span style={{ fontWeight: 'bold', marginLeft: 4 }}>Escolas</span></p>
+      </button> na escola desejada na aba <span style={{ fontWeight: 'bold', marginLeft: 4 }}>Escola</span></p>
 
     </div>
   )

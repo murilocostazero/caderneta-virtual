@@ -300,6 +300,8 @@
   padding: 16px;
   border-radius: 8px;
   max-width: 70%;
+  max-height: 80%;
+  overflow-y: auto;
 }
 
 .evaluations-list {
@@ -397,4 +399,43 @@ table input {
 
 .edit-term-button :hover {
   fill: #0166ff;
+}
+
+.registration-container {
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.registro-geral {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ccc;
+}
+
+.registro-geral thead tr {
+  background-color: #0166ff;
+}
+
+.registro-geral th,
+.registro-geral td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.registro-geral thead {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.linha-par {
+  background-color: #ffffff;
+}
+
+.linha-impar {
+  background-color: #f9f9f9;
+}
+
+.text-center {
+  text-align: center;
 }

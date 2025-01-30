@@ -53,6 +53,9 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
       case 'portugues':
         setSubjectImg(gbpt);
         break;
+      case 'lingua portuguesa':
+        setSubjectImg(gbpt);
+        break;
       case 'matematica':
         setSubjectImg(gbmt);
         break;
@@ -107,6 +110,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   //---------- TERM
 
   const handleTermModal = (isOpen) => {
+    setSelectedTerm(null);
     setTermModal(isOpen);
   }
 
@@ -122,7 +126,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
       });
 
       if (response.status === 201) {
-        handleSelectGradebook(response.data.gradebook); //AAAQUI
+        handleSelectGradebook(response.data.gradebook);
       } else {
         showStatusBar({ message: 'Erro ao adicionar novo bimestre', type: 'error' });
       }
@@ -157,7 +161,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
 
       if (response.status === 200) {
         handleSelectGradebook(response.data.gradebook);
-        showStatusBar({message: response.data.message, type: 'success'});
+        showStatusBar({ message: response.data.message, type: 'success' });
       } else {
         showStatusBar({ message: 'Erro ao adicionar novo bimestre', type: 'error' });
       }
@@ -268,14 +272,14 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
 
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`/gradebook/${gradebook._id}/learning-record`,  {
+      const response = await axiosInstance.get(`/gradebook/${gradebook._id}/learning-record`, {
         timeout: 10000
       });
 
       if (response.status === 200) {
-       //RECEBE O REGISTRO GERAL DO BACKEND
-       console.log('-------F', response.data)
-       setLearningRecords(response.data);
+        //RECEBE O REGISTRO GERAL DO BACKEND
+        console.log('-------F', response.data)
+        setLearningRecords(response.data);
       } else {
         showStatusBar({ message: 'Erro ao gerar o registro geral', type: 'error' });
       }
@@ -462,7 +466,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
         </div>
 
         {
-          isAnnualRegistrationVisible && learningRecords && 
+          isAnnualRegistrationVisible && learningRecords &&
           <AnnualRegistration
             handleCloseAnnualRegistration={() => setIsAnnualRegistrationVisible(false)}
             learningRecords={learningRecords}

@@ -253,7 +253,7 @@ const SchoolSubject = ({ globalSchool }) => {
                                                 <button onClick={() => setSubjectToRemove(subject)}>Excluir</button>
                                             </div>
                                         </div>
-                                        <div className='add-teacher-container'>
+                                        {/* <div className='add-teacher-container'>
                                             <button className='ok-button' onClick={() => getSchoolTeachers(subject)}>Adicionar professor</button>
 
                                             <div className='subject-teachers'>
@@ -270,7 +270,7 @@ const SchoolSubject = ({ globalSchool }) => {
                                                         )
                                                 }
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </li>
                             ))}

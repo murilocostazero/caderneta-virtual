@@ -231,7 +231,7 @@ const School = ({ userInfo, setGlobalSchool }) => {
             }
 
             {/* Barra de Pesquisa com Botão de Limpeza */}
-            {
+            { /*
                 filteredSchools.length > 0 && userInfo.userType === 'manager' ?
                     <div className="search-bar-container">
                         <input
@@ -247,7 +247,7 @@ const School = ({ userInfo, setGlobalSchool }) => {
                             </button>
                         )}
                     </div> :
-                    <div />
+                    <div /> */
             }
 
             <div className="school-list">

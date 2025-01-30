@@ -181,11 +181,11 @@ const Settings = ({ globalSchool, userInfo }) => {
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)} />
 
-                            <label>Tipo de usuário</label>
+                            {/* <label>Tipo de usuário</label>
                             <select value={userType} onChange={(e) => setUserType(e.target.value)}>
-                                <option value='manager'>Gerente</option>
+                                <option value='manager'>Gestor(a)</option>
                                 <option value='teacher'>Professor(a)</option>
-                            </select>
+                            </select> */}
 
                             <label>Área de conhecimento</label>
                             <input

@@ -79,7 +79,7 @@ const Home = () => {
             <label>Escola</label>
           </div>
           {
-            userInfo && userInfo.userType === 'manager' ?
+            userInfo && userInfo.userType === 'manager' &&
               <>
                 <div
                   className="nav-item"
@@ -106,8 +106,6 @@ const Home = () => {
                   <label>Alunos</label>
                 </div>
               </>
-              :
-              <div />
           }
           <div
             className="nav-item"
