@@ -68,7 +68,7 @@
 .gradebook-header,
 .gradebook-list-item {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   /* Três colunas de largura igual */
   padding: 10px;
   border-bottom: 1px solid #ddd;
@@ -82,6 +82,9 @@
 .gradebook-list-item p {
   margin: 0;
   padding: 5px;
+}
+
+.gradebook-list-item> :first-child {
   cursor: pointer;
 }
 
@@ -154,16 +157,10 @@
 .generate-pdf-bt {
   display: flex;
   align-items: center;
-  /* Alinha a imagem e o texto verticalmente */
   gap: 8px;
-  /* Espaçamento entre o texto e a imagem */
-  padding: 8px;
-  background-color: rgba(0, 0, 0, 0.2);
-  /* Cor de fundo */
-  color: white;
+  color: black;
   border-radius: 6px;
   cursor: pointer;
-  font-weight: bold;
   width: fit-content;
 }
 
@@ -178,9 +175,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px;
-    background-color: rgba(0, 0, 0, 0.2);
-    color: white;
+    color: black;
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;

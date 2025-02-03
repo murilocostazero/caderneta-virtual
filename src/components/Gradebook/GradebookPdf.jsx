@@ -2,13 +2,13 @@ import React from "react";
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
-  page: { padding: 20, fontSize: 12 },
+  page: { padding: 20, fontSize: 10 },
   header: { fontSize: 16, fontWeight: "bold", marginBottom: 10, textAlign: "center" },
   section: { marginBottom: 10 },
   table: { display: "table", width: "100%", borderStyle: "solid", borderWidth: 1, borderColor: "black" },
   row: { flexDirection: "row" },
   cell: { flex: 1, padding: 5, borderStyle: "solid", borderWidth: 1, borderColor: "black", textAlign: "center" },
-  bold: { fontWeight: "bold" }
+  bold: { fontWeight: 700 }
 });
 
 const GradebookPDF = ({ gradebook }) => (
@@ -17,10 +17,22 @@ const GradebookPDF = ({ gradebook }) => (
       {/* Cabeçalho */}
       <View style={styles.section}>
         <Text style={styles.header}>Caderneta Escolar</Text>
-        <Text>Professor: {gradebook.teacher.name}</Text>
-        <Text>Disciplina: {gradebook.subject.name}</Text>
-        <Text>Turma: {gradebook.classroom.grade}º {gradebook.classroom.name} ({gradebook.classroom.shift})</Text>
-        <Text>Ano Letivo: {gradebook.academicYear}</Text>
+        <Text>
+          <Text style={styles.bold}>
+            Professor: </Text>
+          {gradebook.teacher.name}
+        </Text>
+        <Text>
+          <Text style={styles.bold}>
+            Disciplina:
+          </Text> {gradebook.subject.name}</Text>
+        <Text>
+          <Text style={styles.bold}>
+            Turma: </Text>
+          {gradebook.classroom.grade}º {gradebook.classroom.name} ({gradebook.classroom.shift})</Text>
+        <Text>
+          <Text style={styles.bold}>
+            Ano Letivo: </Text> {gradebook.academicYear}</Text>
       </View>
 
       {/* Loop pelos bimestres */}

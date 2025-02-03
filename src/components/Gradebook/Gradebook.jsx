@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { MdAdd, MdClose } from 'react-icons/md';
+import generatePDF from '../../assets/images/pdf.png';
+import openGB from '../../assets/images/share.png';
 import './Gradebook.css';
 import GradebookModal from './GradebookModal';
 import axiosInstance from '../../utils/axiosInstance';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import StatusBar from '../StatusBar/StatusBar';
 import SelectedGradebook from './SelectedGradebook';
+import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
+import GradebookPDF from './GradebookPdf';
 
 const Gradebook = ({ globalSchool, userInfo }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,7 +20,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
   const [selectedGradebook, setSelectedGradebook] = useState(null);
 
   useEffect(() => {
-    if(userInfo.userType === 'manager') {
+    if (userInfo.userType === 'manager') {
       getGradebooks();
     } else {
       getTeacherGradebooks();
@@ -121,6 +125,18 @@ const Gradebook = ({ globalSchool, userInfo }) => {
     setSelectedGradebook(gradebook);
   }
 
+  const handleDownload = async (gbook) => {
+    const blob = await pdf(<GradebookPDF gradebook={gbook} />).toBlob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "caderneta_escolar.pdf";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   return (
     selectedGradebook ?
       <SelectedGradebook
@@ -145,12 +161,19 @@ const Gradebook = ({ globalSchool, userInfo }) => {
                 <p>Turma</p>
                 <p>Matéria</p>
                 <p>Professor</p>
+                <p>Gerar PDF</p>
               </div>
               {filteredGradebooks.map((gradebook) => (
-                <div key={gradebook._id} className="gradebook-list-item" onClick={() => handleSelectGradebook(gradebook)}>
-                  <p>{gradebook.classroom.grade}º ano {gradebook.classroom.name} - {gradebook.classroom.shift}</p>
+                <div key={gradebook._id} className="gradebook-list-item">
+                  <p onClick={() => handleSelectGradebook(gradebook)}>
+                    {gradebook.classroom.grade}º ano {gradebook.classroom.name} - {gradebook.classroom.shift}
+                  </p>
                   <p>{gradebook.subject.name}</p>
                   <p>{gradebook.teacher.name}</p>
+                  <div className='generate-pdf-bt' onClick={() => handleDownload(gradebook)}>
+                    <img src={generatePDF} alt="pdf-image" />
+                    baixar
+                  </div>
                 </div>
               ))}
             </div>
