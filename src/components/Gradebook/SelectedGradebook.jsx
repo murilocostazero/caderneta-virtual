@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MdAdd, MdArrowBack, MdArrowDropDown, MdArrowDropUp, MdEdit } from 'react-icons/md';
+import { MdAdd, MdArrowBack, MdEdit, MdKeyboardArrowDown, MdKeyboardArrowUp, MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
 import gbpt from '../../assets/images/subjects/gb-pt.png';
 import gbmt from '../../assets/images/subjects/gb-mt.png';
 import gbht from '../../assets/images/subjects/gb-ht.png';
@@ -39,6 +39,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [isStudentGradesVisible, setIsStudentGradesVisible] = useState(false);
   const [isAnnualRegistrationVisible, setIsAnnualRegistrationVisible] = useState(false);
   const [learningRecords, setLearningRecords] = useState([]);
+  const [expandedTerms, setExpandedTerms] = useState({});
 
   const showStatusBar = (status) => {
     setStatusMessage({ message: status.message, type: status.type });
@@ -50,6 +51,13 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   useEffect(() => {
     selectSubjectImage();
   }, []);
+
+  const toggleLessons = (termId) => {
+    setExpandedTerms((prev) => ({
+      ...prev,
+      [termId]: !prev[termId], // Alterna o estado do bimestre clicado
+    }));
+  };
 
   const selectSubjectImage = () => {
     switch (normalizeString(gradebook.subject.name)) {
@@ -388,6 +396,9 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
             <div key={term._id} className='lesson-container'>
               <div className='row-container'>
                 <div className='row-container'>
+                  <div className='dropdown-button' onClick={() => toggleLessons(term._id)}>
+                    {expandedTerms[term._id] ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+                  </div>
                   <h4>{term.name}</h4>
                   <MdEdit onClick={() => handleEditTerm(term)} className='edit-term-button' />
                 </div>
@@ -410,57 +421,62 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
               }
 
               {
-                !term.lessons || term.lessons.length < 1 ?
-                  <p>Nenhuma aula registrada nesse bimestre</p> :
+                expandedTerms[term._id] &&
+                <>
+                  {
+                    (!term.lessons || term.lessons.length < 1) ? (
+                      <p>Nenhuma aula registrada nesse bimestre</p>
+                    ) : (
+                      term.lessons.map((lesson, index) =>
+                        <div key={lesson._id} className={`single-lesson-container  ${index % 2 === 0 ? "even" : "odd"}`}>
+                          <p>{dateToString(lesson.date)} - Assunto: {lesson.topic}</p>
+                          <div className='lesson-actions'>
+                            <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
 
-                  term.lessons.map((lesson, index) =>
-                    <div key={lesson._id} className={`single-lesson-container  ${index % 2 === 0 ? "even" : "odd"}`}>
-                      <p>{dateToString(lesson.date)} - Assunto: {lesson.topic}</p>
-                      <div className='lesson-actions'>
-                        <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
+                            {
+                              lesson.attendance.length > 0 ?
+                                <button onClick={() => handleOpenAttendance(lesson, true)}>Editar chamada</button> :
+                                <button onClick={() => handleOpenAttendance(lesson, false)}>Nova chamada</button>
+                            }
 
-                        {
-                          lesson.attendance.length > 0 ?
-                            <button onClick={() => handleOpenAttendance(lesson, true)}>Editar chamada</button> :
-                            <button onClick={() => handleOpenAttendance(lesson, false)}>Nova chamada</button>
-                        }
+                          </div>
 
-                      </div>
+                          {
+                            showAttendance &&
+                            <Attendance
+                              gradebook={gradebook}
+                              term={term}
+                              lesson={selectedLesson}
+                              handleSelectGradebook={(gradebook) => {
+                                handleSelectGradebook(gradebook);
+                                setShowAttendance(false);
+                              }}
+                              handleCloseAttendance={() => setShowAttendance(false)}
+                              isEditingAttendance={isEditingAttendance}
+                            />
+                          }
 
-                      {
-                        showAttendance &&
-                        <Attendance
-                          gradebook={gradebook}
-                          term={term}
-                          lesson={selectedLesson}
-                          handleSelectGradebook={(gradebook) => {
-                            handleSelectGradebook(gradebook);
-                            setShowAttendance(false);
-                          }}
-                          handleCloseAttendance={() => setShowAttendance(false)}
-                          isEditingAttendance={isEditingAttendance}
-                        />
-                      }
-
-                      {
-                        isStudentGradesVisible
-                        &&
-                        <StudentGrades
-                          handleClose={() => setIsStudentGradesVisible(false)}
-                          gradebook={gradebook}
-                          term={selectedTerm} />
-                      }
+                          {
+                            isStudentGradesVisible
+                            &&
+                            <StudentGrades
+                              handleClose={() => setIsStudentGradesVisible(false)}
+                              gradebook={gradebook}
+                              term={selectedTerm} />
+                          }
 
 
+                        </div>
+                      )
+                    )
+                  }
+                  {
+                    term.lessons.length > 0 &&
+                    <div className='term-bottom-button'>
+                      <button className='primary-button' onClick={() => handleOpenStudentGrades(term)}>INSTRUMENTO DE AVALIAÇÃO DO PROFESSOR</button>
                     </div>
-                  )
-              }
-
-              {
-                term.lessons.length > 0 &&
-                <div className='term-bottom-button'>
-                  <button className='primary-button' onClick={() => handleOpenStudentGrades(term)}>INSTRUMENTO DE AVALIAÇÃO DO PROFESSOR</button>
-                </div>
+                  }
+                </>
               }
             </div>
           )
