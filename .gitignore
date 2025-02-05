@@ -44,3 +44,7 @@ out/
 
 # Cache ESLint
 .eslintcache
+
+# Ignore o .env de produção, se houver
+.env.production
+config.json
