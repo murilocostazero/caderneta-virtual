@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MdAdd, MdClose } from 'react-icons/md';
 import generatePDF from '../../assets/images/pdf.png';
-import openGB from '../../assets/images/share.png';
 import './Gradebook.css';
 import GradebookModal from './GradebookModal';
 import axiosInstance from '../../utils/axiosInstance';
