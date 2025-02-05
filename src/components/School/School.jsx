@@ -4,6 +4,7 @@ import { MdOutlineAdd, MdCheckCircle, MdEdit, MdClose } from "react-icons/md";
 import AddEditSchool from './AddEditSchool';
 import axiosInstance from '../../utils/axiosInstance';
 import StatusBar from '../StatusBar/StatusBar';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 const School = ({ userInfo, setGlobalSchool }) => {
     const [isModalOpen, setModalOpen] = useState(false);
@@ -252,43 +253,45 @@ const School = ({ userInfo, setGlobalSchool }) => {
 
             <div className="school-list">
                 {
-                    filteredSchools.length < 1 ?
-                        <p className='no-school-message'>
-                            {userInfo.userType === 'manager' ? 'Clique no botão + para cadastrar sua escola.' : 'Você ainda não tem acesso à sua escola. Entre em contato com o seu gestor escolar.'}
-                        </p> :
-                        filteredSchools.map((school) => (
-                            <div
-                                key={school._id}
-                                className="school-card"
-                                onMouseEnter={() => setHoveredSchool(school._id)}
-                                onMouseLeave={() => setHoveredSchool(null)}
-                                style={{ backgroundColor: !userInfo.lastSelectedSchool || userInfo.lastSelectedSchool !== school._id ? '#FFF' : 'rgba(0, 123, 255, 0.17)' }}
-                            >
-                                <div className='school-data'>
-                                    <h3>{school.name}</h3>
-                                    <p>Email: {school.email}</p>
-                                    <p>Telefone: {school.phone}</p>
-                                </div>
-
-                                {
-                                    hoveredSchool === school._id && userInfo.userType === 'manager' &&
-                                    <div className='school-buttons'>
-                                        <button
-                                            className="check-button"
-                                            onClick={() => handleSelectSchool(school)}
-                                        >
-                                            <MdCheckCircle size={24} />
-                                        </button>
-                                        <button
-                                            className="edit-button"
-                                            onClick={() => onSelectSchool(school)}
-                                        >
-                                            <MdEdit size={24} />
-                                        </button>
+                    loading ?
+                        <LoadingSpinner /> :
+                        filteredSchools.length < 1 ?
+                            <p className='no-school-message'>
+                                {userInfo.userType === 'manager' ? 'Clique no botão + para cadastrar sua escola.' : 'Você ainda não tem acesso à sua escola. Entre em contato com o seu gestor escolar.'}
+                            </p> :
+                            filteredSchools.map((school) => (
+                                <div
+                                    key={school._id}
+                                    className="school-card"
+                                    onMouseEnter={() => setHoveredSchool(school._id)}
+                                    onMouseLeave={() => setHoveredSchool(null)}
+                                    style={{ backgroundColor: !userInfo.lastSelectedSchool || userInfo.lastSelectedSchool !== school._id ? '#FFF' : 'rgba(0, 123, 255, 0.17)' }}
+                                >
+                                    <div className='school-data'>
+                                        <h3>{school.name}</h3>
+                                        <p>Email: {school.email}</p>
+                                        <p>Telefone: {school.phone}</p>
                                     </div>
-                                }
-                            </div>
-                        ))}
+
+                                    {
+                                        hoveredSchool === school._id && userInfo.userType === 'manager' &&
+                                        <div className='school-buttons'>
+                                            <button
+                                                className="check-button"
+                                                onClick={() => handleSelectSchool(school)}
+                                            >
+                                                <MdCheckCircle size={24} />
+                                            </button>
+                                            <button
+                                                className="edit-button"
+                                                onClick={() => onSelectSchool(school)}
+                                            >
+                                                <MdEdit size={24} />
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
+                            ))}
             </div>
 
             {
