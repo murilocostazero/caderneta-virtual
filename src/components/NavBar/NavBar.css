@@ -71,3 +71,13 @@
   /* Tamanho da fonte */
 }
 
+
+@media (max-width: 768px) {
+  .username {
+    max-width: 150px;
+    /* Ajuste para telas pequenas */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

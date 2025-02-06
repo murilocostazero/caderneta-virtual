@@ -54,21 +54,37 @@
 
     .sidebar {
         flex-direction: row;
-        justify-content: space-between;
+        justify-content: flex-start;
+        /* Alinha os itens à esquerda para permitir rolagem */
         width: 100%;
         height: 60px;
         position: fixed;
         bottom: 0;
         left: 0;
-        padding-top: 0px;
-        padding-bottom: 0px;
-        padding-left: 10px;
-        padding-right: 10px;
+        padding: 0 10px;
         z-index: 1000;
+
+        overflow-x: auto;
+        /* Adiciona rolagem lateral */
+        white-space: nowrap;
+        /* Impede que os itens quebrem linha */
+        scrollbar-width: thin;
+        /* Deixa a barra de rolagem mais fina */
+        -ms-overflow-style: none;
+        /* Remove a barra de rolagem no Edge/IE */
+    }
+
+    .sidebar::-webkit-scrollbar {
+        display: none;
+        /* Oculta a barra de rolagem no Chrome/Safari */
     }
 
     .nav-item {
         margin: 0;
         font-size: 10px;
+        flex-shrink: 0;
+        /* Garante que os itens não encolham */
+        padding: 0 10px;
+        /* Espaçamento entre os itens */
     }
 }
