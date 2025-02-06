@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { MdOutlineClose } from 'react-icons/md';
 import './StatusBar.css';
 
 const StatusBar = ({ message, type, onClose }) => {
@@ -18,6 +19,7 @@ const StatusBar = ({ message, type, onClose }) => {
     return (
         <div className={`status-bar ${type === 'success' ? 'status-success' : 'status-error'}`}>
             {message}
+            <MdOutlineClose className='close-sb-icon' onClick={() => setIsVisible(false)} />
         </div>
     );
 };

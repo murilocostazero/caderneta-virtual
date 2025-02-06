@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaUser } from "react-icons/fa";
 import './NavBar.css';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,8 @@ import teacherOk from '../../assets/images/teacher-ok.png';
 
 const NavBar = ({ userInfo }) => {
     const navigate = useNavigate();
+
+    const [openMenu, setOpenMenu] = useState(false);
 
     const onLogout = () => {
         localStorage.clear();
@@ -23,11 +25,15 @@ const NavBar = ({ userInfo }) => {
                     </div>
                 </div>
                 <div className='right-container'>
-                    <div className='user-container'>
-                        <span className="username">{!userInfo ? 'Carregando' : userInfo.email}</span>
-                        <p onClick={() => onLogout()}>Sair</p>
-                    </div>
-                    <div className='icon-container'>
+                    {
+                        openMenu && (
+                            <div className='user-container'>
+                                <span className="username">{!userInfo ? 'Carregando' : userInfo.email}</span>
+                                <p onClick={() => onLogout()}>Sair</p>
+                            </div>
+                        )
+                    }
+                    <div className='icon-container' onClick={() => setOpenMenu(!openMenu)}>
                         <FaUser className='icon' />
                     </div>
                 </div>

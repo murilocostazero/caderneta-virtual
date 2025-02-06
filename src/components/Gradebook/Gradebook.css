@@ -341,6 +341,17 @@
   overflow-y: auto;
 }
 
+@media (max-width: 768px) {
+  .student-grades-modal {
+    background-color: white;
+    padding: 16px;
+    border-radius: 8px;
+    max-width: 95%;
+    max-height: 80%;
+    overflow-y: auto;
+  }
+}
+
 .evaluations-list {
   max-width: 100%;
   /* Defina a largura máxima do contêiner */
@@ -416,6 +427,7 @@ table input {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
 }
 
 .evaluation-button-disable {
