@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FaUser } from "react-icons/fa";
 import './NavBar.css';
 import { useNavigate } from 'react-router-dom';
@@ -10,11 +10,6 @@ const NavBar = ({ userInfo }) => {
     const navigate = useNavigate();
 
     const [openMenu, setOpenMenu] = useState(false);
-    const [firstAndSecondName, setFirstAndSecondName] = useState('');
-
-    useEffect(() => {
-        setFirstAndSecondName(!userInfo ? 'Carregando...' : getFirstAndSecondName(userInfo.name));
-    }, []);
 
     const onLogout = () => {
         localStorage.clear();
@@ -34,7 +29,7 @@ const NavBar = ({ userInfo }) => {
                     {
                         openMenu && (
                             <div className='user-container'>
-                                <span className="username">{!userInfo ? 'Carregando' : firstAndSecondName}</span>
+                                <span className="username">{userInfo}</span>
                                 <p onClick={() => onLogout()}>Sair</p>
                             </div>
                         )

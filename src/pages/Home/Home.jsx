@@ -14,6 +14,7 @@ import Student from '../../components/Student/Student';
 import Gradebook from '../../components/Gradebook/Gradebook';
 import Team from '../../components/Team/Team';
 import Settings from '../../components/Settings/Settings';
+import { getFirstAndSecondName } from '../../utils/helper';
 
 const Home = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -69,7 +70,11 @@ const Home = () => {
 
   return (
     <div>
-      <NavBar userInfo={userInfo} />
+      {
+        userInfo ?
+          <NavBar userInfo={getFirstAndSecondName(userInfo.name)} /> :
+          <div />
+      }
       <div className="home-container">
         <nav className="sidebar">
           <div
@@ -80,32 +85,32 @@ const Home = () => {
           </div>
           {
             userInfo && userInfo.userType === 'manager' &&
-              <>
-                <div
-                  className="nav-item"
-                  onClick={() => setSelectedPage('teacher')}>
-                  <FaUserTie className="icon" />
-                  <label>Colaboradores</label>
-                </div>
-                <div
-                  className="nav-item"
-                  onClick={() => setSelectedPage('schoolSubject')}>
-                  <FaBook className="icon" />
-                  <label>Disciplinas</label>
-                </div>
-                <div
-                  className="nav-item"
-                  onClick={() => setSelectedPage('classes')}>
-                  <FaChalkboardTeacher className="icon" />
-                  <label>Turmas</label>
-                </div>
-                <div
-                  className="nav-item"
-                  onClick={() => setSelectedPage('students')}>
-                  <FaUserGraduate className="icon" />
-                  <label>Alunos</label>
-                </div>
-              </>
+            <>
+              <div
+                className="nav-item"
+                onClick={() => setSelectedPage('teacher')}>
+                <FaUserTie className="icon" />
+                <label>Colaboradores</label>
+              </div>
+              <div
+                className="nav-item"
+                onClick={() => setSelectedPage('schoolSubject')}>
+                <FaBook className="icon" />
+                <label>Disciplinas</label>
+              </div>
+              <div
+                className="nav-item"
+                onClick={() => setSelectedPage('classes')}>
+                <FaChalkboardTeacher className="icon" />
+                <label>Turmas</label>
+              </div>
+              <div
+                className="nav-item"
+                onClick={() => setSelectedPage('students')}>
+                <FaUserGraduate className="icon" />
+                <label>Alunos</label>
+              </div>
+            </>
           }
           <div
             className="nav-item"
@@ -140,8 +145,8 @@ const Home = () => {
                         selectedPage === 'gradebook' && userInfo.lastSelectedSchool ?
                           <Gradebook globalSchool={globalSchool} userInfo={userInfo} /> :
                           selectedPage === 'settings' && userInfo.lastSelectedSchool ?
-                          <Settings globalSchool={globalSchool} userInfo={userInfo} /> :
-                          <NoSelectedSchool />
+                            <Settings globalSchool={globalSchool} userInfo={userInfo} /> :
+                            <NoSelectedSchool />
           }
         </main>
       </div>
