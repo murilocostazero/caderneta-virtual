@@ -28,7 +28,7 @@ const NavBar = ({ userInfo }) => {
                     {
                         openMenu && (
                             <div className='user-container'>
-                                <span className="username">{!userInfo ? 'Carregando' : userInfo.email}</span>
+                                <span className="username">{!userInfo ? 'Carregando' : userInfo.name}</span>
                                 <p onClick={() => onLogout()}>Sair</p>
                             </div>
                         )
