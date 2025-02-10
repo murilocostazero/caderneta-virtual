@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaUser } from "react-icons/fa";
 import './NavBar.css';
 import { useNavigate } from 'react-router-dom';
 import teacherOk from '../../assets/images/teacher-ok.png';
+import { getFirstAndSecondName } from '../../utils/helper';
 
 
 const NavBar = ({ userInfo }) => {
     const navigate = useNavigate();
 
     const [openMenu, setOpenMenu] = useState(false);
+    const [firstAndSecondName, setFirstAndSecondName] = useState('');
+
+    useEffect(() => {
+        setFirstAndSecondName(!userInfo ? 'Carregando...' : getFirstAndSecondName(userInfo.name));
+    }, []);
 
     const onLogout = () => {
         localStorage.clear();
@@ -28,7 +34,7 @@ const NavBar = ({ userInfo }) => {
                     {
                         openMenu && (
                             <div className='user-container'>
-                                <span className="username">{!userInfo ? 'Carregando' : userInfo.name}</span>
+                                <span className="username">{!userInfo ? 'Carregando' : firstAndSecondName}</span>
                                 <p onClick={() => onLogout()}>Sair</p>
                             </div>
                         )

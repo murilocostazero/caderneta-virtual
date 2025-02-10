@@ -43,3 +43,11 @@ export function classroomTypeToPT(classroomType) {
             return 'Ensino Médio';
     }
 }
+
+export function getFirstAndSecondName(fullName) {
+    const nameParts = fullName.trim().split(/\s+/); // Divide por espaços múltiplos e remove espaços extras
+    const firstName = nameParts[0] || ""; // Primeiro nome
+    const secondName = nameParts[1] || ""; // Segundo nome (se existir)
+    
+    return `${firstName} ${secondName}`;
+}
