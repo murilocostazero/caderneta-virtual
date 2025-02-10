@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import axiosInstance from '../../utils/axiosInstance';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import { classroomTypeToPT } from '../../utils/helper';
 
 
 const ChangeClassroom = ({ onCloseModal, selectedClassroom, studentToChange, classrooms, changeClassroom }) => {
@@ -64,7 +65,7 @@ const ChangeClassroom = ({ onCloseModal, selectedClassroom, studentToChange, cla
                         <option value="">Escolha</option>
                         {classrooms.map((classroom) => (
                             <option key={classroom._id} value={classroom._id}>
-                                {classroom.grade}º ano {classroom.name} - {classroom.shift}
+                                {classroomTypeToPT(classroom.classroomType)} - {classroom.grade} {classroom.name} - {classroom.shift}
                             </option>
                         ))}
                     </select>

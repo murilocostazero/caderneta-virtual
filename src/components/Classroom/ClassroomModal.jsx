@@ -3,7 +3,8 @@ import { MdClose } from 'react-icons/md';
 import './Classroom.css';
 
 const ClassroomModal = ({ onClose, handleSaveClassroom, currentClassroom, handleEditClassroom }) => {
-    
+
+    const [classroomType, setClassroomType] = useState(currentClassroom ? currentClassroom.classroomType : 'kindergarten');
     const [grade, setGrade] = useState(currentClassroom ? currentClassroom.grade : '');
     const [name, setName] = useState(currentClassroom ? currentClassroom.name : '');
     const [shift, setShift] = useState(currentClassroom ? currentClassroom.shift : 'Matutino');
@@ -18,12 +19,12 @@ const ClassroomModal = ({ onClose, handleSaveClassroom, currentClassroom, handle
     }
 
     const onAdd = () => {
-        if (!grade || !name || !shift) {
+        if (!classroomType || !grade || !shift) {
             handleError('Preencha todos os campos.');
-        } else if(!currentClassroom) {
-            handleSaveClassroom({grade: grade, name: name, shift: shift});
+        } else if (!currentClassroom) {
+            handleSaveClassroom({ classroomType: classroomType, grade: grade, name: name, shift: shift });
         } else {
-            handleEditClassroom({grade: grade, name: name, shift: shift});
+            handleEditClassroom({ classroomType: classroomType, grade: grade, name: name, shift: shift });
         }
     }
 
@@ -36,9 +37,22 @@ const ClassroomModal = ({ onClose, handleSaveClassroom, currentClassroom, handle
                     </button>
                 </div>
                 <div className='classroom-form'>
+                    <div className='classroom-select-container'>
+                        <label>Tipo de turma</label>
+                        <select
+                            id="classroomType"
+                            name="classroomType"
+                            value={classroomType}
+                            onChange={(e) => setClassroomType(e.target.value)}>
+                            <option value="kindergarten">Maternal</option>
+                            <option value="elementary">Ensino Fundamental</option>
+                            <option value="high">Ensino Médio</option>
+                        </select>
+                    </div>
+
                     <label>Ano/Série</label>
                     <input
-                        type="number"
+                        type="text"
                         name="grade"
                         value={grade}
                         onChange={(e) => setGrade(e.target.value)}
@@ -56,9 +70,9 @@ const ClassroomModal = ({ onClose, handleSaveClassroom, currentClassroom, handle
 
                     <div className='classroom-select-container'>
                         <label>Turno</label>
-                        <select 
-                            id="shift" 
-                            name="shift" 
+                        <select
+                            id="shift"
+                            name="shift"
                             value={shift}
                             onChange={(e) => setShift(e.target.value)}>
                             <option value="Matutino">Matutino</option>

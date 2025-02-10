@@ -9,6 +9,7 @@ import StatusBar from '../StatusBar/StatusBar';
 import SelectedGradebook from './SelectedGradebook';
 import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
 import GradebookPDF from './GradebookPdf';
+import { classroomTypeToPT } from '../../utils/helper';
 
 const Gradebook = ({ globalSchool, userInfo }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -165,7 +166,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
               {filteredGradebooks.map((gradebook) => (
                 <div key={gradebook._id} className="gradebook-list-item">
                   <p onClick={() => handleSelectGradebook(gradebook)}>
-                    {gradebook.classroom.grade}º ano {gradebook.classroom.name} - {gradebook.classroom.shift}
+                    {classroomTypeToPT(gradebook.classroom.classroomType)} {gradebook.classroom.grade} {gradebook.classroom.name} - {gradebook.classroom.shift}
                   </p>
                   <p>{gradebook.subject.name}</p>
                   <p>{gradebook.teacher.name}</p>

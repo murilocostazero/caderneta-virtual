@@ -1,6 +1,7 @@
 import React from 'react';
 import './Student.css';
 import { MdClose } from 'react-icons/md';
+import { classroomTypeToPT } from '../../utils/helper';
 
 const SelectClassroom = ({ onCloseModal, classrooms, onSelectClassroom }) => {
     return (
@@ -15,7 +16,7 @@ const SelectClassroom = ({ onCloseModal, classrooms, onSelectClassroom }) => {
                 {
                     classrooms.map((classroom) => (
                         <div className='classroom-list-item' key={classroom._id} onClick={() => onSelectClassroom(classroom)}>
-                            <p>{classroom.grade}º ano {classroom.name} - {classroom.shift}</p>
+                            <p>{classroomTypeToPT(classroom.classroomType)} - {classroom.grade} {classroom.name} - {classroom.shift}</p>
                         </div>
                     ))
                 }

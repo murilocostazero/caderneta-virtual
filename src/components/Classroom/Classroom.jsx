@@ -5,6 +5,7 @@ import { MdEdit, MdDelete, MdAdd } from "react-icons/md";
 import './Classroom.css';
 import StatusBar from '../StatusBar/StatusBar';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import { classroomTypeToPT } from '../../utils/helper';
 
 const Classroom = ({ globalSchool }) => {
     const [classrooms, setClassrooms] = useState([]);
@@ -71,6 +72,7 @@ const Classroom = ({ globalSchool }) => {
         setLoading(true);
         try {
             const response = await axiosInstance.post(`/classroom`, {
+                classroomType: classroomData.classroomType,
                 grade: classroomData.grade,
                 name: classroomData.name,
                 shift: classroomData.shift,
@@ -100,6 +102,7 @@ const Classroom = ({ globalSchool }) => {
         setLoading(true);
         try {
             const response = await axiosInstance.put(`/classroom/${currentClassroom._id}`, {
+                classroomType: classroomData.classroomType,
                 grade: classroomData.grade,
                 name: classroomData.name,
                 shift: classroomData.shift
@@ -174,7 +177,7 @@ const Classroom = ({ globalSchool }) => {
                             filteredClassrooms.map(classroom => (
                                 <div key={classroom._id} className="classroom-item">
                                     <div className="classroom-info">
-                                        <h4>{classroom.grade}º ano {classroom.name}</h4>
+                                        <h4>{classroomTypeToPT(classroom.classroomType)} - {classroom.grade} {classroom.name}</h4>
                                         <p>{classroom.shift}</p>
                                         <p>Alunos: {classroom.students.length}</p>
                                     </div>

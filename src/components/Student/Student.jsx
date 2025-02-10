@@ -117,9 +117,10 @@ const Student = ({ globalSchool }) => {
                 showStatusBar({ message: 'Erro ao salvar novo(a) aluno(a)', type: 'error' });
             }
         } catch (error) {
-            console.log(error)
             if (error.code === 'ERR_NETWORK') {
                 showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+            } else if (error.status === 400) {
+                showStatusBar({ message: error.response.data.message, type: 'error' });
             } else {
                 showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
             }
@@ -195,7 +196,7 @@ const Student = ({ globalSchool }) => {
                                 <span>
                                     {
                                         selectedClassroom ?
-                                            `${selectedClassroom.grade}º ano ${selectedClassroom.name} - ${selectedClassroom.shift}` :
+                                            `${selectedClassroom.grade} ${selectedClassroom.name} - ${selectedClassroom.shift}` :
                                             'Clique para selecionar'
                                     }
                                 </span>

@@ -9,8 +9,10 @@ import gbeg from '../../assets/images/subjects/gb-eg.jpg';
 import gbet from '../../assets/images/subjects/gb-et.png';
 import gbef from '../../assets/images/subjects/gb-ef.jpg';
 import gbefc from '../../assets/images/subjects/gb-efc.jpg';
+import kindergarten from '../../assets/images/subjects/kindergarten.jpg'
+import otherImg from '../../assets/images/subjects/other.jpg'
 import './Gradebook.css';
-import { dateToString, normalizeString, stringToDate } from '../../utils/helper';
+import { classroomTypeToPT, dateToString, normalizeString, stringToDate } from '../../utils/helper';
 import StatusBar from '../StatusBar/StatusBar';
 import axiosInstance from '../../utils/axiosInstance';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
@@ -87,6 +89,12 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
         break;
       case 'educacao para o transito':
         setSubjectImg(gbet);
+        break;
+      case 'todas as disciplinas':
+        setSubjectImg(kindergarten);
+        break;
+      default:
+        setSubjectImg(otherImg);
         break;
     }
   }
@@ -322,7 +330,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
             <div className='subject-info-container'>
               <h2>{gradebook.subject.name}</h2>
               <h3>{gradebook.academicYear}</h3>
-              <h3>{gradebook.classroom.grade}º ano {gradebook.classroom.name} - {gradebook.classroom.shift}</h3>
+              <h3>{classroomTypeToPT(gradebook.classroom.classroomType)} {gradebook.classroom.grade} {gradebook.classroom.name} - {gradebook.classroom.shift}</h3>
             </div>
           </div>
         </div>

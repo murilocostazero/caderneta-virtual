@@ -3,14 +3,16 @@ import { MdClose } from 'react-icons/md';
 import './Gradebook.css';
 import axiosInstance from '../../utils/axiosInstance';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import { classroomTypeToPT } from '../../utils/helper';
 
 const GradebookModal = ({ onCloseModal, globalSchool, onSaveGradebook, loadingSave }) => {
 
     const [academicYear, setAcademicYear] = useState('');
     const [classroom, setClassroom] = useState(null);
     const [classrooms, setClassrooms] = useState([]);
+    //Teacher aqui é um colaborador. Pode ser professor ou gestor
     const [teacher, setTeacher] = useState(null);
-    const [teachers, setTeachers] = useState([]);
+    const [team, setTeam] = useState([]);
     const [subject, setSubject] = useState(null);
     const [subjects, setSubjects] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -19,7 +21,7 @@ const GradebookModal = ({ onCloseModal, globalSchool, onSaveGradebook, loadingSa
     useEffect(() => {
         setAcademicYear(new Date().getFullYear());
         getClassrooms();
-        getSchoolTeachers();
+        getTeam();
         getSubjects();
     }, []);
 
@@ -46,14 +48,14 @@ const GradebookModal = ({ onCloseModal, globalSchool, onSaveGradebook, loadingSa
         setLoading(false);
     }
 
-    const getSchoolTeachers = async () => {
+    const getTeam = async () => {
         setLoading(true);
         try {
-            const response = await axiosInstance.get(`/school/teachers/${globalSchool._id}`, {
+            const response = await axiosInstance.get(`/get-team/${globalSchool._id}`, {
                 timeout: 10000
             });
-            // console.log(response.data.teachers)
-            setTeachers(response.data.teachers);
+            // console.log(response.data.team)
+            setTeam(response.data);
         } catch (error) {
             console.error('Erro ao buscar professores:', error);
         }
@@ -124,7 +126,7 @@ const GradebookModal = ({ onCloseModal, globalSchool, onSaveGradebook, loadingSa
                         {
                             classrooms.map(classroom => (
                                 <option key={classroom._id} value={classroom._id}>
-                                    {classroom.grade}º ano {classroom.name} - {classroom.shift}
+                                    {classroomTypeToPT(classroom.classroomType)} - {classroom.grade} {classroom.name} - {classroom.shift}
                                 </option>
                             ))
                         }
@@ -137,7 +139,7 @@ const GradebookModal = ({ onCloseModal, globalSchool, onSaveGradebook, loadingSa
                         onChange={(e) => setTeacher(e.target.value)}>
                         <option value="">Selecione o professor</option>
                         {
-                            teachers.map(teacher => (
+                            team.map(teacher => (
                                 <option key={teacher._id} value={teacher._id}>
                                     {teacher.name}
                                 </option>

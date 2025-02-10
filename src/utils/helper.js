@@ -32,3 +32,14 @@ export function getCurrentDate() {
 
     return `${day}/${month}/${year}`;
 }
+
+export function classroomTypeToPT(classroomType) {
+    switch (classroomType) {
+        case 'kindergarten':
+            return 'Maternal';
+        case 'elementary':
+            return 'Ensino Fundamental';
+        case 'high':
+            return 'Ensino Médio';
+    }
+}
