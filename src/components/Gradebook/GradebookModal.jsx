@@ -5,7 +5,7 @@ import axiosInstance from '../../utils/axiosInstance';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { classroomTypeToPT } from '../../utils/helper';
 
-const GradebookModal = ({ onCloseModal, globalSchool, onSaveGradebook, loadingSave }) => {
+const GradebookModal = ({ onCloseModal, globalSchool, onSaveGradebook, onSaveKindergarten, loadingSave, gradebookType }) => {
 
     const [academicYear, setAcademicYear] = useState('');
     const [classroom, setClassroom] = useState(null);
@@ -94,15 +94,22 @@ const GradebookModal = ({ onCloseModal, globalSchool, onSaveGradebook, loadingSa
 
     const handleSaveGradebook = () => {
 
-        if (!academicYear || !classroom || !teacher || !subject) {
+        if ((gradebookType === 'elementary' && (!academicYear || !classroom || !teacher || !subject)) || (gradebookType !== 'elementary' && (!academicYear || !classroom || !teacher))) {
             handleError('Preencha todos os campos');
         } else {
+            gradebookType === 'elementary' ?
             onSaveGradebook({
                 academicYear,
                 classroom,
                 teacher,
                 subject
-            });
+            })
+            :
+            onSaveKindergarten({
+                academicYear,
+                classroom,
+                teacher
+            })
         }
     }
 
@@ -147,28 +154,35 @@ const GradebookModal = ({ onCloseModal, globalSchool, onSaveGradebook, loadingSa
                         }
                     </select>
 
-                    <label>Matéria/Disciplina</label>
-                    <select
-                        id="subjectSelect"
-                        value={subject}
-                        onChange={(e) => setSubject(e.target.value)}>
-                        <option value="">Selecione uma disciplina</option>
-                        {
-                            subjects.map(subject => (
-                                <option key={subject._id} value={subject._id}>
-                                    {subject.name}
-                                </option>
-                            ))
-                        }
-                    </select>
+                    {
+                        gradebookType === 'elementary' ?
+                            <div>
+                                <label>Matéria/Disciplina</label>
+                                <select
+                                    id="subjectSelect"
+                                    value={subject}
+                                    onChange={(e) => setSubject(e.target.value)}>
+                                    <option value="">Selecione uma disciplina</option>
+                                    {
+                                        subjects.map(subject => (
+                                            <option key={subject._id} value={subject._id}>
+                                                {subject.name}
+                                            </option>
+                                        ))
+                                    }
+                                </select>
+                            </div>
+                            :
+                            <div />
+                    }
 
                     <div className='error-container'>
                         {
                             error ?
                                 <p className='error-message'>{error}</p> :
                                 loadingSave ?
-                                <LoadingSpinner /> :
-                                <button className='gradebook-save-button' onClick={() => handleSaveGradebook()}>Salvar</button>
+                                    <LoadingSpinner /> :
+                                    <button className='gradebook-save-button' onClick={() => handleSaveGradebook()}>Salvar</button>
                         }
                     </div>
                 </div>
