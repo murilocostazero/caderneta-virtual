@@ -4,7 +4,15 @@ import axiosInstance from '../../utils/axiosInstance';
 import './Gradebook.css';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
-const Attendance = ({ handleCloseAttendance, term, lesson, gradebook, isEditingAttendance, handleSelectGradebook }) => {
+const Attendance = ({ 
+    handleCloseAttendance, 
+    term, 
+    lesson, 
+    gradebook, 
+    isEditingAttendance, 
+    handleSelectGradebook,
+    classroomType
+ }) => {
     const [loading, setLoading] = useState(false);
     const [students, setStudents] = useState(null);
     const [attendance, setAttendance] = useState(null);
@@ -52,7 +60,7 @@ const Attendance = ({ handleCloseAttendance, term, lesson, gradebook, isEditingA
     const getAttendance = async () => {
         setLoading(true);
         try {
-            const response = await axiosInstance.get(`/gradebook/${gradebook._id}/term/${term._id}/lesson/${lesson._id}/attendance`, {
+            const response = await axiosInstance.get(`/${classroomType === 'kindergarten' ? 'kindergarten' : 'gradebook'}/${gradebook._id}/term/${term._id}/lesson/${lesson._id}/attendance`, {
                 timeout: 10000
             });
             
@@ -114,7 +122,7 @@ const Attendance = ({ handleCloseAttendance, term, lesson, gradebook, isEditingA
     const onSaveAttendance = async () => {
         setLoading(true);
         try {
-            const response = await axiosInstance.post(`/gradebook/${gradebook._id}/term/${term._id}/lesson/${lesson._id}/attendance`, {
+            const response = await axiosInstance.post(`/${classroomType === 'kindergarten' ? 'kindergarten' : 'gradebook'}/${gradebook._id}/term/${term._id}/lesson/${lesson._id}/attendance`, {
                 attendance: attendance
             }, {
                 timeout: 10000
@@ -134,7 +142,7 @@ const Attendance = ({ handleCloseAttendance, term, lesson, gradebook, isEditingA
     const onUpdateAttendance = async () => {
         setLoading(true);
         try {
-            const response = await axiosInstance.put(`/gradebook/${gradebook._id}/term/${term._id}/lesson/${lesson._id}/attendance`, {
+            const response = await axiosInstance.put(`/${classroomType === 'kindergarten' ? 'kindergarten' : 'gradebook'}/${gradebook._id}/term/${term._id}/lesson/${lesson._id}/attendance`, {
                 attendance: attendance
             }, {
                 timeout: 10000

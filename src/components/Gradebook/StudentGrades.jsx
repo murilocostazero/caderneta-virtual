@@ -5,7 +5,7 @@ import { dateToString } from '../../utils/helper';
 import axiosInstance from '../../utils/axiosInstance';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
-const StudentGrades = ({ handleClose, term, gradebook }) => {
+const StudentGrades = ({ handleClose, term, gradebook, classroomType }) => {
   const [loading, setLoading] = useState(false);
   const [loadingSave, setLoadingSave] = useState(false);
   const [error, setError] = useState('');
@@ -25,7 +25,7 @@ const StudentGrades = ({ handleClose, term, gradebook }) => {
   const getEvaluation = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`/gradebook/${gradebook._id}/term/${term._id}/evaluations`, {
+      const response = await axiosInstance.get(`/${classroomType === 'kindergarten' ? 'kindergarten' : 'gradebook'}/${gradebook._id}/term/${term._id}/evaluations`, {
         timeout: 10000
       });
 

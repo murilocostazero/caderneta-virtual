@@ -10,6 +10,7 @@ import SelectedGradebook from './SelectedGradebook';
 import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
 import GradebookPDF from './GradebookPdf';
 import { classroomTypeToPT } from '../../utils/helper';
+import SelectedKindergarten from './SelectedKindergarten';
 
 const Gradebook = ({ globalSchool, userInfo }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,7 +25,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
     if (userInfo.userType === 'manager') {
       gradebookType === 'elementary' ? getGradebooks() : getKindergartenGB();
     } else {
-      getTeacherGradebooks();
+      gradebookType === 'elementary' ? getTeacherGradebooks() : getTeacherKindergarten();
     }
   }, [selectedGradebook, gradebookType]);
 
@@ -59,7 +60,6 @@ const Gradebook = ({ globalSchool, userInfo }) => {
         showStatusBar({ message: 'Erro ao buscar escolas', type: 'error' });
       }
     } catch (error) {
-      console.log(error)
       if (error.code === 'ERR_NETWORK') {
         showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
       } else {
@@ -82,7 +82,6 @@ const Gradebook = ({ globalSchool, userInfo }) => {
         showStatusBar({ message: 'Erro ao buscar cadernetas', type: 'error' });
       }
     } catch (error) {
-      console.log(error)
       if (error.code === 'ERR_NETWORK') {
         showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
       } else {
@@ -100,13 +99,11 @@ const Gradebook = ({ globalSchool, userInfo }) => {
       });
 
       if (response.status === 200) {
-        console.log('deded', response.data)
         setGradebooks(response.data);
       } else {
         showStatusBar({ message: 'Erro ao buscar cadernetas', type: 'error' });
       }
     } catch (error) {
-      console.log(error)
       if (error.code === 'ERR_NETWORK') {
         showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
       } else {
@@ -124,9 +121,6 @@ const Gradebook = ({ globalSchool, userInfo }) => {
       const response = await axiosInstance.get(`/kindergarten/school/${globalSchool._id}`, {
         timeout: 10000
       });
-
-      console.log(response.data)
-      
       if (response.status === 200) {
         setGradebooks(response.data);
       } else {
@@ -159,6 +153,28 @@ const Gradebook = ({ globalSchool, userInfo }) => {
         getKindergartenGB();
       } else {
         showStatusBar({ message: 'Erro ao buscar escolas', type: 'error' });
+      }
+    } catch (error) {
+      if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+      } else {
+        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+      }
+    }
+    setLoading(false);
+  }
+
+  const getTeacherKindergarten = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get(`/kindergarten/teacher/${userInfo._id}`, {
+        timeout: 10000
+      });
+
+      if (response.status === 200) {
+        setGradebooks(response.data);
+      } else {
+        showStatusBar({ message: 'Erro ao buscar cadernetas', type: 'error' });
       }
     } catch (error) {
       console.log(error)
@@ -196,94 +212,96 @@ const Gradebook = ({ globalSchool, userInfo }) => {
   return (
     <div>
       {
-        selectedGradebook ?
+        selectedGradebook && gradebookType === 'elementary' ?
           <SelectedGradebook
             handleSelectGradebook={(gradebook) => handleSelectGradebook(gradebook)}
             gradebook={selectedGradebook} /> :
-          <div className='gradebook-container'>
-            {
-              loading ?
-                <LoadingSpinner /> :
-                <div className="gradebooks-container">
-                  <div className='gradebook-search-container'>
-                    <div>
-                      <h2>Cadernetas</h2>
-                      {
-                        userInfo && userInfo.userType === 'manager' ?
-                          <select
-                            className='gradebook-select'
-                            id="gradebookSelect"
-                            value={gradebookType}
-                            onChange={(e) => setGradebookType(e.target.value)}>
-                            <option value="elementary">Fundamental e Médio</option>
-                            <option value="kindergarten">Educação infantil</option>
-                          </select>
-                          :
-                          <div />
-                      }
-                    </div>
-                    <div className='gb-filter-container'>
-                      <input
-                        placeholder='Filtrar cadernetas por turma'
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)} />
-                      <MdClose className='clear-icon' />
-                    </div>
-                  </div>
-                  <div className="gradebook-header">
-                    <p>Turma</p>
-                    <p>Matéria</p>
-                    <p>Professor</p>
-                    <p>Gerar PDF</p>
-                  </div>
-                  {
-                    gradebooks.length < 1 ?
-                    <h3>Nenhuma caderneta cadastrada até o momento</h3> :
-                    filteredGradebooks.map((gradebook) => (
-                      <div key={gradebook._id} className="gradebook-list-item">
-                        <p onClick={() => handleSelectGradebook(gradebook)}>
-                          {classroomTypeToPT(gradebook.classroom.classroomType)} {gradebook.classroom.grade} {gradebook.classroom.name} - {gradebook.classroom.shift}
-                        </p>
-                        <p>{!gradebook.subject ? 'Todas as matérias' : gradebook.subject.name}</p>
-                        <p>{gradebook.teacher.name}</p>
-                        <div className='generate-pdf-bt' onClick={() => handleDownload(gradebook)}>
-                          <img src={generatePDF} alt="pdf-image" />
-                          baixar
-                        </div>
+          selectedGradebook && gradebookType === 'kindergarten' ?
+            <SelectedKindergarten
+              handleSelectGradebook={(gradebook) => handleSelectGradebook(gradebook)}
+              gradebook={selectedGradebook}
+            />
+            :
+            <div className='gradebook-container'>
+              {
+                loading ?
+                  <LoadingSpinner /> :
+                  <div className="gradebooks-container">
+                    <div className='gradebook-search-container'>
+                      <div>
+                        <h2>Cadernetas</h2>
+                        <select
+                          className='gradebook-select'
+                          id="gradebookSelect"
+                          value={gradebookType}
+                          onChange={(e) => setGradebookType(e.target.value)}>
+                          <option value="elementary">Fundamental e Médio</option>
+                          <option value="kindergarten">Educação infantil</option>
+                        </select>
+
                       </div>
-                    ))
-                  }
-                </div>
-            }
+                      <div className='gb-filter-container'>
+                        <input
+                          placeholder='Filtrar cadernetas por turma'
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)} />
+                        <MdClose className='clear-icon' />
+                      </div>
+                    </div>
+                    <div className="gradebook-header">
+                      <p>Turma</p>
+                      <p>Matéria</p>
+                      <p>Professor</p>
+                      <p>Gerar PDF</p>
+                    </div>
+                    {
+                      gradebooks.length < 1 ?
+                        <h3>Nenhuma caderneta cadastrada até o momento</h3> :
+                        filteredGradebooks.map((gradebook) => (
+                          <div key={gradebook._id} className="gradebook-list-item">
+                            <p onClick={() => handleSelectGradebook(gradebook)}>
+                              {classroomTypeToPT(gradebook.classroom.classroomType)} {gradebook.classroom.grade} {gradebook.classroom.name} - {gradebook.classroom.shift}
+                            </p>
+                            <p>{!gradebook.subject ? 'Todas as matérias' : gradebook.subject.name}</p>
+                            <p>{gradebook.teacher.name}</p>
+                            <div className='generate-pdf-bt' onClick={() => handleDownload(gradebook)}>
+                              <img src={generatePDF} alt="pdf-image" />
+                              baixar
+                            </div>
+                          </div>
+                        ))
+                    }
+                  </div>
+              }
 
-            {
-              isModalOpen ?
-                <GradebookModal
-                  loadingSave={loading}
-                  onCloseModal={() => onCloseModal()}
-                  globalSchool={globalSchool}
-                  onSaveGradebook={(gradebook) => onSaveGradebook(gradebook)}
-                  onSaveKindergarten={(gradebook) =>onSaveKindergarten(gradebook)}
-                  gradebookType={gradebookType} /> :
-                <div />
-            }
+              {
+                isModalOpen ?
+                  <GradebookModal
+                    loadingSave={loading}
+                    onCloseModal={() => onCloseModal()}
+                    globalSchool={globalSchool}
+                    onSaveGradebook={(gradebook) => onSaveGradebook(gradebook)}
+                    onSaveKindergarten={(gradebook) => onSaveKindergarten(gradebook)}
+                    gradebookType={gradebookType} /> :
+                  <div />
+              }
 
-            {
-              userInfo.userType === 'manager' ?
-                <button className='add-button' onClick={() => setIsModalOpen(true)}>
-                  <MdAdd />
-                </button> :
-                <div />
-            }
+              {
+                userInfo.userType === 'manager' ?
+                  <button className='add-button' onClick={() => setIsModalOpen(true)}>
+                    <MdAdd />
+                  </button> :
+                  <div />
+              }
 
-            {statusMessage && (
-              <StatusBar
-                message={statusMessage.message}
-                type={statusMessage.type}
-                onClose={() => setStatusMessage(null)}
-              />
-            )}
-          </div>
+              {statusMessage && (
+                <StatusBar
+                  message={statusMessage.message}
+                  type={statusMessage.type}
+                  onClose={() => setStatusMessage(null)}
+                />
+              )}
+            </div>
       }
     </div>
   )
