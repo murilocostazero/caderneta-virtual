@@ -1,0 +1,124 @@
+.kindergarten-container {
+    padding: 8px;
+}
+
+.kg-primary-button {
+    position: absolute;
+    right: 12px;
+    bottom: 6px;
+}
+
+.bncc-row-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.add-new-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.bncc-row-container> :nth-child(2) {
+    cursor: pointer;
+}
+
+.bncc-row-container input {
+    margin-bottom: 0px;
+}
+
+.column-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.list-item> :nth-child(1) {
+    margin-right: 4px;
+    font-weight: bold;
+    /* transform: rotate(-90deg); */
+}
+
+.list-item> :nth-child(2) {
+    max-width: 200px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.row-list-item {
+    margin-bottom: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.row-list-item> :nth-child(2) {
+    font-size: 12px;
+    color: '#ddd';
+    cursor: pointer;
+}
+
+.row-list-item:hover > :nth-child(2) {
+    color: #e41313;
+    font-weight: bold;
+}
+
+.save-experience-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.info-label {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.4)
+}
+
+.kg-list-item {
+    padding: 8px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    display: flex;
+    flex-direction: row;
+}
+
+.kg-list-item:hover {
+    background-color: rgba(1, 102, 255, 0.3);
+}
+
+.kg-list-item> :nth-child(1) {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.kg-list-item> :nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.kg-list-icon {
+    fill: #DDD;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.kg-list-icon :hover {
+    fill: #0166ff;
+}
+
+.bold-label {
+    font-weight: bold;
+}
+
+.subitem-list {
+    display: flex;
+    flex-direction: column;
+    margin-left: 8px;
+}

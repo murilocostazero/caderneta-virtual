@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Home.css'
-import { FaSchool, FaUserTie, FaBook, FaChalkboardTeacher, FaUserGraduate, FaClipboard, FaWrench } from 'react-icons/fa';
+import { FaSchool, FaUserTie, FaBook, FaChalkboardTeacher, FaUserGraduate, FaClipboard, FaWrench, FaChild } from 'react-icons/fa';
 import NavBar from '../../components/NavBar/NavBar';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosInstance';
@@ -15,6 +15,7 @@ import Gradebook from '../../components/Gradebook/Gradebook';
 import Team from '../../components/Team/Team';
 import Settings from '../../components/Settings/Settings';
 import { getFirstAndSecondName } from '../../utils/helper';
+import Kindergarten from '../../components/Kindergarten/Kindergarten';
 
 const Home = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -110,6 +111,12 @@ const Home = () => {
                 <FaUserGraduate className="icon" />
                 <label>Alunos</label>
               </div>
+              <div
+                className="nav-item"
+                onClick={() => setSelectedPage('kindergarten')}>
+                <FaChild className="icon" />
+                <label>Ed. Infantil</label>
+              </div>
             </>
           }
           <div
@@ -140,13 +147,15 @@ const Home = () => {
                     <SchoolSubject globalSchool={globalSchool} /> :
                     selectedPage === 'classes' && userInfo.lastSelectedSchool ?
                       <Classroom globalSchool={globalSchool} /> :
-                      selectedPage === 'students' && userInfo.lastSelectedSchool ?
-                        <Student globalSchool={globalSchool} /> :
-                        selectedPage === 'gradebook' && userInfo.lastSelectedSchool ?
-                          <Gradebook globalSchool={globalSchool} userInfo={userInfo} /> :
-                          selectedPage === 'settings' && userInfo.lastSelectedSchool ?
-                            <Settings globalSchool={globalSchool} userInfo={userInfo} /> :
-                            <NoSelectedSchool />
+                      selectedPage === 'kindergarten' && userInfo.lastSelectedSchool ?
+                        <Kindergarten globalSchool={globalSchool} /> :
+                        selectedPage === 'students' && userInfo.lastSelectedSchool ?
+                          <Student globalSchool={globalSchool} /> :
+                          selectedPage === 'gradebook' && userInfo.lastSelectedSchool ?
+                            <Gradebook globalSchool={globalSchool} userInfo={userInfo} /> :
+                            selectedPage === 'settings' && userInfo.lastSelectedSchool ?
+                              <Settings globalSchool={globalSchool} userInfo={userInfo} /> :
+                              <NoSelectedSchool />
           }
         </main>
       </div>
