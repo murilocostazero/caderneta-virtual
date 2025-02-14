@@ -129,7 +129,7 @@ const Kindergarten = ({ globalSchool }) => {
                     experiences.map((experience) => (
                         <div className='kg-list-item'>
                             <div>
-                                <label><label className='bold-label'>Critério: </label>{experience.name}</label>
+                                <label><label className='bold-label'>Campo: </label>{experience.name}</label>
                                 <label><label className='bold-label'>Descrição: </label>{experience.description}</label>
                                 <label className='bold-label'>Códigos BNCC:</label> {
                                     experience.bnccCodes.map((code) => (

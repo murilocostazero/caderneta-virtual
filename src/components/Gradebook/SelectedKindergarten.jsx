@@ -9,7 +9,7 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import TermModal from './TermModal';
 import Lesson from './Lesson';
 import Attendance from './Attendance';
-import StudentGrades from './StudentGrades';
+import KindergartenGrades from './KindergartenGrades';
 import AnnualRegistration from './AnnualRegistration';
 
 const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
@@ -392,7 +392,7 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
                           {
                             isStudentGradesVisible
                             &&
-                            <StudentGrades
+                            <KindergartenGrades
                               handleClose={() => setIsStudentGradesVisible(false)}
                               gradebook={gradebook}
                               term={selectedTerm}

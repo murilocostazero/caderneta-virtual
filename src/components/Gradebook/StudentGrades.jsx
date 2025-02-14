@@ -25,7 +25,7 @@ const StudentGrades = ({ handleClose, term, gradebook, classroomType }) => {
   const getEvaluation = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`/${classroomType === 'kindergarten' ? 'kindergarten' : 'gradebook'}/${gradebook._id}/term/${term._id}/evaluations`, {
+      const response = await axiosInstance.get(`/gradebook/${gradebook._id}/term/${term._id}/evaluations`, {
         timeout: 10000
       });
 

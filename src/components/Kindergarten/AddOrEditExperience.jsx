@@ -12,7 +12,23 @@ const AddOrEditExperience = ({ handleClose, handleOnSave, selectedCriteria }) =>
     const [bnccCodes, setBnccCodes] = useState(selectedCriteria ? selectedCriteria.bnccCodes : []);
     const [evaluationCriteria, setEvaluationCriteria] = useState('');
     const [criteriaDescription, setCriteriaDescription] = useState('');
-    const [criterias, setCriterias] = useState(selectedCriteria ? selectedCriteria.evaluationCriteria : []);
+    const [criterias, setCriterias] = useState(selectedCriteria ? selectedCriteria.evaluationCriteria : [
+        {
+            code: 'not-yet',
+            label: 'Ainda não desenvolvido',
+            description: 'A criança ainda não demonstra a habilidade ou comportamento esperado. Necessita de mais oportunidades e mediação para avançar nesse aspecto.'
+        },
+        {
+            code: 'under-development',
+            label: 'Em desenvolvimento',
+            description: 'A criança já apresenta indícios da habilidade ou comportamento esperado, mas ainda precisa de apoio e mais vivências para consolidá-lo.'
+        },
+        {
+            code: 'developed',
+            label: 'Desenvolvido',
+            description: 'A criança demonstra a habilidade ou comportamento de forma consistente e autônoma no seu cotidiano.'
+        }
+    ]);
     const [showAddBnccCode, setShowAddBnccCode] = useState(false);
     const [showAddExperience, setShowAddExperience] = useState(false);
     const [error, setError] = useState('');
@@ -179,45 +195,16 @@ const AddOrEditExperience = ({ handleClose, handleOnSave, selectedCriteria }) =>
                     </div>
 
                     <div className='add-new-container'>
-                        <div className='bncc-row-container'>
-                            <label>Critérios de avaliação</label>
-                            {
-                                !showAddExperience ?
-                                    <MdAdd color='#0166ff' size={24} onClick={() => setShowAddExperience(true)} /> :
-                                    <MdClose color='#e41313' size={24} onClick={() => handleCloseExperience()} />
-                            }
-                        </div>
+                        <label>Critérios de avaliação</label>
                         {
-                            showAddExperience ?
-                                <div className='column-container'>
-                                    <input
-                                        type="text"
-                                        name="evaluationCriteria"
-                                        placeholder='Ex.: Desenvolveu, em desenvolvimento ou ainda não desenvolveu'
-                                        value={evaluationCriteria}
-                                        onChange={(e) => setEvaluationCriteria(e.target.value)} />
-                                    <input
-                                        type="text"
-                                        name="criteriaDescription"
-                                        placeholder='Descrição do critério'
-                                        value={criteriaDescription}
-                                        onChange={(e) => setCriteriaDescription(e.target.value)} />
-                                    <button className='primary-button' onClick={() => onAddCriteria()}>Adicionar</button>
-                                </div> :
-                                criterias.length > 0 ?
-                                    criterias.map((criteria) => (
-                                        <div className='row-list-item'>
-                                            <div className='list-item'>
-                                                <label>{criteria.label}</label>
-                                                <label>{criteria.description}</label>
-                                            </div>
-                                            <span onClick={() => handleRemoveCriteria(criteria.label)}>REMOVER</span>
-                                        </div>
-                                    ))
-                                    :
-                                    <p className='info-label'>Clique no + para adicionar os campos de experiências</p>
-                        }
-
+                            criterias.map((criteria) => (
+                                <div className='row-list-item'>
+                                    <div className='list-item'>
+                                        <label>{criteria.label}</label>
+                                        <label>{criteria.description}</label>
+                                    </div>
+                                </div>
+                            ))}
                     </div>
 
                 </div>

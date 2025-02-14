@@ -436,11 +436,17 @@ table td:last-child {
 }
 
 table input {
-  width: 80%;
-  padding: 5px;
+  width: 90%;
+  padding: 6px;
   border: 1px solid #ccc;
   border-radius: 4px;
   text-align: center;
+}
+
+.absence-field {
+  width: 100%;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 
 .evaluations-button {
