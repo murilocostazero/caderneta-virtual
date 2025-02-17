@@ -211,6 +211,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   }
 
   const handleCloseLesson = () => {
+    setSelectedTerm(null);
     setShowLesson(false);
   }
 
@@ -271,7 +272,8 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   }
 
   //---------- ATTENDENCE
-  const handleOpenAttendance = (lesson, isEditing) => {
+  const handleOpenAttendance = (term, lesson, isEditing) => {
+    setSelectedTerm(term);
     setIsEditingAttendance(isEditing);
     setSelectedLesson(lesson);
     setShowAttendance(true);
@@ -423,8 +425,8 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
 
                             {
                               lesson.attendance.length > 0 ?
-                                <button onClick={() => handleOpenAttendance(lesson, true)}>Editar chamada</button> :
-                                <button onClick={() => handleOpenAttendance(lesson, false)}>Nova chamada</button>
+                                <button onClick={() => handleOpenAttendance(term, lesson, true)}>Editar chamada</button> :
+                                <button onClick={() => handleOpenAttendance(term, lesson, false)}>Nova chamada</button>
                             }
 
                           </div>
@@ -433,13 +435,16 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
                             showAttendance &&
                             <Attendance
                               gradebook={gradebook}
-                              term={term}
+                              term={selectedTerm}
                               lesson={selectedLesson}
                               handleSelectGradebook={(gradebook) => {
                                 handleSelectGradebook(gradebook);
                                 setShowAttendance(false);
                               }}
-                              handleCloseAttendance={() => setShowAttendance(false)}
+                              handleCloseAttendance={() => {
+                                setShowAttendance(false);
+                                setSelectedTerm(null);
+                              }}
                               isEditingAttendance={isEditingAttendance}
                             />
                           }
