@@ -3,7 +3,6 @@ import { FaUser } from "react-icons/fa";
 import './NavBar.css';
 import { useNavigate } from 'react-router-dom';
 import teacherOk from '../../assets/images/teacher-ok.png';
-import { getFirstAndSecondName } from '../../utils/helper';
 
 
 const NavBar = ({ userInfo }) => {
