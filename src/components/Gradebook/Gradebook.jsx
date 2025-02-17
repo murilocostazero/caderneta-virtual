@@ -11,6 +11,7 @@ import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
 import GradebookPDF from './GradebookPdf';
 import { classroomTypeToPT } from '../../utils/helper';
 import SelectedKindergarten from './SelectedKindergarten';
+import KindergartenGBPdf from './KindergartenGBPdf';
 
 const Gradebook = ({ globalSchool, userInfo }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,12 +21,23 @@ const Gradebook = ({ globalSchool, userInfo }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGradebook, setSelectedGradebook] = useState(null);
   const [gradebookType, setGradebookType] = useState('elementary');
+  const [experienceFields, setExperienceFields] = useState([]);
 
   useEffect(() => {
     if (userInfo.userType === 'manager') {
-      gradebookType === 'elementary' ? getGradebooks() : getKindergartenGB();
+      if (gradebookType === 'elementary') {
+        getGradebooks();
+      } else {
+        getKindergartenGB();
+        getExperienceFields();
+      }
     } else {
-      gradebookType === 'elementary' ? getTeacherGradebooks() : getTeacherKindergarten();
+      if (gradebookType === 'elementary') {
+        getTeacherGradebooks();
+      } else {
+        getTeacherKindergarten();
+        getExperienceFields();
+      }
     }
   }, [selectedGradebook, gradebookType]);
 
@@ -197,8 +209,34 @@ const Gradebook = ({ globalSchool, userInfo }) => {
     setSelectedGradebook(gradebook);
   }
 
+  const getExperienceFields = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get(`/experience-field/school/${globalSchool._id}`, {
+        timeout: 10000
+      });
+
+      if (response.status === 200) {
+        setExperienceFields(response.data);
+      } else {
+        showStatusBar({ type: 'error', message: 'Erro ao buscar campos' });
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ type: 'error', message: 'Verifique sua conexão com a internet' });
+      } else {
+        showStatusBar({ type: 'error', message: 'Um erro inesperado aconteceu. Tente novamente.' });
+      }
+    }
+    setLoading(false);
+  }
+
   const handleDownload = async (gbook) => {
-    const blob = await pdf(<GradebookPDF gradebook={gbook} />).toBlob();
+    const blob = gbook.classroom.classroomType !== 'kindergarten' ?
+      await pdf(<GradebookPDF gradebook={gbook} />).toBlob() :
+      await pdf(<KindergartenGBPdf gradebook={gbook} experienceFields={experienceFields} />).toBlob();
+
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;

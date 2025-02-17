@@ -10,7 +10,6 @@ const KGAnnualRegistration = ({ handleCloseAnnualRegistration, learningRecords, 
     const [error, setError] = useState('');
 
     useEffect(() => {
-        console.log('-------XXX', learningRecords)
         getExperienceFields();
     }, []);
 
