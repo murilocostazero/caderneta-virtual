@@ -10,7 +10,7 @@ import TermModal from './TermModal';
 import Lesson from './Lesson';
 import Attendance from './Attendance';
 import KindergartenGrades from './KindergartenGrades';
-import AnnualRegistration from './AnnualRegistration';
+import KGAnnualRegistration from './KGAnnualRegistration';
 
 const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
   const [skill, setSkill] = useState(gradebook.skill ? gradebook.skill : '');
@@ -229,17 +229,16 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
 
   //---------- ANNUAL REGISTRATION
   const handleOpenAnnualRegistration = async () => {
-
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`/gradebook/${gradebook._id}/learning-record`, {
+      const response = await axiosInstance.get(`/kindergarten/${gradebook._id}/general-record`, {
         timeout: 10000
       });
 
       if (response.status === 200) {
         //RECEBE O REGISTRO GERAL DO BACKEND
-        console.log('-------F', response.data)
-        setLearningRecords(response.data);
+        console.log(response.data.generalRecord)
+        setLearningRecords(response.data.generalRecord);
       } else {
         showStatusBar({ message: 'Erro ao gerar o registro geral', type: 'error' });
       }
@@ -437,9 +436,10 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
 
         {
           isAnnualRegistrationVisible && learningRecords &&
-          <AnnualRegistration
+          <KGAnnualRegistration
             handleCloseAnnualRegistration={() => setIsAnnualRegistrationVisible(false)}
             learningRecords={learningRecords}
+            gradebook={gradebook}
           />
         }
 
