@@ -16,11 +16,7 @@ const School = ({ userInfo, setGlobalSchool }) => {
     const [hoveredSchool, setHoveredSchool] = useState(null);
 
     useEffect(() => {
-        if (userInfo.userType === 'manager') {
-            getSchools();
-        } else {
-            getSchool();
-        }
+        getSchool();
     }, []);
 
     const handleOpenModal = () => {
@@ -295,11 +291,11 @@ const School = ({ userInfo, setGlobalSchool }) => {
             </div>
 
             {
-                userInfo.userType !== 'teacher' ?
-                    <button className="circular-button" onClick={handleOpenModal}>
-                        <MdOutlineAdd className='icon' />
-                    </button> :
-                    <div />
+                // userInfo.userType !== 'teacher' ?
+                //     <button className="circular-button" onClick={handleOpenModal}>
+                //         <MdOutlineAdd className='icon' />
+                //     </button> :
+                //     <div />
             }
 
             {statusMessage && (
