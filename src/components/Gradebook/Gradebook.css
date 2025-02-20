@@ -515,3 +515,7 @@ table input {
 .text-center {
   text-align: center;
 }
+
+.select-icons {
+  padding: 8px;
+}

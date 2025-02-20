@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MdAdd, MdClose } from 'react-icons/md';
+import { FaChalkboardTeacher, FaBook } from "react-icons/fa";
+import { FaPeopleLine } from "react-icons/fa6";
 import generatePDF from '../../assets/images/pdf.png';
 import './Gradebook.css';
 import GradebookModal from './GradebookModal';
@@ -200,9 +202,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
   }
 
   const filteredGradebooks = gradebooks.filter(gradebook =>
-    gradebook.classroom.grade.toString().includes(searchQuery) ||
-    gradebook.classroom.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    gradebook.classroom.shift.toLowerCase().includes(searchQuery.toLowerCase())
+    gradebook.teacher.name.toString().includes(searchQuery)
   );
 
   const handleSelectGradebook = (gradebook) => {
@@ -280,10 +280,10 @@ const Gradebook = ({ globalSchool, userInfo }) => {
                       </div>
                       <div className='gb-filter-container'>
                         <input
-                          placeholder='Filtrar cadernetas por turma'
+                          placeholder='Filtrar por professor(a)'
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)} />
-                        <MdClose className='clear-icon' />
+                        <MdClose className='clear-icon' onClick={() => setSearchQuery('')} />
                       </div>
                     </div>
                     <div className="gradebook-header">
