@@ -272,12 +272,12 @@ const School = ({ userInfo, setGlobalSchool }) => {
                                     {
                                         hoveredSchool === school._id && userInfo.userType === 'manager' &&
                                         <div className='school-buttons'>
-                                            <button
+                                            {/* <button
                                                 className="check-button"
                                                 onClick={() => handleSelectSchool(school)}
                                             >
                                                 <MdCheckCircle size={24} />
-                                            </button>
+                                            </button> */}
                                             <button
                                                 className="edit-button"
                                                 onClick={() => onSelectSchool(school)}

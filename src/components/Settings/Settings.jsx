@@ -54,7 +54,7 @@ const Settings = ({ globalSchool, userInfo }) => {
         setPhone(collaber.phone);
         setAddress(collaber.address);
         setAreaOfExpertise(collaber.areaOfExpertise);
-        setBirthDate(collaber.birthDate);
+        setBirthDate(dateToString(collaber.birthDate));
         setUserType(collaber.userType);
     }
 
