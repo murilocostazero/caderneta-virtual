@@ -39,6 +39,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [isAnnualRegistrationVisible, setIsAnnualRegistrationVisible] = useState(false);
   const [learningRecords, setLearningRecords] = useState([]);
   const [expandedTerms, setExpandedTerms] = useState({});
+  const [confirmDeleteGB, setConfirmDeleteGB] = useState(false);
 
   const showStatusBar = (status) => {
     setStatusMessage({ message: status.message, type: status.type });
@@ -314,6 +315,34 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     setIsAnnualRegistrationVisible(true);
   }
 
+  const handleDeleteGB = (confirm) => {
+    setConfirmDeleteGB(confirm);
+  }
+
+  const onDeleteGB = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.delete(`/gradebook/${gradebook._id}`, {
+        timeout: 10000
+      });
+
+      if (response.status === 200) {
+        handleSelectGradebook(null);
+        showStatusBar({ message: 'Caderneta removida', type: 'success' });
+      } else {
+        showStatusBar({ message: 'Erro ao deletar caderneta', type: 'error' });
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+      } else {
+        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+      }
+    }
+    setLoading(false);
+  }
+
   return (
     <div className='gradebook-container'>
       <div className='subject-header'>
@@ -501,7 +530,27 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
             learningRecords={learningRecords}
           />
         }
+      </div>
 
+      <div className='gradebook-section danger-zone'>
+        <div className='row-container'>
+          <h3>Zona de perigo</h3>
+          <button onClick={() => handleDeleteGB(true)}>
+            Deletar caderneta
+          </button>
+        </div>
+
+        {
+          confirmDeleteGB ?
+            <div className='confirm-delete-container'>
+              Essa ação não poderá ser desfeita. Deseja continuar com a exclusão?
+              <div className='row-container confirm-buttons'>
+                <button onClick={() => handleDeleteGB(false)}>CANCELAR</button>
+                <button onClick={() => onDeleteGB()}>PROSSEGUIR</button>
+              </div>
+            </div> :
+            <div />
+        }
 
       </div>
 

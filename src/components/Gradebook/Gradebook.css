@@ -516,6 +516,42 @@ table input {
   text-align: center;
 }
 
-.select-icons {
+.danger-zone {
+  border: 2px solid #e41313;
+  background-color: #333;
+  color: #FFF;
+}
+
+.danger-zone button {
+  border: 2px solid #e41313;
+  background-color: #333;
+  color: #e41313;
   padding: 8px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.danger-zone button:hover {
+  background-color: #e41313;
+  color: #FFF;
+}
+
+.confirm-delete-container {
+  margin-top: 12px;
+  max-width: 20%;
+  text-align: justify;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(154, 155, 156, 0.925)
+}
+
+.confirm-buttons> :nth-child(1) {
+
+}
+
+.confirm-buttons> :nth-child(1) {
+  background-color: #0166ff;
+  color: #FFF;
+  border: none;
 }
