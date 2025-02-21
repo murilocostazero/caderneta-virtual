@@ -278,13 +278,16 @@ const Gradebook = ({ globalSchool, userInfo }) => {
                         </select>
 
                       </div>
-                      <div className='gb-filter-container'>
-                        <input
-                          placeholder='Filtrar por professor(a)'
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)} />
-                        <MdClose className='clear-icon' onClick={() => setSearchQuery('')} />
-                      </div>
+                      {
+                        userInfo && userInfo.userType === 'manager' &&
+                        <div className='gb-filter-container'>
+                          <input
+                            placeholder='Filtrar por professor(a)'
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)} />
+                          <MdClose className='clear-icon' onClick={() => setSearchQuery('')} />
+                        </div>
+                      }
                     </div>
                     <div className="gradebook-header">
                       <p>Turma</p>
