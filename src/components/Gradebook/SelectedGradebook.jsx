@@ -195,6 +195,32 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     handleTermModal(false);
   }
 
+  const onDeleteTerm = async (term) => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.delete(`/gradebook/${gradebook._id}/term/${term._id}`, {
+        timeout: 10000
+      });
+
+      if (response.status === 200) {
+        handleSelectGradebook(response.data.gradebook);
+        showStatusBar({ message: 'Bimestre removida', type: 'success' });
+      } else {
+        showStatusBar({ message: 'Erro ao deletar bimestre', type: 'error' });
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+      } else {
+        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+      }
+    }
+    setLoading(false);
+
+    handleTermModal(false);
+  }
+
   //---------- LESSON
 
   const handleOpenLesson = (term) => {
@@ -510,7 +536,9 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
               handleTermModal={(isOpen) => handleTermModal(isOpen)}
               onSaveTerm={(term) => onSaveTerm(term)}
               onEditTerm={(term) => onEditTerm(term)}
-              selectedTerm={selectedTerm} /> :
+              selectedTerm={selectedTerm}
+              onDeleteTerm={(term) => onDeleteTerm(term)}
+              loading={loading} /> :
             <div />
         }
       </div>

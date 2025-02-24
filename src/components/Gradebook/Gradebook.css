@@ -61,7 +61,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-} 
+}
 
 .gradebook-select {
   margin-left: 10px;
@@ -81,7 +81,7 @@
   outline: none;
 }
 
-.gradebooks-container h3{
+.gradebooks-container h3 {
   text-align: center;
   margin-top: 12px;
 }
@@ -546,12 +546,30 @@ table input {
   border: 1px solid rgba(154, 155, 156, 0.925)
 }
 
-.confirm-buttons> :nth-child(1) {
-
-}
+.confirm-buttons> :nth-child(1) {}
 
 .confirm-buttons> :nth-child(1) {
   background-color: #0166ff;
   color: #FFF;
   border: none;
+}
+
+.remove-button {
+  border: none;
+  background-color: rgba(228, 19, 19, 0.4);
+  color: #FFF;
+  font-weight: bold;
+  border-radius: 4px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.remove-button:hover {
+  background-color: #e41313;
+}
+
+.remove-button label {
+  margin-left: 8px;
+  color: #FFF;
+  cursor: pointer;
 }
