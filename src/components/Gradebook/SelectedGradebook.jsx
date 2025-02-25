@@ -257,6 +257,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
       if (response.status >= 400 && response.status <= 500) {
         showStatusBar({ message: response.data.message, type: 'error' });
       } else {
+        console.log(response.data.gradebook)
         handleSelectGradebook(response.data.gradebook);
       }
     } catch (error) {
@@ -465,102 +466,101 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
 
         {
           gradebook.terms.map((term) =>
-            <div key={term._id} className='lesson-container'>
-              <div className='row-container'>
+            loadingRemoveLesson ?
+              <LoadingSpinner /> :
+              <div key={term._id} className='lesson-container'>
                 <div className='row-container'>
-                  <div className='dropdown-button' onClick={() => toggleLessons(term._id)}>
-                    {expandedTerms[term._id] ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+                  <div className='row-container'>
+                    <div className='dropdown-button' onClick={() => toggleLessons(term._id)}>
+                      {expandedTerms[term._id] ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+                    </div>
+                    <h4>{term.name}</h4>
+                    <MdEdit onClick={() => handleEditTerm(term)} className='edit-term-button' />
                   </div>
-                  <h4>{term.name}</h4>
-                  <MdEdit onClick={() => handleEditTerm(term)} className='edit-term-button' />
+                  <button className='add-lesson-button' onClick={() => handleOpenLesson(term)}>
+                    <MdAdd />
+                  </button>
                 </div>
-                <button className='add-lesson-button' onClick={() => handleOpenLesson(term)}>
-                  <MdAdd />
-                </button>
-              </div>
 
-              {
-                showLesson ?
-                  <Lesson
-                    term={term}
-                    handleCloseLesson={() => handleCloseLesson()}
-                    onAddLesson={(lesson) => onAddLesson(lesson)}
-                    onEditLesson={(lesson) => onEditLesson(lesson)}
-                    selectedLesson={selectedLesson}
-                    editingLesson={editingLesson}
-                    loading={loading} /> :
-                  <div />
-              }
+                {
+                  showLesson ?
+                    <Lesson
+                      term={term}
+                      handleCloseLesson={() => handleCloseLesson()}
+                      onAddLesson={(lesson) => onAddLesson(lesson)}
+                      onEditLesson={(lesson) => onEditLesson(lesson)}
+                      selectedLesson={selectedLesson}
+                      editingLesson={editingLesson}
+                      loading={loading} /> :
+                    <div />
+                }
 
-              {
-                expandedTerms[term._id] &&
-                <>
-                  {
-                    (!term.lessons || term.lessons.length < 1) ? (
-                      <p>Nenhuma aula registrada nesse bimestre</p>
-                    ) : (
-                      term.lessons.map((lesson, index) =>
-                        <div key={lesson._id} className={`single-lesson-container  ${index % 2 === 0 ? "even" : "odd"}`}>
+                {
+                  expandedTerms[term._id] &&
+                  <>
+                    {
+                      (!term.lessons || term.lessons.length < 1) ? (
+                        <p>Nenhuma aula registrada nesse bimestre</p>
+                      ) : (
+                        term.lessons.map((lesson, index) =>
+                          <div key={lesson._id} className={`single-lesson-container  ${index % 2 === 0 ? "even" : "odd"}`}>
 
-                          <p>
+                            <p>
+                              <FaTrash className='remove-lesson-icon' onClick={() => onDeleteLesson(term, lesson)} />
+                              {dateToString(lesson.date)} - Assunto: {lesson.topic}</p>
+                            <div className='lesson-actions'>
+                              <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
+
+                              {
+                                lesson.attendance?.length > 0 ?
+                                  <button onClick={() => handleOpenAttendance(term, lesson, true)}>Editar chamada</button> :
+                                  <button onClick={() => handleOpenAttendance(term, lesson, false)}>Nova chamada</button>
+                              }
+
+                            </div>
+
                             {
-                              loadingRemoveLesson ?
-                                <LoadingSpinner /> :
-                                <FaTrash className='remove-lesson-icon' onClick={() => onDeleteLesson(term, lesson)} />
+                              showAttendance &&
+                              <Attendance
+                                gradebook={gradebook}
+                                term={selectedTerm}
+                                lesson={selectedLesson}
+                                handleSelectGradebook={(gradebook) => {
+                                  handleSelectGradebook(gradebook);
+                                  setShowAttendance(false);
+                                }}
+                                handleCloseAttendance={() => {
+                                  setShowAttendance(false);
+                                  setSelectedTerm(null);
+                                }}
+                                isEditingAttendance={isEditingAttendance}
+                                classroomType={gradebook.classroom.classroomType}
+                              />
                             }
-                            {dateToString(lesson.date)} - Assunto: {lesson.topic}</p>
-                          <div className='lesson-actions'>
-                            <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
 
                             {
-                              lesson.attendance ?
-                                <button onClick={() => handleOpenAttendance(term, lesson, true)}>Editar chamada</button> :
-                                <button onClick={() => handleOpenAttendance(term, lesson, false)}>Nova chamada</button>
+                              isStudentGradesVisible
+                              &&
+                              <StudentGrades
+                                handleClose={() => setIsStudentGradesVisible(false)}
+                                gradebook={gradebook}
+                                term={selectedTerm} />
                             }
+
 
                           </div>
-
-                          {
-                            showAttendance &&
-                            <Attendance
-                              gradebook={gradebook}
-                              term={selectedTerm}
-                              lesson={selectedLesson}
-                              handleSelectGradebook={(gradebook) => {
-                                handleSelectGradebook(gradebook);
-                                setShowAttendance(false);
-                              }}
-                              handleCloseAttendance={() => {
-                                setShowAttendance(false);
-                                setSelectedTerm(null);
-                              }}
-                              isEditingAttendance={isEditingAttendance}
-                            />
-                          }
-
-                          {
-                            isStudentGradesVisible
-                            &&
-                            <StudentGrades
-                              handleClose={() => setIsStudentGradesVisible(false)}
-                              gradebook={gradebook}
-                              term={selectedTerm} />
-                          }
-
-
-                        </div>
+                        )
                       )
-                    )
-                  }
-                  {
-                    term.lessons.length > 0 &&
-                    <div className='term-bottom-button'>
-                      <button className='primary-button' onClick={() => handleOpenStudentGrades(term)}>INSTRUMENTO DE AVALIAÇÃO DO PROFESSOR</button>
-                    </div>
-                  }
-                </>
-              }
-            </div>
+                    }
+                    {
+                      term.lessons.length > 0 &&
+                      <div className='term-bottom-button'>
+                        <button className='primary-button' onClick={() => handleOpenStudentGrades(term)}>INSTRUMENTO DE AVALIAÇÃO DO PROFESSOR</button>
+                      </div>
+                    }
+                  </>
+                }
+              </div>
           )
         }
 

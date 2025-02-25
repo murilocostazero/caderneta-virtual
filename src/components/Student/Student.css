@@ -19,9 +19,7 @@
     padding: 8px;
 }
 
-.student-form {
-
-}
+.student-form {}
 
 .student-form label {
     margin: 2px 0px;
@@ -92,13 +90,13 @@
     font-weight: bold;
 }
 
-.select-classroom-button{
+.select-classroom-button {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-.select-classroom-button > :nth-child(2){
+.select-classroom-button> :nth-child(2) {
     margin-left: 4px;
 }
 
@@ -121,7 +119,7 @@
     cursor: pointer;
 }
 
-.student-info-container > :first-child {
+.student-info-container> :first-child {
     font-weight: bold;
 }
 
@@ -141,4 +139,8 @@
 .change-classroom-container button {
     margin-top: 12px;
     width: 100%;
+}
+
+.situation-container-bg {
+    background-color: rgba(228, 19, 19, 0.4);
 }

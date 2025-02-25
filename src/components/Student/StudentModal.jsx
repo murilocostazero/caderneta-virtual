@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import InputMask from "react-input-mask";
 import './Student.css';
 import { MdClose } from 'react-icons/md';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
-import { dateToString } from '../../utils/helper';
+import { dateToString, getCurrentDate, stringToDate } from '../../utils/helper';
 
 const StudentModal = ({ onCloseModal, onSaveStudent, onEditStudent, selectedStudent, loading }) => {
     const [name, setName] = useState(selectedStudent ? selectedStudent.name : '');
@@ -16,6 +16,21 @@ const StudentModal = ({ onCloseModal, onSaveStudent, onEditStudent, selectedStud
     const [guardianRelationship, setGuardianRelationship] = useState(selectedStudent ? selectedStudent.guardian.relationship : 'father-mother');
     const [guardianAddress, setGuardianAddress] = useState(selectedStudent ? selectedStudent.guardian.address : '');
     const [error, setError] = useState('');
+    const [studentSituation, setStudentSituation] = useState('active');
+    const [situationSince, setSituationSince] = useState(getCurrentDate());
+
+    useEffect(() => {
+        handleGetNewSituationSince();
+
+        if (selectedStudent) {
+            if (selectedStudent.studentSituation) {
+                setStudentSituation(selectedStudent.studentSituation.situation);
+                if (selectedStudent.studentSituation.since) {
+                    setSituationSince(dateToString(selectedStudent.studentSituation.since))
+                }
+            }
+        }
+    }, []);
 
     const handleError = (message) => {
         setError(message);
@@ -39,6 +54,9 @@ const StudentModal = ({ onCloseModal, onSaveStudent, onEditStudent, selectedStud
                     contact: guardianContact,
                     relationship: guardianRelationship,
                     address: guardianAddress
+                },
+                studentSituation: {
+                    situation: 'active'
                 }
             });
         } else {
@@ -54,9 +72,18 @@ const StudentModal = ({ onCloseModal, onSaveStudent, onEditStudent, selectedStud
                     contact: guardianContact,
                     relationship: guardianRelationship,
                     address: guardianAddress
+                },
+                studentSituation: {
+                    situation: studentSituation,
+                    since: stringToDate(situationSince)
                 }
             });
         }
+    }
+
+    const handleGetNewSituationSince = () => {
+        let today = getCurrentDate();
+        setSituationSince(today);
     }
 
     return (
@@ -137,6 +164,35 @@ const StudentModal = ({ onCloseModal, onSaveStudent, onEditStudent, selectedStud
                         placeholder="Ex.: Rua Dona Maria Consola, 52, Guanabara, Colinas-MA"
                         value={guardianAddress}
                         onChange={(e) => setGuardianAddress(e.target.value)} />
+
+                    {
+                        !selectedStudent ?
+                            <div /> :
+                            <div className=''>
+                                <label>Situação do aluno</label>
+                                <select value={studentSituation} onChange={(e) => {
+                                    setStudentSituation(e.target.value);
+                                    e.target.value !== 'active' && handleGetNewSituationSince();
+                                }}>
+                                    <option value='active'>Ativo</option>
+                                    <option value='transferred'>Transferido</option>
+                                    <option value='escaped'>Evadiu</option>
+                                </select>
+
+                                {
+                                    studentSituation !== 'active' ?
+                                        <div>
+                                            <label>Desde</label>
+                                            <input
+                                                type="text"
+                                                value={situationSince}
+                                                onChange={(e) => setSituationSince(e.target.value)}
+                                                placeholder='Ex.: 00/00/0000' />
+                                        </div> :
+                                        <div />
+                                }
+                            </div>
+                    }
 
                     {
                         error ?

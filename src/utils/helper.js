@@ -62,3 +62,15 @@ export function experienceFieldToPT(ef) {
             return 'Ainda não desenvolvido';
     }
 }
+
+
+export function studentSituationToPt(ss) {
+    switch (ss) {
+        case 'transferred':
+            return 'Transferido';
+        case 'escaped':
+            return 'Evadiu';
+        default:
+            return 'Ativo';
+    }
+}

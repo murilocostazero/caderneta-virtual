@@ -3,16 +3,17 @@ import { MdCheck, MdClose } from 'react-icons/md';
 import axiosInstance from '../../utils/axiosInstance';
 import './Gradebook.css';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import { studentSituationToPt } from '../../utils/helper';
 
-const Attendance = ({ 
-    handleCloseAttendance, 
-    term, 
-    lesson, 
-    gradebook, 
-    isEditingAttendance, 
+const Attendance = ({
+    handleCloseAttendance,
+    term,
+    lesson,
+    gradebook,
+    isEditingAttendance,
     handleSelectGradebook,
     classroomType
- }) => {
+}) => {
     const [loading, setLoading] = useState(false);
     const [students, setStudents] = useState(null);
     const [attendance, setAttendance] = useState(null);
@@ -63,7 +64,7 @@ const Attendance = ({
             const response = await axiosInstance.get(`/${classroomType === 'kindergarten' ? 'kindergarten' : 'gradebook'}/${gradebook._id}/term/${term._id}/lesson/${lesson._id}/attendance`, {
                 timeout: 10000
             });
-            
+
             if (response.status === 200) {
                 setAttendance(initializeLessonAttendance(response.data.lesson));
             } else if (response.status >= 400 && response.status <= 500) {
@@ -76,7 +77,7 @@ const Attendance = ({
             } else {
                 handleError('Um erro inesperado aconteceu. Tente novamente.');
             }
-        } 
+        }
         setLoading(false);
     }
 
@@ -94,17 +95,20 @@ const Attendance = ({
                 contact: student.guardian.contact,
                 address: student.guardian.address
             },
+            studentSituation: student.studentSituation,
             classroom: student.classroom,
             present: true
         }));
     }
 
     const initializeLessonAttendance = (lessonAttendance) => {
+        console.log(lessonAttendance)
         return lessonAttendance.attendance.map(lessonAtt => ({
             _id: lessonAtt.studentId._id,
             studentId: lessonAtt.studentId._id,
             name: lessonAtt.studentId.name,
-            present: lessonAtt.present
+            present: lessonAtt.present,
+            studentSituation: lessonAtt.studentId.studentSituation
         }));
     }
 
@@ -176,22 +180,26 @@ const Attendance = ({
                         !attendance || attendance.length < 1 ?
                             <p>Nenhum aluno nessa turma</p> :
                             attendance.map((student, index) => (
-                                <div key={student._id} className={`row-container attendance-student ${index % 2 === 0 ? "even" : "odd"}`}>
-                                    <div className='student-attendance-container'>
+
+                                student.studentSituation?.situation === 'transferred' || student.studentSituation?.situation === 'escaped' ?
+                                    <label className='text-center' key={student._id}>{student.name} - Situação: {studentSituationToPt(student.studentSituation.situation)}</label> :
+
+                                    <div key={student._id} className={`row-container attendance-student ${index % 2 === 0 ? "even" : "odd"}`}>
+                                        <div className='student-attendance-container'>
+                                            {
+                                                student.present ?
+                                                    <MdCheck className='attendance-icon' color='#18A205' fontSize={20} /> :
+                                                    <MdClose className='attendance-icon' color='#e41313' fontSize={20} />
+                                            }
+                                            <span>{student.name}</span>
+                                        </div>
+
                                         {
                                             student.present ?
-                                                <MdCheck className='attendance-icon' color='#18A205' fontSize={20} /> :
-                                                <MdClose className='attendance-icon' color='#e41313' fontSize={20} />
+                                                <button className='absent-button' onClick={() => changePresence(student._id)}>Aplicar falta</button> :
+                                                <button className='presence-button' onClick={() => changePresence(student._id)}>Colocar presença</button>
                                         }
-                                        <span>{student.name}</span>
                                     </div>
-
-                                    {
-                                        student.present ?
-                                            <button className='absent-button' onClick={() => changePresence(student._id)}>Aplicar falta</button> :
-                                            <button className='presence-button' onClick={() => changePresence(student._id)}>Colocar presença</button>
-                                    }
-                                </div>
                             )
                             )
                     }
@@ -203,8 +211,8 @@ const Attendance = ({
                             loading ?
                                 <LoadingSpinner /> :
                                 isEditingAttendance ?
-                                <button className='primary-button' onClick={() => onUpdateAttendance()}>Salvar alterações</button> :
-                                <button className='primary-button' onClick={() => onSaveAttendance()}>Salvar chamada</button>
+                                    <button className='primary-button' onClick={() => onUpdateAttendance()}>Salvar alterações</button> :
+                                    <button className='primary-button' onClick={() => onSaveAttendance()}>Salvar chamada</button>
                     }
                 </div>
             </div>

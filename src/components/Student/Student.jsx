@@ -6,7 +6,7 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { FiRefreshCcw } from "react-icons/fi";
 import StatusBar from '../StatusBar/StatusBar';
 import axiosInstance from '../../utils/axiosInstance';
-import { stringToDate } from '../../utils/helper';
+import { stringToDate, studentSituationToPt } from '../../utils/helper';
 import SelectClassroom from './SelectClassroom';
 import ChangeClassroom from './ChangeClassroom';
 
@@ -105,6 +105,7 @@ const Student = ({ globalSchool }) => {
                 contact: student.contact,
                 address: student.address,
                 guardian: student.guardian,
+                studentSituation: student.studentSituation,
                 classroom: selectedClassroom
             }, {
                 timeout: 10000
@@ -137,7 +138,8 @@ const Student = ({ globalSchool }) => {
                 birthDate: stringToDate(student.birthDate),
                 contact: student.contact,
                 address: student.address,
-                guardian: student.guardian
+                guardian: student.guardian,
+                studentSituation: student.studentSituation
             }, {
                 timeout: 10000
             });
@@ -221,14 +223,18 @@ const Student = ({ globalSchool }) => {
                     filteredStudents.length < 1 ?
                         <p>Nenhum aluno cadastrado nessa turma</p> :
                         filteredStudents.map((student) => (
-                            <div key={student._id} className='students-list-item'>
+                            <div key={student._id} className={`students-list-item ${student.studentSituation?.situation === 'transferred' || student.studentSituation?.situation === 'escaped' ? 'situation-container-bg' : ''}`}>
                                 <div className='student-info-container' onClick={() => handleEditStudent(student)}>
                                     <p>{student.name}</p>
                                     <p>Responsável: <span className='guardian-contact' onClick={() => openWhatsApp(student.guardian.contact)}>{student.guardian.contact}</span></p>
                                 </div>
-                                <div>
-                                    <button className='primary-button' onClick={() => handleChangeClassroom(student)}>Mudar de turma</button>
-                                </div>
+                                {
+                                    student.studentSituation?.situation === 'transferred' || student.studentSituation?.situation === 'escaped' ?
+                                        <label>{studentSituationToPt(student.studentSituation.situation)}</label> :
+                                        <div>
+                                            <button className='primary-button' onClick={() => handleChangeClassroom(student)}>Mudar de turma</button>
+                                        </div>
+                                }
                             </div>
                         ))
                 }
