@@ -161,6 +161,31 @@ const Student = ({ globalSchool }) => {
         setLoading(false);
     }
 
+    const onDeleteStudent = async (student) => {
+        setLoading(true);
+        try {
+            const response = await axiosInstance.delete(`/student/${student._id}`, {
+                timeout: 10000
+            });
+
+            if (response.status === 200) {
+                onCloseModal();
+                getStudents(selectedClassroom);
+                showStatusBar({ message: 'Aluno(a) removido com sucesso', type: 'success' });
+            } else {
+                showStatusBar({ message: 'Erro ao remover aluno(a)', type: 'error' });
+            }
+        } catch (error) {
+            console.log(error)
+            if (error.code === 'ERR_NETWORK') {
+                showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+            } else {
+                showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+            }
+        }
+        setLoading(false);
+    }
+
     const filteredStudents = students.filter(student =>
         student.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -274,7 +299,8 @@ const Student = ({ globalSchool }) => {
                         selectedStudent={selectedStudent}
                         onCloseModal={() => onCloseModal()}
                         onSaveStudent={(student) => onSaveStudent(student)}
-                        onEditStudent={(student) => onEditStudent(student)} /> :
+                        onEditStudent={(student) => onEditStudent(student)}
+                        onDeleteStudent={(student) => onDeleteStudent(student)} /> :
                     <div />
             }
 

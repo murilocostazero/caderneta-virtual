@@ -4,8 +4,9 @@ import './Student.css';
 import { MdClose } from 'react-icons/md';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { dateToString, getCurrentDate, stringToDate } from '../../utils/helper';
+import { FaRegTrashAlt } from 'react-icons/fa';
 
-const StudentModal = ({ onCloseModal, onSaveStudent, onEditStudent, selectedStudent, loading }) => {
+const StudentModal = ({ onCloseModal, onSaveStudent, onEditStudent, selectedStudent, loading, onDeleteStudent }) => {
     const [name, setName] = useState(selectedStudent ? selectedStudent.name : '');
     const [cpf, setCpf] = useState(selectedStudent ? selectedStudent.cpf : '');
     const [birthDate, setBirthDate] = useState(selectedStudent ? dateToString(selectedStudent.birthDate) : '');
@@ -18,6 +19,7 @@ const StudentModal = ({ onCloseModal, onSaveStudent, onEditStudent, selectedStud
     const [error, setError] = useState('');
     const [studentSituation, setStudentSituation] = useState('active');
     const [situationSince, setSituationSince] = useState(getCurrentDate());
+    const [confirmRemoveStudent, setConfirmRemoveStudent] = useState(false);
 
     useEffect(() => {
         handleGetNewSituationSince();
@@ -84,6 +86,10 @@ const StudentModal = ({ onCloseModal, onSaveStudent, onEditStudent, selectedStud
     const handleGetNewSituationSince = () => {
         let today = getCurrentDate();
         setSituationSince(today);
+    }
+
+    const onRemoveStudent = () => {
+        setConfirmRemoveStudent(!confirmRemoveStudent)
     }
 
     return (
@@ -191,6 +197,22 @@ const StudentModal = ({ onCloseModal, onSaveStudent, onEditStudent, selectedStud
                                         </div> :
                                         <div />
                                 }
+
+                                {
+                                    !confirmRemoveStudent ?
+                                        <button className='remove-button' onClick={() => onRemoveStudent()}>
+                                            <FaRegTrashAlt />
+                                            <label>Excluir aluno</label>
+                                        </button>
+                                        :
+                                        <div>
+                                            <label>Cuidado! Essa ação não poderá ser desfeita.</label>
+                                            <div className='delete-student-buttons'>
+                                                <button onClick={() => onRemoveStudent()}>CANCELAR</button>
+                                                <button onClick={() => onDeleteStudent(selectedStudent)}>Prosseguir</button>
+                                            </div>
+                                        </div>
+                                }
                             </div>
                     }
 
@@ -199,7 +221,7 @@ const StudentModal = ({ onCloseModal, onSaveStudent, onEditStudent, selectedStud
                             <p className='error-message'>{error}</p> :
                             loading ?
                                 <LoadingSpinner /> :
-                                <button onClick={() => handleSave()}>Salvar</button>
+                                <button className='student-button' onClick={() => handleSave()}>Salvar</button>
                     }
                 </div>
             </div>
