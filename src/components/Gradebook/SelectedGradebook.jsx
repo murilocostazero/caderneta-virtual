@@ -21,6 +21,7 @@ import Lesson from './Lesson';
 import Attendance from './Attendance';
 import StudentGrades from './StudentGrades';
 import AnnualRegistration from './AnnualRegistration';
+import { FaTrash } from 'react-icons/fa';
 
 const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [subjectImg, setSubjectImg] = useState(null);
@@ -40,6 +41,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [learningRecords, setLearningRecords] = useState([]);
   const [expandedTerms, setExpandedTerms] = useState({});
   const [confirmDeleteGB, setConfirmDeleteGB] = useState(false);
+  const [loadingRemoveLesson, setLoadingRemoveLesson] = useState(false);
 
   const showStatusBar = (status) => {
     setStatusMessage({ message: status.message, type: status.type });
@@ -298,6 +300,31 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     handleCloseLesson();
   }
 
+  const onDeleteLesson = async (term, lesson) => {
+    setLoadingRemoveLesson(true);
+    try {
+      const response = await axiosInstance.delete(`/gradebook/${gradebook._id}/term/${term._id}/lesson/${lesson._id}`, {
+        timeout: 10000
+      });
+
+      if (response.status >= 400 && response.status <= 500) {
+        showStatusBar({ message: response.data.message, type: 'error' });
+      } else {
+        handleSelectGradebook(response.data.gradebook);
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+      } else {
+        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+      }
+    }
+    setLoadingRemoveLesson(false);
+
+    handleCloseLesson();
+  }
+
   //---------- ATTENDENCE
   const handleOpenAttendance = (term, lesson, isEditing) => {
     setSelectedTerm(term);
@@ -474,7 +501,14 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
                     ) : (
                       term.lessons.map((lesson, index) =>
                         <div key={lesson._id} className={`single-lesson-container  ${index % 2 === 0 ? "even" : "odd"}`}>
-                          <p>{dateToString(lesson.date)} - Assunto: {lesson.topic}</p>
+
+                          <p>
+                            {
+                              loadingRemoveLesson ?
+                                <LoadingSpinner /> :
+                                <FaTrash className='remove-lesson-icon' onClick={() => onDeleteLesson(term, lesson)} />
+                            }
+                            {dateToString(lesson.date)} - Assunto: {lesson.topic}</p>
                           <div className='lesson-actions'>
                             <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
 

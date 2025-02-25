@@ -38,27 +38,11 @@ const TermModal = ({ handleTermModal, onSaveTerm, onEditTerm, selectedTerm, onDe
         <div className='modal-overlay'>
             <div className='modal'>
                 <div className='term-form'>
-                    {
-                        !confirmRemoveTerm ?
-                            <div className='row-container'>
-                                <button className='remove-button' onClick={() => onRemoveTerm()}>
-                                    <div className='row-container'>
-                                        <FaRegTrashAlt />
-                                        <label>Remover bimestre</label>
-                                    </div>
-                                </button>
-                                <button className="close-button" onClick={() => handleTermModal(false)}>
-                                    <MdClose className='close-icon' />
-                                </button>
-                            </div> :
-                            <div>
-                                <label>Cuidado! Essa ação não poderá ser desfeita.</label>
-                                <div className='row-container confirm-buttons'>
-                                    <button className='primary-button' onClick={() => onRemoveTerm()}>CANCELAR</button>
-                                    <button className='remove-button' onClick={() => onDeleteTerm(selectedTerm)}>Prosseguir</button>
-                                </div>
-                            </div>
-                    }
+                    <div className='align-right-container'>
+                        <button className="close-button" onClick={() => handleTermModal(false)}>
+                            <MdClose className='close-icon' />
+                        </button>
+                    </div>
 
                     <label>
                         Bimestre
@@ -85,6 +69,24 @@ const TermModal = ({ handleTermModal, onSaveTerm, onEditTerm, selectedTerm, onDe
                         mask="99/99/9999"
                         onChange={(e) => setEndDate(e.target.value)}
                         value={endDate} />
+
+                    {
+                        !selectedTerm ?
+                            <div /> :
+                            !confirmRemoveTerm ?
+                                <button className='remove-button' onClick={() => onRemoveTerm()}>
+                                    <FaRegTrashAlt />
+                                    <label>Remover bimestre</label>
+                                </button>
+                                :
+                                <div>
+                                    <label>Cuidado! Essa ação não poderá ser desfeita.</label>
+                                    <div className='row-container confirm-buttons'>
+                                        <button className='primary-button' onClick={() => onRemoveTerm()}>CANCELAR</button>
+                                        <button className='remove-button' onClick={() => onDeleteTerm(selectedTerm)}>Prosseguir</button>
+                                    </div>
+                                </div>
+                    }
 
                     {
                         error ?

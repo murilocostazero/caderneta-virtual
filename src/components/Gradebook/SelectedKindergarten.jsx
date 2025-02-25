@@ -11,6 +11,7 @@ import Lesson from './Lesson';
 import Attendance from './Attendance';
 import KindergartenGrades from './KindergartenGrades';
 import KGAnnualRegistration from './KGAnnualRegistration';
+import { FaTrash } from 'react-icons/fa';
 
 const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
   const [skill, setSkill] = useState(gradebook.skill ? gradebook.skill : '');
@@ -28,6 +29,8 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
   const [isAnnualRegistrationVisible, setIsAnnualRegistrationVisible] = useState(false);
   const [learningRecords, setLearningRecords] = useState([]);
   const [expandedTerms, setExpandedTerms] = useState({});
+  const [loadingRemoveLesson, setLoadingRemoveLesson] = useState(false);
+  const [confirmDeleteGB, setConfirmDeleteGB] = useState(false);
 
   const showStatusBar = (status) => {
     setStatusMessage({ message: status.message, type: status.type });
@@ -138,6 +141,32 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
     handleTermModal(false);
   }
 
+  const onDeleteTerm = async (term) => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.delete(`/kindergarten/${gradebook._id}/term/${term._id}`, {
+        timeout: 10000
+      });
+
+      if (response.status === 200) {
+        handleSelectGradebook(response.data.kindergarten);
+        showStatusBar({ message: 'Bimestre removido', type: 'success' });
+      } else {
+        showStatusBar({ message: 'Erro ao deletar bimestre', type: 'error' });
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+      } else {
+        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+      }
+    }
+    setLoading(false);
+
+    handleTermModal(false);
+  }
+
   //---------- LESSON
 
   const handleOpenLesson = (term) => {
@@ -214,6 +243,31 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
     handleCloseLesson();
   }
 
+  const onDeleteLesson = async (term, lesson) => {
+    setLoadingRemoveLesson(true);
+    try {
+      const response = await axiosInstance.delete(`/kindergarten/${gradebook._id}/term/${term._id}/lesson/${lesson._id}`, {
+        timeout: 10000
+      });
+
+      if (response.status >= 400 && response.status <= 500) {
+        showStatusBar({ message: response.data.message, type: 'error' });
+      } else {
+        handleSelectGradebook(response.data.kindergarten);
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+      } else {
+        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+      }
+    }
+    setLoadingRemoveLesson(false);
+
+    handleCloseLesson();
+  }
+
   //---------- ATTENDENCE
   const handleOpenAttendance = (lesson, isEditing) => {
     setIsEditingAttendance(isEditing);
@@ -253,6 +307,34 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
     setLoading(false);
 
     setIsAnnualRegistrationVisible(true);
+  }
+
+  const onDeleteGB = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.delete(`/kindergarten/${gradebook._id}`, {
+        timeout: 10000
+      });
+
+      if (response.status === 200) {
+        handleSelectGradebook(null);
+        showStatusBar({ message: 'Caderneta removida', type: 'success' });
+      } else {
+        showStatusBar({ message: 'Erro ao deletar caderneta', type: 'error' });
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+      } else {
+        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+      }
+    }
+    setLoading(false);
+  }
+
+  const handleDeleteGB = (confirm) => {
+    setConfirmDeleteGB(confirm);
   }
 
   return (
@@ -360,7 +442,13 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
                     ) : (
                       term.lessons.map((lesson, index) =>
                         <div key={lesson._id} className={`single-lesson-container  ${index % 2 === 0 ? "even" : "odd"}`}>
-                          <p>{dateToString(lesson.date)} - Assunto: {lesson.topic}</p>
+                          <p>
+                            {
+                              loadingRemoveLesson ?
+                                <LoadingSpinner /> :
+                                <FaTrash className='remove-lesson-icon' onClick={() => onDeleteLesson(term, lesson)} />
+                            }
+                            {dateToString(lesson.date)} - Assunto: {lesson.topic}</p>
                           <div className='lesson-actions'>
                             <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
 
@@ -421,7 +509,9 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
               handleTermModal={(isOpen) => handleTermModal(isOpen)}
               onSaveTerm={(term) => onSaveTerm(term)}
               onEditTerm={(term) => onEditTerm(term)}
-              selectedTerm={selectedTerm} /> :
+              selectedTerm={selectedTerm}
+              onDeleteTerm={(term) => onDeleteTerm(term)}
+              loading={loading} /> :
             <div />
         }
       </div>
@@ -443,6 +533,28 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
           />
         }
 
+
+      </div>
+
+      <div className='gradebook-section danger-zone'>
+        <div className='row-container'>
+          <h3>Zona de perigo</h3>
+          <button onClick={() => handleDeleteGB(true)}>
+            Deletar caderneta
+          </button>
+        </div>
+
+        {
+          confirmDeleteGB ?
+            <div className='confirm-delete-container'>
+              Essa ação não poderá ser desfeita. Deseja continuar com a exclusão?
+              <div className='row-container confirm-buttons'>
+                <button onClick={() => handleDeleteGB(false)}>CANCELAR</button>
+                <button onClick={() => onDeleteGB()}>PROSSEGUIR</button>
+              </div>
+            </div> :
+            <div />
+        }
 
       </div>
 

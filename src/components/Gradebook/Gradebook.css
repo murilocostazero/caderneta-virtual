@@ -562,6 +562,15 @@ table input {
   border-radius: 4px;
   padding: 8px;
   cursor: pointer;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-button> :nth-child(1) {
+  margin-right: 4px;
 }
 
 .remove-button:hover {
@@ -572,4 +581,22 @@ table input {
   margin-left: 8px;
   color: #FFF;
   cursor: pointer;
+}
+
+.align-right-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.remove-lesson-icon {
+  margin-right: 4px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+.remove-lesson-icon :hover {
+  color: #e41313
 }

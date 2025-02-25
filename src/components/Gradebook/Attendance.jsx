@@ -19,7 +19,6 @@ const Attendance = ({
     const [error, setError] = useState('');
 
     useEffect(() => {
-        console.log('term', term)
         if (!isEditingAttendance) {
             getStudents();
         } else {
