@@ -513,7 +513,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
                             <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
 
                             {
-                              lesson.attendance.length > 0 ?
+                              lesson.attendance ?
                                 <button onClick={() => handleOpenAttendance(term, lesson, true)}>Editar chamada</button> :
                                 <button onClick={() => handleOpenAttendance(term, lesson, false)}>Nova chamada</button>
                             }
