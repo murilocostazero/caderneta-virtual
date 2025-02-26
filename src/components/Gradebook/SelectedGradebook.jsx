@@ -507,7 +507,9 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
 
                             <p>
                               <FaTrash className='remove-lesson-icon' onClick={() => onDeleteLesson(term, lesson)} />
-                              {dateToString(lesson.date)} - Assunto: {lesson.topic}</p>
+                              {dateToString(lesson.date)} - Assunto:
+                              <pre className='lesson-topic'>{lesson.topic}</pre>
+                            </p>
                             <div className='lesson-actions'>
                               <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
 

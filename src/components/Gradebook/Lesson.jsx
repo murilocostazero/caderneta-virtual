@@ -6,19 +6,26 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import './Gradebook.css';
 
 const Lesson = ({ term, handleCloseLesson, onAddLesson, editingLesson, loading, selectedLesson, onEditLesson }) => {
+    let maxLengthTextArea = 80;
 
     const [topic, setTopic] = useState('');
     const [date, setDate] = useState('');
     const [error, setError] = useState('');
+    // const [maxLengthTextArea, setMaxLengthTextArea] = useState(120);
+    const [textAreaCounter, setTextAreaCounter] = useState(maxLengthTextArea);
 
     useEffect(() => {
-        if (editingLesson === false) {
+        if (!editingLesson) {
             setDate(getCurrentDate());
-        } else {
+            setTextAreaCounter(maxLengthTextArea); // Resetando o contador quando não está editando
+        } else if (selectedLesson) {
             setTopic(selectedLesson.topic);
             setDate(dateToString(selectedLesson.date));
+
+            // Corrigindo o cálculo do contador
+            setTextAreaCounter(maxLengthTextArea - selectedLesson.topic.length);
         }
-    }, []);
+    }, [editingLesson, selectedLesson]);
 
     const handleError = (message) => {
         setError(message);
@@ -43,6 +50,13 @@ const Lesson = ({ term, handleCloseLesson, onAddLesson, editingLesson, loading, 
         setTopic('');
     }
 
+    const handleTextArea = (text) => {
+        if (text.length <= maxLengthTextArea) {
+            setTopic(text);
+            setTextAreaCounter(maxLengthTextArea - text.length);
+        }
+    }
+
     return (
         <div className='modal-overlay'>
             <div className='modal'>
@@ -58,24 +72,18 @@ const Lesson = ({ term, handleCloseLesson, onAddLesson, editingLesson, loading, 
                 <div className='term-form'>
                     <h3>Nova aula</h3>
                     <label>
-                        Assunto da aula
-                        <input
+                        <div className='row-container'>
+                            Assunto da aula
+                            <label>{textAreaCounter}</label>
+                        </div>
+                        <textarea
                             placeholder='Digite aqui o assunto da aula de hoje'
                             type="text"
                             name="name"
                             value={topic}
-                            onChange={(e) => setTopic(e.target.value)} />
+                            maxLength={maxLengthTextArea}
+                            onChange={(e) => handleTextArea(e.target.value)} />
                     </label>
-
-                    {/* <label>Tipo de aula</label>
-                    <select
-                        id="lessonType"
-                        name="lessonType"
-                        value={lessonType}
-                        onChange={(e) => setLessonType(e.target.value)}>
-                        <option value="regular">Normal</option>
-                        <option value="evaluative">Avaliativa</option>
-                    </select> */}
 
                     <label>Data da aula</label>
                     <InputMask

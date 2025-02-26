@@ -167,13 +167,13 @@ const Login = () => {
               </button>
           }
 
-          <div className='singup-msg-container'>
+          {/* <div className='singup-msg-container'>
             {
               isLogin ?
                 <label className='singup-msg'>Não é cadastrado? <span className='singup-link' onClick={() => setIsLogin(!isLogin)}>Criar conta</span></label> :
                 <label className='singup-msg'>Já tem conta? <span className='singup-link' onClick={() => setIsLogin(!isLogin)}>Fazer login</span></label>
             }
-          </div>
+          </div> */}
         </div>
 
         <footer className='footer'>
