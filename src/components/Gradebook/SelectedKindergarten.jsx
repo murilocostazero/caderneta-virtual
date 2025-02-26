@@ -55,7 +55,7 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
         const response = await axiosInstance.put(`/gradebook/${gradebook._id}`, {
           skill: skill
         }, {
-          timeout: 10000
+          timeout: 20000
         });
         if (response.status >= 400 && response.status <= 500) {
           showStatusBar({ message: response.data.message, type: 'error' });
@@ -85,7 +85,7 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
         startDate: stringToDate(term.startDate),
         endDate: stringToDate(term.endDate)
       }, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 201) {
@@ -119,7 +119,7 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
         startDate: stringToDate(term.startDate),
         endDate: stringToDate(term.endDate)
       }, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 200) {
@@ -145,7 +145,7 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.delete(`/kindergarten/${gradebook._id}/term/${term._id}`, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 200) {
@@ -194,7 +194,7 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
         topic: lesson.topic,
         date: stringToDate(lesson.date)
       }, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status >= 400 && response.status <= 500) {
@@ -222,7 +222,7 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
         topic: lesson.topic,
         date: stringToDate(lesson.date)
       }, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status >= 400 && response.status <= 500) {
@@ -247,7 +247,7 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
     setLoadingRemoveLesson(true);
     try {
       const response = await axiosInstance.delete(`/kindergarten/${gradebook._id}/term/${term._id}/lesson/${lesson._id}`, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status >= 400 && response.status <= 500) {
@@ -286,7 +286,7 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(`/kindergarten/${gradebook._id}/general-record`, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 200) {
@@ -313,7 +313,7 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.delete(`/kindergarten/${gradebook._id}`, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 200) {

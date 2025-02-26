@@ -42,7 +42,7 @@ const School = ({ userInfo, setGlobalSchool }) => {
                 cnpj: school.cnpj,
                 userId: userInfo._id
             }, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status >= 400 && response.status <= 501) {
@@ -75,7 +75,7 @@ const School = ({ userInfo, setGlobalSchool }) => {
                 cnpj: school.cnpj,
                 userId: userInfo._id
             }, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status >= 400 && response.status <= 501) {
@@ -100,7 +100,7 @@ const School = ({ userInfo, setGlobalSchool }) => {
         setLoading(true);
         try {
             const response = await axiosInstance.get(`/school/schools/${userInfo._id}`, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status !== 200) {
@@ -123,7 +123,7 @@ const School = ({ userInfo, setGlobalSchool }) => {
         setLoading(true);
         try {
             const response = await axiosInstance.get(`/school/${userInfo.lastSelectedSchool}`, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status !== 200) {
@@ -152,7 +152,7 @@ const School = ({ userInfo, setGlobalSchool }) => {
         setLoading(true);
         try {
             const response = await axiosInstance.delete(`/school/${schoolId}`, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status >= 400 && response.status <= 501) {
@@ -188,7 +188,7 @@ const School = ({ userInfo, setGlobalSchool }) => {
             const response = await axiosInstance.put(`/update-last-school/${userInfo._id}`, {
                 schoolId: school._id
             }, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status >= 400 && response.status <= 501) {

@@ -60,7 +60,7 @@ const Settings = ({ globalSchool, userInfo }) => {
         setLoading(true);
         try {
             const response = await axiosInstance.get(`/get-user/${userInfo._id}`, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status === 401) {
@@ -94,7 +94,7 @@ const Settings = ({ globalSchool, userInfo }) => {
                 userType: collaber.userType,
                 lastSelectedSchool: globalSchool._id
             }, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status === 200) {

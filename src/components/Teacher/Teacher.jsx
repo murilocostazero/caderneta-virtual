@@ -29,7 +29,7 @@ const Teacher = ({ globalSchool }) => {
     const getTeachers = async () => {
         try {
             const response = await axiosInstance.get('/get-teachers', {
-                timeout: 10000
+                timeout: 20000
             });
             setTeachers(response.data);
         } catch (error) {
@@ -40,7 +40,7 @@ const Teacher = ({ globalSchool }) => {
     const getSchoolTeachers = async () => {
         try {
             const response = await axiosInstance.get(`/school/teachers/${globalSchool._id}`, {
-                timeout: 10000
+                timeout: 20000
             });
             // console.log(response.data.teachers)
             setMyTeachers(response.data.teachers);
@@ -71,7 +71,7 @@ const Teacher = ({ globalSchool }) => {
             const response = await axiosInstance.put(`/school/add-teacher/${globalSchool._id}`, {
                 teacherId: teacher._id
             }, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status !== 200) {
@@ -98,7 +98,7 @@ const Teacher = ({ globalSchool }) => {
         setLoading(true);
         try {
             const response = await axiosInstance.put(`/remove-teacher/${globalSchool._id}/${selectedTeacher._id}`, {
-                timeout: 10000
+                timeout: 20000
             });
             if (response.status === 404) {
                 showStatusBar({ message: response.data.message, type: 'error' });

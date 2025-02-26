@@ -29,7 +29,7 @@ const Kindergarten = ({ globalSchool }) => {
         setLoading(true);
         try {
             const response = await axiosInstance.get(`/experience-field/school/${globalSchool._id}`, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status === 200) {
@@ -62,7 +62,7 @@ const Kindergarten = ({ globalSchool }) => {
                 evaluationCriteria: experience.evaluationCriteria,
                 school: globalSchool._id
             }, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status === 201) {
@@ -85,7 +85,7 @@ const Kindergarten = ({ globalSchool }) => {
         setLoading(true);
         try {
             const response = await axiosInstance.delete(`/experience-field/${experienceId}`, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status === 200) {

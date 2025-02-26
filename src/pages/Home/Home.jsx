@@ -50,7 +50,7 @@ const Home = () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(`/school/${schoolId}`, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status !== 200) {

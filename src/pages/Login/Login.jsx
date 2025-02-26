@@ -35,7 +35,7 @@ const Login = () => {
           email: email,
           password: password
         }, {
-          timeout: 10000
+          timeout: 20000
         });
 
         if (response.data && response.data.accessToken) {
@@ -74,7 +74,7 @@ const Login = () => {
           password: password,
           userType: userType
         }, {
-          timeout: 10000
+          timeout: 20000
         });
 
         if (response.status >= 400 && response.status <= 500) {

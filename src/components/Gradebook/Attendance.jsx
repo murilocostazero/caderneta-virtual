@@ -38,7 +38,7 @@ const Attendance = ({
         setLoading(true);
         try {
             const response = await axiosInstance.get(`/student/classrooms/${gradebook.classroom._id}`, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status === 200) {
@@ -62,7 +62,7 @@ const Attendance = ({
         setLoading(true);
         try {
             const response = await axiosInstance.get(`/${classroomType === 'kindergarten' ? 'kindergarten' : 'gradebook'}/${gradebook._id}/term/${term._id}/lesson/${lesson._id}/attendance`, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status === 200) {
@@ -129,7 +129,7 @@ const Attendance = ({
             const response = await axiosInstance.post(`/${classroomType === 'kindergarten' ? 'kindergarten' : 'gradebook'}/${gradebook._id}/term/${term._id}/lesson/${lesson._id}/attendance`, {
                 attendance: attendance
             }, {
-                timeout: 10000
+                timeout: 20000
             });
             if (response.status >= 400 && response.status <= 500) {
                 handleError(response.data.message);
@@ -149,7 +149,7 @@ const Attendance = ({
             const response = await axiosInstance.put(`/${classroomType === 'kindergarten' ? 'kindergarten' : 'gradebook'}/${gradebook._id}/term/${term._id}/lesson/${lesson._id}/attendance`, {
                 attendance: attendance
             }, {
-                timeout: 10000
+                timeout: 20000
             });
             if (response.status >= 400 && response.status <= 500) {
                 handleError(response.data.message);

@@ -111,7 +111,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
         const response = await axiosInstance.put(`/gradebook/${gradebook._id}`, {
           skill: skill
         }, {
-          timeout: 10000
+          timeout: 20000
         });
         if (response.status >= 400 && response.status <= 500) {
           showStatusBar({ message: response.data.message, type: 'error' });
@@ -141,7 +141,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
         startDate: stringToDate(term.startDate),
         endDate: stringToDate(term.endDate)
       }, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 201) {
@@ -175,7 +175,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
         startDate: stringToDate(term.startDate),
         endDate: stringToDate(term.endDate)
       }, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 200) {
@@ -201,7 +201,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.delete(`/gradebook/${gradebook._id}/term/${term._id}`, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 200) {
@@ -251,7 +251,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
         topic: lesson.topic,
         date: stringToDate(lesson.date)
       }, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status >= 400 && response.status <= 500) {
@@ -280,7 +280,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
         topic: lesson.topic,
         date: stringToDate(lesson.date)
       }, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status >= 400 && response.status <= 500) {
@@ -305,7 +305,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     setLoadingRemoveLesson(true);
     try {
       const response = await axiosInstance.delete(`/gradebook/${gradebook._id}/term/${term._id}/lesson/${lesson._id}`, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status >= 400 && response.status <= 500) {
@@ -346,7 +346,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(`/gradebook/${gradebook._id}/learning-record`, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 200) {
@@ -377,7 +377,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.delete(`/gradebook/${gradebook._id}`, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 200) {

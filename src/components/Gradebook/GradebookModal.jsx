@@ -29,7 +29,7 @@ const GradebookModal = ({ onCloseModal, globalSchool, onSaveGradebook, onSaveKin
         setLoading(true);
         try {
             const response = await axiosInstance.get(`/classroom/${globalSchool._id}/classes`, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status !== 200) {
@@ -52,7 +52,7 @@ const GradebookModal = ({ onCloseModal, globalSchool, onSaveGradebook, onSaveKin
         setLoading(true);
         try {
             const response = await axiosInstance.get(`/get-team/${globalSchool._id}`, {
-                timeout: 10000
+                timeout: 20000
             });
             // console.log(response.data.team)
             setTeam(response.data);
@@ -66,7 +66,7 @@ const GradebookModal = ({ onCloseModal, globalSchool, onSaveGradebook, onSaveKin
         setLoading(true);
         try {
             const response = await axiosInstance.get(`/subject/school/${globalSchool._id}`, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status !== 200) {

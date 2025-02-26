@@ -78,7 +78,7 @@ const SchoolSubject = ({ globalSchool }) => {
         setLoading(true);
         try {
             const response = await axiosInstance.get(`/subject/school/${globalSchool._id}`, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status !== 200) {
@@ -133,7 +133,7 @@ const SchoolSubject = ({ globalSchool }) => {
                 name: subject.name,
                 workload: subject.workload
             }, {
-                timeout: 10000
+                timeout: 20000
             });
 
             console.log(response)
@@ -159,7 +159,7 @@ const SchoolSubject = ({ globalSchool }) => {
         setLoading(true);
         try {
             const response = await axiosInstance.get(`/school/teachers/${globalSchool._id}`, {
-                timeout: 10000
+                timeout: 20000
             });
             // console.log(response.data.teachers)
             setSelectedSubject(subject);
@@ -175,7 +175,7 @@ const SchoolSubject = ({ globalSchool }) => {
         setLoading(true);
         try {
             const response = await axiosInstance.put(`/subject/${selectedSubject._id}/add-teacher/${teacher._id}`, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status >= 400 && response.status <= 500) {
@@ -195,7 +195,7 @@ const SchoolSubject = ({ globalSchool }) => {
         setLoading(true);
         try {
             const response = await axiosInstance.put(`/subject/${subjectId}/remove-teacher/${teacherId}`, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status >= 400 && response.status <= 500) {

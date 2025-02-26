@@ -54,7 +54,7 @@ const Team = ({ globalSchool }) => {
                 userType: collaber.userType,
                 lastSelectedSchool: globalSchool._id
             }, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status === 201) {
@@ -89,7 +89,7 @@ const Team = ({ globalSchool }) => {
                 userType: collaber.userType,
                 lastSelectedSchool: globalSchool._id
             }, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status === 200) {
@@ -114,7 +114,7 @@ const Team = ({ globalSchool }) => {
         setLoading(true);
         try {
             const response = await axiosInstance.get(`/get-team/${globalSchool._id}`, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status === 200) {

@@ -52,7 +52,7 @@ const Student = ({ globalSchool }) => {
         setLoadingClasses(true);
         try {
             const response = await axiosInstance.get(`/classroom/${globalSchool._id}/classes`, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status !== 200) {
@@ -75,7 +75,7 @@ const Student = ({ globalSchool }) => {
         setLoading(true);
         try {
             const response = await axiosInstance.get(`/student/classrooms/${classroom._id}`, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status === 200) {
@@ -107,7 +107,7 @@ const Student = ({ globalSchool }) => {
                 studentSituation: student.studentSituation,
                 classroom: selectedClassroom
             }, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status === 201) {
@@ -140,7 +140,7 @@ const Student = ({ globalSchool }) => {
                 guardian: student.guardian,
                 studentSituation: student.studentSituation
             }, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status === 200) {
@@ -164,7 +164,7 @@ const Student = ({ globalSchool }) => {
         setLoading(true);
         try {
             const response = await axiosInstance.delete(`/student/${student._id}`, {
-                timeout: 10000
+                timeout: 20000
             });
 
             if (response.status === 200) {

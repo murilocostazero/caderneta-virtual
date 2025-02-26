@@ -26,7 +26,7 @@ const StudentGrades = ({ handleClose, term, gradebook, classroomType }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(`/gradebook/${gradebook._id}/term/${term._id}/evaluations`, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 200) {
@@ -116,7 +116,7 @@ const StudentGrades = ({ handleClose, term, gradebook, classroomType }) => {
       const response = await axiosInstance.put(`/gradebook/${gradebook._id}/term/${term._id}/evaluations`, {
         evaluations: evaluations
       }, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 200) {

@@ -64,7 +64,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
         teacher: gradebook.teacher,
         subject: gradebook.subject
       }, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 201) {
@@ -87,7 +87,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(`/gradebook/school/${globalSchool._id}`, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 200) {
@@ -109,7 +109,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(`/gradebook/teacher/${userInfo._id}`, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 200) {
@@ -133,7 +133,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(`/kindergarten/school/${globalSchool._id}`, {
-        timeout: 10000
+        timeout: 20000
       });
       if (response.status === 200) {
         setGradebooks(response.data);
@@ -159,7 +159,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
         classroom: gradebook.classroom,
         teacher: gradebook.teacher
       }, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 201) {
@@ -182,7 +182,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(`/kindergarten/teacher/${userInfo._id}`, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 200) {
@@ -213,7 +213,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(`/experience-field/school/${globalSchool._id}`, {
-        timeout: 10000
+        timeout: 20000
       });
 
       if (response.status === 200) {

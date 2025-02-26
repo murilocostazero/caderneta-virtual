@@ -31,7 +31,7 @@ const ChangeClassroom = ({ onCloseModal, selectedClassroom, studentToChange, cla
                     oldClassroomId: selectedClassroom._id
 
                 }, {
-                    timeout: 10000
+                    timeout: 20000
                 });
 
                 if (response.status === 200) {
