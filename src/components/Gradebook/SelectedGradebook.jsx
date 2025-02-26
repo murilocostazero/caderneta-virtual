@@ -257,7 +257,6 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
       if (response.status >= 400 && response.status <= 500) {
         showStatusBar({ message: response.data.message, type: 'error' });
       } else {
-        console.log(response.data.gradebook)
         handleSelectGradebook(response.data.gradebook);
       }
     } catch (error) {
@@ -351,7 +350,6 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
 
       if (response.status === 200) {
         //RECEBE O REGISTRO GERAL DO BACKEND
-        console.log('-------F', response.data)
         setLearningRecords(response.data);
       } else {
         showStatusBar({ message: 'Erro ao gerar o registro geral', type: 'error' });

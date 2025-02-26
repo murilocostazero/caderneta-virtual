@@ -102,7 +102,6 @@ const Attendance = ({
     }
 
     const initializeLessonAttendance = (lessonAttendance) => {
-        console.log(lessonAttendance)
         return lessonAttendance.attendance.map(lessonAtt => ({
             _id: lessonAtt.studentId._id,
             studentId: lessonAtt.studentId._id,
