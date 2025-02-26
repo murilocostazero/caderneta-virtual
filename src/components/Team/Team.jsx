@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import StatusBar from '../StatusBar/StatusBar';
-import { MdOutlineAdd, MdCheckCircle, MdEdit, MdClose } from "react-icons/md";
+import { MdOutlineAdd } from "react-icons/md";
 import AddOrEditCollab from './AddOrEditCollab';
 import axiosInstance from '../../utils/axiosInstance';
 import { stringToDate } from '../../utils/helper';

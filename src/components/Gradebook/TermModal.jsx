@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import { FaRegTrashAlt } from "react-icons/fa";
 import InputMask from "react-input-mask";

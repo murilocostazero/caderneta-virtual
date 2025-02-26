@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ClassroomModal from './ClassroomModal'; // Supondo que você tenha um componente Modal
 import axiosInstance from '../../utils/axiosInstance';
-import { MdEdit, MdDelete, MdAdd } from "react-icons/md";
+import { MdAdd } from "react-icons/md";
 import './Classroom.css';
 import StatusBar from '../StatusBar/StatusBar';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';

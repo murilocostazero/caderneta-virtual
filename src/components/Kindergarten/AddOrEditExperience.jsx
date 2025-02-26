@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { MdAdd, MdClose } from 'react-icons/md';
-import { FaTrash } from 'react-icons/fa';
 import '../Gradebook/Gradebook.css';
 import './Kindergarten.css';
 

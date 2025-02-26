@@ -10,7 +10,6 @@ const Lesson = ({ term, handleCloseLesson, onAddLesson, editingLesson, loading, 
     const [topic, setTopic] = useState('');
     const [date, setDate] = useState('');
     const [error, setError] = useState('');
-    const [lessonType, setLessonType] = useState('');
 
     useEffect(() => {
         if (editingLesson === false) {

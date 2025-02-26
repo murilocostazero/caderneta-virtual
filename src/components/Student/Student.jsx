@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './Student.css';
 import StudentModal from './StudentModal';
 import { MdOutlineAdd } from 'react-icons/md';
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { FiRefreshCcw } from "react-icons/fi";
 import StatusBar from '../StatusBar/StatusBar';
 import axiosInstance from '../../utils/axiosInstance';

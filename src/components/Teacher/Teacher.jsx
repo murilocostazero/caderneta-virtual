@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../utils/axiosInstance';
 import StatusBar from '../StatusBar/StatusBar';
-import { MdClose, MdPersonRemoveAlt1 } from "react-icons/md";
+import { MdPersonRemoveAlt1 } from "react-icons/md";
 import './Teacher.css';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 

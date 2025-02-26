@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { MdAdd, MdArrowBack, MdEdit, MdKeyboardArrowDown, MdKeyboardArrowUp, MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
 import kindergartenImg from '../../assets/images/subjects/kindergarten.jpg'
 import './Gradebook.css';
-import { classroomTypeToPT, dateToString, normalizeString, stringToDate } from '../../utils/helper';
+import { classroomTypeToPT, dateToString, stringToDate } from '../../utils/helper';
 import StatusBar from '../StatusBar/StatusBar';
 import axiosInstance from '../../utils/axiosInstance';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';

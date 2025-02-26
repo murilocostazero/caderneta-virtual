@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './TeachersToSelect.css';
 
 const TeachersToSelect = ({ myTeachers, loading, handleCancel, addTeacher }) => {

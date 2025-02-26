@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './School.css';
-import { MdOutlineAdd, MdCheckCircle, MdEdit, MdClose } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
 import AddEditSchool from './AddEditSchool';
 import axiosInstance from '../../utils/axiosInstance';
 import StatusBar from '../StatusBar/StatusBar';

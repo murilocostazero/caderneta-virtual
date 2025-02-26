@@ -14,7 +14,6 @@ const AddOrEditCollab = ({ onClose, selectedCollaber, onAddCollaber, onEditColla
     const [areaOfExpertise, setAreaOfExpertise] = useState(selectedCollaber ? selectedCollaber.areaOfExpertise : '');
     const [birthDate, setBirthDate] = useState(selectedCollaber ? dateToString(selectedCollaber.birthDate) : '');
     const [userType, setUserType] = useState(selectedCollaber ? selectedCollaber.userType : 'teacher');
-    const [lastSelectedSchool, setLastSelectedSchool] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 

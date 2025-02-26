@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axiosInstance from '../../utils/axiosInstance';
 import './SchoolSubject.css';
 
 const SchoolSubjectModal = ({ closeModal, currentSubject, onAddSubject, onEditSubject, editMode }) => {

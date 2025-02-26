@@ -4,7 +4,7 @@ import StatusBar from '../StatusBar/StatusBar';
 import './SchoolSubject.css';
 import axiosInstance from '../../utils/axiosInstance';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
-import { MdAdd, MdClose } from "react-icons/md";
+import { MdAdd } from "react-icons/md";
 import TeachersToSelect from '../TeachersToSelect/TeachersToSelect';
 
 const SchoolSubject = ({ globalSchool }) => {

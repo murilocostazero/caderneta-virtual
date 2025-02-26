@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { MdClose } from 'react-icons/md';
 import InputMask from "react-input-mask";
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { dateToString, stringToDate } from '../../utils/helper';
@@ -17,7 +16,6 @@ const Settings = ({ globalSchool, userInfo }) => {
     const [areaOfExpertise, setAreaOfExpertise] = useState('');
     const [birthDate, setBirthDate] = useState('');
     const [userType, setUserType] = useState('');
-    const [lastSelectedSchool, setLastSelectedSchool] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [statusMessage, setStatusMessage] = useState(null);
