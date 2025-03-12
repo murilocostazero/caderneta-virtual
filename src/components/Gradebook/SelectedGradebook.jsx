@@ -470,7 +470,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
                 <div className='row-container'>
                   <div className='row-container'>
                     <div className='dropdown-button' onClick={() => toggleLessons(term._id)}>
-                      {expandedTerms[term._id] ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+                      {expandedTerms[term._id] ? <MdKeyboardArrowUp size={24} /> : <MdKeyboardArrowDown size={24} />}
                     </div>
                     <h4>{term.name}</h4>
                     <MdEdit onClick={() => handleEditTerm(term)} className='edit-term-button' />

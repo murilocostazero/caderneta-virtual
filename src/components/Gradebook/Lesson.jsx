@@ -6,7 +6,7 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import './Gradebook.css';
 
 const Lesson = ({ term, handleCloseLesson, onAddLesson, editingLesson, loading, selectedLesson, onEditLesson }) => {
-    let maxLengthTextArea = 80;
+    let maxLengthTextArea = 100;
 
     const [topic, setTopic] = useState('');
     const [date, setDate] = useState('');

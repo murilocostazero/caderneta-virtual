@@ -410,7 +410,7 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
               <div className='row-container'>
                 <div className='row-container'>
                   <div className='dropdown-button' onClick={() => toggleLessons(term._id)}>
-                    {expandedTerms[term._id] ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+                    {expandedTerms[term._id] ? <MdKeyboardArrowUp size={24} /> : <MdKeyboardArrowDown size={24} />}
                   </div>
                   <h4>{term.name}</h4>
                   <MdEdit onClick={() => handleEditTerm(term)} className='edit-term-button' />
@@ -452,8 +452,8 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
 
                               {
                                 lesson.attendance?.length > 0 ?
-                                  <button onClick={() => handleOpenAttendance(term, lesson, true)}>Editar chamada</button> :
-                                  <button onClick={() => handleOpenAttendance(term, lesson, false)}>Nova chamada</button>
+                                  <button onClick={() => handleOpenAttendance(lesson, true)}>Editar chamada</button> :
+                                  <button onClick={() => handleOpenAttendance(lesson, false)}>Nova chamada</button>
                               }
                             </div>
 
