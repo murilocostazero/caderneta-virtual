@@ -38,6 +38,10 @@
   .login-form label {
     margin-top: 10px;
   }
+
+  .password-icon {
+    cursor: pointer;
+  }
   
   .input-group {
     display: flex;

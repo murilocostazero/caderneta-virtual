@@ -4,6 +4,7 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { dateToString, stringToDate } from '../../utils/helper';
 import axiosInstance from '../../utils/axiosInstance';
 import StatusBar from '../StatusBar/StatusBar';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import './Settings.css';
 
 const Settings = ({ globalSchool, userInfo }) => {
@@ -19,6 +20,7 @@ const Settings = ({ globalSchool, userInfo }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [statusMessage, setStatusMessage] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         getCollaber();
@@ -149,9 +151,18 @@ const Settings = ({ globalSchool, userInfo }) => {
                                 onChange={(e) => setCpf(e.target.value)}
                                 value={cpf} />
 
-                            <label>Senha</label>
+                            <div className='flex-row'>
+                                <label>Senha</label>
+
+                                {
+                                    showPassword ?
+                                        <FaEyeSlash onClick={() => setShowPassword(!showPassword)} className="login-icon password-icon" /> :
+                                        <FaEye onClick={() => setShowPassword(!showPassword)} className="login-icon password-icon" />
+                                }
+
+                            </div>
                             <input
-                                type="password"
+                                type={ !showPassword ? "password" : "text" }
                                 placeholder="Defina sua nova senha"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)} />

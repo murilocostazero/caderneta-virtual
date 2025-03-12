@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import teacherimg from '../../assets/images/image-teacher.jpg';
 import checkok from '../../assets/images/check-ok.png';
 import { useNavigate } from 'react-router-dom';
-import { FaEnvelope, FaLock, FaUser } from 'react-icons/fa'; // Biblioteca de ícones react-icons
+import { FaEnvelope, FaLock, FaUser, FaEye, FaEyeSlash } from 'react-icons/fa'; // Biblioteca de ícones react-icons
 import { MdPersonAdd } from "react-icons/md";
 import './Login.css';
 import StatusBar from '../../components/StatusBar/StatusBar';
@@ -18,6 +18,7 @@ const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [statusMessage, setStatusMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -135,10 +136,17 @@ const Login = () => {
           <div className="input-group">
             <FaLock className="login-icon" />
             <input
-              type="password"
+              type={ !showPassword ? "password" : "text" }
               placeholder="Digite sua senha"
               value={password}
               onChange={(e) => setPassword(e.target.value)} />
+              
+              {
+                showPassword ? 
+                  <FaEyeSlash onClick={() => setShowPassword(!showPassword)} className="login-icon password-icon" /> : 
+                  <FaEye onClick={() => setShowPassword(!showPassword)} className="login-icon password-icon" />
+              }
+          
           </div>
 
           {
