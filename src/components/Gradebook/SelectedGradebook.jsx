@@ -503,11 +503,11 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
                         term.lessons.map((lesson, index) =>
                           <div key={lesson._id} className={`single-lesson-container  ${index % 2 === 0 ? "even" : "odd"}`}>
 
-                            <p>
+                            <div>
                               <FaTrash className='remove-lesson-icon' onClick={() => onDeleteLesson(term, lesson)} />
                               {dateToString(lesson.date)} - Assunto:
                               <pre className='lesson-topic'>{lesson.topic}</pre>
-                            </p>
+                            </div>
                             <div className='lesson-actions'>
                               <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
 

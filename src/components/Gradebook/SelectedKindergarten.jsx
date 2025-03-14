@@ -442,20 +442,20 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
                     ) : (
                       term.lessons.map((lesson, index) =>
                         <div key={lesson._id} className={`single-lesson-container  ${index % 2 === 0 ? "even" : "odd"}`}>
-                          <p>
-                              <FaTrash className='remove-lesson-icon' onClick={() => onDeleteLesson(term, lesson)} />
-                              {dateToString(lesson.date)} - Assunto:
-                              <pre className='lesson-topic'>{lesson.topic}</pre>
-                            </p>
-                            <div className='lesson-actions'>
-                              <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
+                          <div>
+                            <FaTrash className='remove-lesson-icon' onClick={() => onDeleteLesson(term, lesson)} />
+                            {dateToString(lesson.date)} - Assunto:
+                            <pre className='lesson-topic'>{lesson.topic}</pre>
+                          </div>
+                          <div className='lesson-actions'>
+                            <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
 
-                              {
-                                lesson.attendance?.length > 0 ?
-                                  <button onClick={() => handleOpenAttendance(lesson, true)}>Editar chamada</button> :
-                                  <button onClick={() => handleOpenAttendance(lesson, false)}>Nova chamada</button>
-                              }
-                            </div>
+                            {
+                              lesson.attendance?.length > 0 ?
+                                <button onClick={() => handleOpenAttendance(lesson, true)}>Editar chamada</button> :
+                                <button onClick={() => handleOpenAttendance(lesson, false)}>Nova chamada</button>
+                            }
+                          </div>
 
                           {
                             showAttendance &&
