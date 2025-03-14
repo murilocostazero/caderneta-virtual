@@ -6,12 +6,12 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { studentSituationToPt } from '../../utils/helper';
 
 const Attendance = ({
-    handleCloseAttendance,
     term,
     lesson,
     gradebook,
     isEditingAttendance,
     handleSelectGradebook,
+    handleCloseAttendance,
     classroomType
 }) => {
     const [loading, setLoading] = useState(false);
@@ -43,7 +43,7 @@ const Attendance = ({
 
             if (response.status === 200) {
                 setStudents(response.data);
-                setAttendance(initializeAttendance(response.data));
+                await handleSetAttendance(response.data);
             } else if (response.status >= 400 && response.status <= 500) {
                 handleError(response.data.message);
             }
@@ -58,48 +58,32 @@ const Attendance = ({
         setLoading(false);
     }
 
-    const getAttendance = async (maxRetries = 5, retryDelay = 1000) => {
+    const getAttendance = async () => {
         setLoading(true);
-        let attempts = 0;
+        try {
+            const response = await axiosInstance.get(`/${classroomType === 'kindergarten' ? 'kindergarten' : 'gradebook'}/${gradebook._id}/term/${term._id}/lesson/${lesson._id}/attendance`, {
+                timeout: 20000
+            });
 
-        while (attempts < maxRetries) {
-            try {
-                const response = await axiosInstance.get(
-                    `/${classroomType === 'kindergarten' ? 'kindergarten' : 'gradebook'}/${gradebook._id}/term/${term._id}/lesson/${lesson._id}/attendance`,
-                    { timeout: 20000 }
-                );
-
-                if (response.status === 200) {
-                    setAttendance(initializeLessonAttendance(response.data.lesson));
-                    setLoading(false);
-                    return;
-                } else if (response.status >= 400 && response.status <= 500) {
-                    handleError(response.data.message);
-                    setLoading(false);
-                    return;
-                }
-            } catch (error) {
-                console.log(`Tentativa ${attempts + 1} falhou. Erro:`, error);
-
-                if (error.code === 'ERR_NETWORK') {
-                    handleError('Verifique sua conexão com a internet');
-                }
-
-                if (attempts === maxRetries - 1) {
-                    handleError('Não foi possível carregar a presença. Tente novamente.');
-                    setLoading(false);
-                    return;
-                }
-
-                // Espera progressiva antes da próxima tentativa
-                await new Promise((resolve) => setTimeout(resolve, retryDelay));
-                retryDelay *= 2; // Exponential backoff
+            if (response.status === 200) {
+                setAttendance(initializeLessonAttendance(response.data.lesson));
+            } else if (response.status >= 400 && response.status <= 500) {
+                handleError(response.data.message);
             }
-
-            attempts++;
+        } catch (error) {
+            console.log(error)
+            if (error.code === 'ERR_NETWORK') {
+                handleError('Verifique sua conexão com a internet');
+            } else {
+                handleError('Um erro inesperado aconteceu. Tente novamente.');
+            }
         }
         setLoading(false);
-    };
+    }
+
+    const handleSetAttendance = (students) => {
+        setAttendance(initializeAttendance(students));
+    }
 
     const initializeAttendance = (students) => {
         return students.map(student => ({
@@ -193,11 +177,10 @@ const Attendance = ({
 
                 <div className='attendance-form'>
                     <h2>Lista de chamada</h2>
-                    <p>Por padrão os alunos vem com presença, o(a) sr(a) pode aplicar apenas as faltas.</p>
-
+                    <p>Aula: {lesson.topic}</p>
                     {
                         !attendance || attendance.length < 1 ?
-                            <p>Nenhum aluno nessa turma</p> :
+                            <p>Verifique sua conexão e tente novamente</p> :
                             attendance.map((student, index) => (
 
                                 student.studentSituation?.situation === 'transferred' || student.studentSituation?.situation === 'escaped' ?
@@ -225,13 +208,10 @@ const Attendance = ({
                 </div>
                 <div className='bottom-attendance-container'>
                     {
-                        loading ?
-                            <LoadingSpinner /> :
-                            error ?
-                                <div>
-                                    <p className='error-message'>{error}</p>
-                                    <button className='primary-button' onClick={() => getAttendance()}>Tentar novamente</button>
-                                </div> :
+                        error ?
+                            <p className='error-message'>{error}</p> :
+                            loading ?
+                                <LoadingSpinner /> :
                                 isEditingAttendance ?
                                     <button className='primary-button' onClick={() => onUpdateAttendance()}>Salvar alterações</button> :
                                     <button className='primary-button' onClick={() => onSaveAttendance()}>Salvar chamada</button>

@@ -269,10 +269,18 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
   }
 
   //---------- ATTENDENCE
-  const handleOpenAttendance = (lesson, isEditing) => {
+  const handleOpenAttendance = (lesson, isEditing, term) => {
     setIsEditingAttendance(isEditing);
+    setSelectedTerm(term);
     setSelectedLesson(lesson);
     setShowAttendance(true);
+  }
+
+  const handleCloseAttendance = () => {
+    setIsEditingAttendance(false);
+    setSelectedTerm(null);
+    setSelectedLesson(null);
+    setShowAttendance(false);
   }
 
   //---------- STUDENT GRADES
@@ -405,99 +413,94 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
         </div>
 
         {
-          gradebook.terms.map((term) =>
-            <div key={term._id} className='lesson-container'>
-              <div className='row-container'>
+          isStudentGradesVisible
+          &&
+          <KindergartenGrades
+            handleClose={() => setIsStudentGradesVisible(false)}
+            gradebook={gradebook}
+            term={selectedTerm}
+            classroomType={gradebook.classroom.classroomType} />
+        }
+
+        {
+          showAttendance ?
+            <Attendance
+              gradebook={gradebook}
+              term={selectedTerm}
+              lesson={selectedLesson}
+              handleSelectGradebook={(gradebook) => {
+                handleSelectGradebook(gradebook);
+                setShowAttendance(false);
+              }}
+              handleCloseAttendance={() => handleCloseAttendance()}
+              isEditingAttendance={isEditingAttendance}
+              classroomType={gradebook.classroom.classroomType}
+            /> :
+            gradebook.terms.map((term) =>
+              <div key={term._id} className='lesson-container'>
                 <div className='row-container'>
-                  <div className='dropdown-button' onClick={() => toggleLessons(term._id)}>
-                    {expandedTerms[term._id] ? <MdKeyboardArrowUp size={24} /> : <MdKeyboardArrowDown size={24} />}
-                  </div>
-                  <h4>{term.name}</h4>
-                  <MdEdit onClick={() => handleEditTerm(term)} className='edit-term-button' />
-                </div>
-                <button className='add-lesson-button' onClick={() => handleOpenLesson(term)}>
-                  <MdAdd />
-                </button>
-              </div>
-
-              {
-                showLesson ?
-                  <Lesson
-                    term={term}
-                    handleCloseLesson={() => handleCloseLesson()}
-                    onAddLesson={(lesson) => onAddLesson(lesson)}
-                    onEditLesson={(lesson) => onEditLesson(lesson)}
-                    selectedLesson={selectedLesson}
-                    editingLesson={editingLesson}
-                    loading={loading} /> :
-                  <div />
-              }
-
-              {
-                expandedTerms[term._id] &&
-                <>
-                  {
-                    (!term.lessons || term.lessons.length < 1) ? (
-                      <p>Nenhuma aula registrada nesse bimestre</p>
-                    ) : (
-                      term.lessons.map((lesson, index) =>
-                        <div key={lesson._id} className={`single-lesson-container  ${index % 2 === 0 ? "even" : "odd"}`}>
-                          <div>
-                            <FaTrash className='remove-lesson-icon' onClick={() => onDeleteLesson(term, lesson)} />
-                            {dateToString(lesson.date)} - Assunto:
-                            <pre className='lesson-topic'>{lesson.topic}</pre>
-                          </div>
-                          <div className='lesson-actions'>
-                            <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
-
-                            {
-                              lesson.attendance?.length > 0 ?
-                                <button onClick={() => handleOpenAttendance(lesson, true)}>Editar chamada</button> :
-                                <button onClick={() => handleOpenAttendance(lesson, false)}>Nova chamada</button>
-                            }
-                          </div>
-
-                          {
-                            showAttendance &&
-                            <Attendance
-                              gradebook={gradebook}
-                              term={term}
-                              lesson={selectedLesson}
-                              handleSelectGradebook={(gradebook) => {
-                                handleSelectGradebook(gradebook);
-                                setShowAttendance(false);
-                              }}
-                              handleCloseAttendance={() => setShowAttendance(false)}
-                              isEditingAttendance={isEditingAttendance}
-                              classroomType={gradebook.classroom.classroomType}
-                            />
-                          }
-
-                          {
-                            isStudentGradesVisible
-                            &&
-                            <KindergartenGrades
-                              handleClose={() => setIsStudentGradesVisible(false)}
-                              gradebook={gradebook}
-                              term={selectedTerm}
-                              classroomType={gradebook.classroom.classroomType} />
-                          }
-
-
-                        </div>
-                      )
-                    )
-                  }
-                  {
-                    term.lessons.length > 0 &&
-                    <div className='term-bottom-button'>
-                      <button className='primary-button' onClick={() => handleOpenStudentGrades(term)}>INSTRUMENTO DE AVALIAÇÃO DO PROFESSOR</button>
+                  <div className='row-container'>
+                    <div className='dropdown-button' onClick={() => toggleLessons(term._id)}>
+                      {expandedTerms[term._id] ? <MdKeyboardArrowUp size={24} /> : <MdKeyboardArrowDown size={24} />}
                     </div>
-                  }
-                </>
-              }
-            </div>
-          )
+                    <h4>{term.name}</h4>
+                    <MdEdit onClick={() => handleEditTerm(term)} className='edit-term-button' />
+                  </div>
+                  <button className='add-lesson-button' onClick={() => handleOpenLesson(term)}>
+                    <MdAdd />
+                  </button>
+                </div>
+
+                {
+                  showLesson ?
+                    <Lesson
+                      term={term}
+                      handleCloseLesson={() => handleCloseLesson()}
+                      onAddLesson={(lesson) => onAddLesson(lesson)}
+                      onEditLesson={(lesson) => onEditLesson(lesson)}
+                      selectedLesson={selectedLesson}
+                      editingLesson={editingLesson}
+                      loading={loading} /> :
+                    <div />
+                }
+
+                {
+                  expandedTerms[term._id] &&
+                  <>
+                    {
+                      (!term.lessons || term.lessons.length < 1) ? (
+                        <p>Nenhuma aula registrada nesse bimestre</p>
+                      ) : (
+                        term.lessons.map((lesson, index) =>
+                          <div key={lesson._id} className={`single-lesson-container  ${index % 2 === 0 ? "even" : "odd"}`}>
+                            <div>
+                              <FaTrash className='remove-lesson-icon' onClick={() => onDeleteLesson(term, lesson)} />
+                              {dateToString(lesson.date)} - Assunto:
+                              <pre className='lesson-topic'>{lesson.topic}</pre>
+                            </div>
+                            <div className='lesson-actions'>
+                              <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
+
+                              {
+                                lesson.attendance?.length > 0 ?
+                                  <button onClick={() => handleOpenAttendance(lesson, true, term)}>Editar chamada</button> :
+                                  <button onClick={() => handleOpenAttendance(lesson, false, term)}>Nova chamada</button>
+                              }
+                            </div>
+                          </div>
+                        )
+                      )
+                    }
+                    {
+                      term.lessons.length > 0 &&
+                      <div className='term-bottom-button'>
+                        <button className='primary-button' onClick={() => handleOpenStudentGrades(term)}>INSTRUMENTO DE AVALIAÇÃO DO PROFESSOR</button>
+                      </div>
+                    }
+                  </>
+                }
+              </div>
+            )
         }
 
         {

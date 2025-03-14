@@ -53,7 +53,6 @@ const KindergartenGrades = ({ handleClose, term, gradebook, classroomType }) => 
       const response = await axiosInstance.get(`/kindergarten/${gradebook._id}/term/${term._id}/evaluations`, {
         timeout: 20000
       });
-      console.log(response.data)
       if (response.status === 200) {
         setEvaluations(response.data.evaluations);
       } else {
