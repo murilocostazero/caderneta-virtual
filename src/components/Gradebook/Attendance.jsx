@@ -180,7 +180,7 @@ const Attendance = ({
                     <p>Aula: {lesson.topic}</p>
                     {
                         !attendance || attendance.length < 1 ?
-                            <p>Verifique sua conexão e tente novamente</p> :
+                            <p>Por favor, aguarde.</p> :
                             attendance.map((student, index) => (
 
                                 student.studentSituation?.situation === 'transferred' || student.studentSituation?.situation === 'escaped' ?
