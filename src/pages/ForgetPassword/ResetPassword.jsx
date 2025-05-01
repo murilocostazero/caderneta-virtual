@@ -6,6 +6,7 @@ import StatusBar from '../../components/StatusBar/StatusBar';
 import axiosInstance from '../../utils/axiosInstance';
 import weak from '../../assets/images/weak.png';
 import strong from '../../assets/images/strong.png';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const ResetPasswordForm = () => {
     const [newPassword, setNewPassword] = useState('');
@@ -13,6 +14,7 @@ const ResetPasswordForm = () => {
     const [statusMessage, setStatusMessage] = useState(null);
     const [validPassword, setValidPassword] = useState(false);
     const [passwordStrength, setPasswordStrength] = useState('weak');
+    const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
     const showStatusBar = (status) => setStatusMessage({ message: status.message, type: status.type });
@@ -69,15 +71,23 @@ const ResetPasswordForm = () => {
             <h2 className="reset-title">Redefinir senha</h2>
             <form onSubmit={handleSubmit} className="reset-form">
                 <label className="reset-label">Nova senha</label>
-                <input
-                    type="password"
-                    className="reset-input"
-                    value={newPassword}
-                    onChange={(e) => validatePassword(e.target.value)}
-                    required
-                />
+                <div className='password-input-container'>
+                    <input
+                        type={!showPassword ? "password" : "text"}
+                        className="reset-input"
+                        value={newPassword}
+                        onChange={(e) => validatePassword(e.target.value)}
+                        required
+                    />
+
+                    {
+                        showPassword ?
+                            <FaEyeSlash onClick={() => setShowPassword(!showPassword)} className="login-icon password-icon" /> :
+                            <FaEye onClick={() => setShowPassword(!showPassword)} className="login-icon password-icon" />
+                    }
+                </div>
+
                 <div className='password-strength-div'>
-                    <label>Senha:</label>
                     <div className='strength-container'>
                         <div className='strength-circle'>
                             <img
