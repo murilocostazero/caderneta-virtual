@@ -167,3 +167,15 @@
     text-align: center;
     font-size: 14px;
   }
+
+  .forget-password {
+    margin-top: 24px;
+    text-align: center;
+    color: #333;
+    cursor: pointer;
+  }
+
+  .forget-password:hover {
+    color: #0166ff;
+    font-weight: bold;
+  }

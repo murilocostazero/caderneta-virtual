@@ -182,6 +182,8 @@ const Login = () => {
                 <label className='singup-msg'>Já tem conta? <span className='singup-link' onClick={() => setIsLogin(!isLogin)}>Fazer login</span></label>
             }
           </div> */}
+          
+          <span className='forget-password' onClick={() => navigate('/forget-password')}>Esqueceu sua senha?</span>
         </div>
 
         <footer className='footer'>

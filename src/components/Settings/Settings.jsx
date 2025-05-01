@@ -151,7 +151,7 @@ const Settings = ({ globalSchool, userInfo }) => {
                                 onChange={(e) => setCpf(e.target.value)}
                                 value={cpf} />
 
-                            <div className='flex-row'>
+                            {/* <div className='flex-row'>
                                 <label>Senha</label>
 
                                 {
@@ -165,7 +165,7 @@ const Settings = ({ globalSchool, userInfo }) => {
                                 type={ !showPassword ? "password" : "text" }
                                 placeholder="Defina sua nova senha"
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)} />
+                                onChange={(e) => setPassword(e.target.value)} /> */}
 
                             <label>Nascimento</label>
                             <InputMask
@@ -208,7 +208,7 @@ const Settings = ({ globalSchool, userInfo }) => {
                                     <p className='error-message'>{error}</p> :
                                     loading ?
                                         <LoadingSpinner /> :
-                                        <button onClick={() => handleSave()}>
+                                        <button className='primary-button' onClick={() => handleSave()}>
                                             Salvar
                                         </button>
                             }

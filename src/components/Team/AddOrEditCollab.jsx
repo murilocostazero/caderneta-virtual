@@ -127,7 +127,7 @@ const AddOrEditCollab = ({ onClose, selectedCollaber, onAddCollaber, onEditColla
                                 <p className='error-message'>{error}</p> :
                                 loading ?
                                     <LoadingSpinner /> :
-                                    <button onClick={() => handleSave()}>
+                                    <button className='primary-button' onClick={() => handleSave()}>
                                         {
                                             selectedCollaber ?
                                             'Salvar Alterações' :
