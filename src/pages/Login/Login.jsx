@@ -108,7 +108,7 @@ const Login = () => {
           <label className='title'>Caderneta Virtual</label>
         </div>
 
-        <div className="login-form">
+        <form className="login-form" onSubmit={isLogin ? handleLogin : handleSingup}>
           <p className='title'>Olá. Seja bem-vindo!</p>
           <p className='subtitle'>Por favor, insira suas credenciais</p>
 
@@ -136,17 +136,17 @@ const Login = () => {
           <div className="input-group">
             <FaLock className="login-icon" />
             <input
-              type={ !showPassword ? "password" : "text" }
+              type={!showPassword ? "password" : "text"}
               placeholder="Digite sua senha"
               value={password}
               onChange={(e) => setPassword(e.target.value)} />
-              
-              {
-                showPassword ? 
-                  <FaEyeSlash onClick={() => setShowPassword(!showPassword)} className="login-icon password-icon" /> : 
-                  <FaEye onClick={() => setShowPassword(!showPassword)} className="login-icon password-icon" />
-              }
-          
+
+            {
+              showPassword ?
+                <FaEyeSlash onClick={() => setShowPassword(!showPassword)} className="login-icon password-icon" /> :
+                <FaEye onClick={() => setShowPassword(!showPassword)} className="login-icon password-icon" />
+            }
+
           </div>
 
           {
@@ -174,17 +174,17 @@ const Login = () => {
                 }
               </button>
           }
+        </form>
 
-          {/* <div className='singup-msg-container'>
+        {/* <div className='singup-msg-container'>
             {
               isLogin ?
                 <label className='singup-msg'>Não é cadastrado? <span className='singup-link' onClick={() => setIsLogin(!isLogin)}>Criar conta</span></label> :
                 <label className='singup-msg'>Já tem conta? <span className='singup-link' onClick={() => setIsLogin(!isLogin)}>Fazer login</span></label>
             }
           </div> */}
-          
-          <span className='forget-password' onClick={() => navigate('/forget-password')}>Esqueceu sua senha?</span>
-        </div>
+
+        <span className='forget-password' onClick={() => navigate('/forget-password')}>Esqueceu sua senha?</span>
 
         <footer className='footer'>
           Junte-se a nós e experimente mais praticidade! Aqui você terá mais tempo para o que realmente importa.
