@@ -93,6 +93,7 @@
   /* Três colunas de largura igual */
   padding: 10px;
   border-bottom: 1px solid #ddd;
+  cursor: pointer;
 }
 
 .gradebook-header {
@@ -103,10 +104,6 @@
 .gradebook-list-item p {
   margin: 0;
   padding: 5px;
-}
-
-.gradebook-list-item> :first-child {
-  cursor: pointer;
 }
 
 /* Estilos opcionais para alinhamento e espaçamento */
@@ -234,14 +231,31 @@
   /* Definição completa da borda */
 }
 
+.lesson-container-header {
+  margin-bottom: 12px;
+}
+
 .lesson-topic {
-  margin-left: 12px;
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto';
-  font-size: 12px;
+  font-size: 14px;
   white-space: pre-wrap; /* Mantém quebras de linha, mas permite quebra automática */
   word-wrap: break-word; /* Quebra palavras longas */
   overflow-wrap: break-word; /* Garante compatibilidade */
   max-width: 100%; /* Garante que não ultrapasse o componente pai */
+}
+
+.circular-container {
+  background-color: rgba(1, 102, 255, 0.2);
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+}
+
+.margin-left {
+  margin-left: 4px;
 }
 
 .drop-icon {
@@ -296,11 +310,15 @@
   margin: 2px;
 }
 
-.lesson-actions> :first-child {
-  background-color: #777;
+.lesson-actions> :nth-child(1) {
+  background-color: #e41313;
 }
 
 .lesson-actions> :nth-child(2) {
+  background-color: #777;
+}
+
+.lesson-actions> :nth-child(3) {
   background-color: #d200d2;
 }
 
@@ -460,7 +478,7 @@ table input {
 
 .edit-term-button {
   margin-left: 4px;
-  fill: rgba(0, 0, 0, 0.1);
+  fill: black;
   cursor: pointer;
 }
 
@@ -637,4 +655,13 @@ table input {
     width: 70%;
     margin-top: 12px;
   }
+}
+
+.highlight-container {
+  background-color: rgba(100,100,100,0.1);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px;
+  border-radius: 8px;
 }

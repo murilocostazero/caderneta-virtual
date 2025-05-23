@@ -443,8 +443,12 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
                     <div className='dropdown-button' onClick={() => toggleLessons(term._id)}>
                       {expandedTerms[term._id] ? <MdKeyboardArrowUp size={24} /> : <MdKeyboardArrowDown size={24} />}
                     </div>
-                    <h4>{term.name}</h4>
-                    <MdEdit onClick={() => handleEditTerm(term)} className='edit-term-button' />
+
+                    <div className='highlight-container'>
+                      <h4>{term.name}</h4>
+                      <MdEdit onClick={() => handleEditTerm(term)} className='edit-term-button' />
+                    </div>
+
                   </div>
                   <button className='add-lesson-button' onClick={() => handleOpenLesson(term)}>
                     <MdAdd />
@@ -474,11 +478,11 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
                         term.lessons.map((lesson, index) =>
                           <div key={lesson._id} className={`single-lesson-container  ${index % 2 === 0 ? "even" : "odd"}`}>
                             <div>
-                              <FaTrash className='remove-lesson-icon' onClick={() => onDeleteLesson(term, lesson)} />
                               {dateToString(lesson.date)} - Assunto:
                               <pre className='lesson-topic'>{lesson.topic}</pre>
                             </div>
                             <div className='lesson-actions'>
+                              <button onClick={() => onDeleteLesson(term, lesson)}>Deletar aula</button>
                               <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
 
                               {

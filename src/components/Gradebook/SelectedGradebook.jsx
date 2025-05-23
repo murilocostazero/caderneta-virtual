@@ -42,6 +42,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [expandedTerms, setExpandedTerms] = useState({});
   const [confirmDeleteGB, setConfirmDeleteGB] = useState(false);
   const [loadingRemoveLesson, setLoadingRemoveLesson] = useState(false);
+  const [subject, setSubject] = useState(null);
 
   const showStatusBar = (status) => {
     setStatusMessage({ message: status.message, type: status.type });
@@ -52,6 +53,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
 
   useEffect(() => {
     selectSubjectImage();
+    getSubject();
   }, []);
 
   const toggleLessons = (termId) => {
@@ -100,6 +102,29 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
         setSubjectImg(otherImg);
         break;
     }
+  }
+
+  const getSubject = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get(`/subject/${gradebook.subject._id}`, {
+        timeout: 20000
+      });
+
+      if (response.status === 200) {
+        setSubject(response.data);
+      } else {
+        showStatusBar({ message: 'Erro ao buscar disciplina', type: 'error' });
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+      } else {
+        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+      }
+    }
+    setLoading(false);
   }
 
   const handleSaveSkill = async () => {
@@ -249,7 +274,8 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     try {
       const response = await axiosInstance.post(`/gradebook/${gradebook._id}/term/${selectedTerm._id}/lesson`, {
         topic: lesson.topic,
-        date: stringToDate(lesson.date)
+        date: stringToDate(lesson.date),
+        workload: lesson.lessonWorkload
       }, {
         timeout: 20000
       });
@@ -277,7 +303,8 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     try {
       const response = await axiosInstance.put(`/gradebook/${gradebook._id}/term/${selectedTerm._id}/lesson/${lesson.id}`, {
         topic: lesson.topic,
-        date: stringToDate(lesson.date)
+        date: stringToDate(lesson.date),
+        workload: lesson.lessonWorkload
       }, {
         timeout: 20000
       });
@@ -408,19 +435,22 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
         <div className='subject-image-container'>
           <img src={subjectImg} alt="Imagem da matéria" className='subject-background' />
 
-          <div class="subject-name">
+          <div className='subject-name'>
             <div className='back-button-container'>
               <MdArrowBack
                 onClick={() => handleSelectGradebook(null)}
                 fontSize={20}
                 color='#FFF'
-                cursor='pointer' />
+                cursor='pointer'
+              />
             </div>
 
             <div className='subject-info-container'>
               <h2>{gradebook.subject.name}</h2>
               <h3>{gradebook.academicYear}</h3>
-              <h3>{classroomTypeToPT(gradebook.classroom.classroomType)} {gradebook.classroom.grade} {gradebook.classroom.name} - {gradebook.classroom.shift}</h3>
+              <h3>
+                {classroomTypeToPT(gradebook.classroom.classroomType)} {gradebook.classroom.grade} {gradebook.classroom.name} - {gradebook.classroom.shift}
+              </h3>
             </div>
           </div>
         </div>
@@ -430,149 +460,168 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
         <h3>Professor: {gradebook.teacher.name}</h3>
       </div>
 
-      {
-        loading ?
-          <LoadingSpinner /> :
-          <div className='gradebook-section'>
-            <div className='row-container'>
-              <h3>Critérios</h3>
-              {
-                !showSkill ?
-                  <MdArrowDropDown className='drop-icon' onClick={() => setShowSkill(true)} /> :
-                  <MdArrowDropUp className='drop-icon' onClick={() => setShowSkill(false)} />
-              }
-            </div>
-
-            {
-              showSkill ?
-                <div className='skill-container'>
-                  <textarea
-                    value={skill}
-                    onChange={(e) => setSkill(e.target.value)} />
-
-                  <button className='primary-button' onClick={() => handleSaveSkill()}>
-                    Salvar
-                  </button>
-                </div> :
-                <div />
-            }
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <div className='gradebook-section'>
+          <div className='row-container'>
+            <h3>Critérios</h3>
+            {!showSkill ? (
+              <MdArrowDropDown className='drop-icon' onClick={() => setShowSkill(true)} />
+            ) : (
+              <MdArrowDropUp className='drop-icon' onClick={() => setShowSkill(false)} />
+            )}
           </div>
-      }
+
+          {showSkill ? (
+            <div className='skill-container'>
+              <textarea value={skill} onChange={(e) => setSkill(e.target.value)} />
+              <button className='primary-button' onClick={() => handleSaveSkill()}>
+                Salvar
+              </button>
+            </div>
+          ) : (
+            <div />
+          )}
+        </div>
+      )}
 
       <div className='gradebook-section'>
         <div className='row-container'>
           <h3>Bimestres</h3>
-          <button
-            onClick={() => handleTermModal(true)}
-            className='primary-button'>
+          <button onClick={() => handleTermModal(true)} className='primary-button'>
             NOVO BIMESTRE
           </button>
         </div>
 
-        {
-          isStudentGradesVisible
-          &&
+        {isStudentGradesVisible && (
           <StudentGrades
             handleClose={() => setIsStudentGradesVisible(false)}
             gradebook={gradebook}
-            term={selectedTerm} />
-        }
-        {
-          showAttendance ?
-            <Attendance
-              gradebook={gradebook}
-              term={selectedTerm}
-              lesson={selectedLesson}
-              handleSelectGradebook={(gradebook) => {
-                handleSelectGradebook(gradebook);
-                setShowAttendance(false);
-              }}
-              handleCloseAttendance={() => handleCloseAttendance()}
-              isEditingAttendance={isEditingAttendance}
-              classroomType={gradebook.classroom.classroomType}
-            /> :
-            gradebook.terms.map((term) =>
-              loadingRemoveLesson ?
-                <LoadingSpinner /> :
-                <div key={term._id} className='lesson-container'>
+            term={selectedTerm}
+          />
+        )}
+
+        {showAttendance ? (
+          <Attendance
+            gradebook={gradebook}
+            term={selectedTerm}
+            lesson={selectedLesson}
+            handleSelectGradebook={(gradebook) => {
+              handleSelectGradebook(gradebook);
+              setShowAttendance(false);
+            }}
+            handleCloseAttendance={() => handleCloseAttendance()}
+            isEditingAttendance={isEditingAttendance}
+            classroomType={gradebook.classroom.classroomType}
+          />
+        ) : (
+          gradebook.terms.map((term) => {
+            const totalWorkload = term.lessons?.reduce((sum, lesson) => sum + (lesson.workload || 0), 0);
+
+            return loadingRemoveLesson ? (
+              <LoadingSpinner key={term._id} />
+            ) : (
+              <div key={term._id} className='lesson-container'>
+                <div className='row-container lesson-container-header'>
                   <div className='row-container'>
-                    <div className='row-container'>
-                      <div className='dropdown-button' onClick={() => toggleLessons(term._id)}>
-                        {expandedTerms[term._id] ? <MdKeyboardArrowUp size={24} /> : <MdKeyboardArrowDown size={24} />}
-                      </div>
+                    <div className='dropdown-button' onClick={() => toggleLessons(term._id)}>
+                      {expandedTerms[term._id] ? <MdKeyboardArrowUp size={24} /> : <MdKeyboardArrowDown size={24} />}
+                    </div>
+
+                    <div className='highlight-container'>
                       <h4>{term.name}</h4>
                       <MdEdit onClick={() => handleEditTerm(term)} className='edit-term-button' />
                     </div>
-                    <button className='add-lesson-button' onClick={() => handleOpenLesson(term)}>
-                      <MdAdd />
-                    </button>
+
+                    <div className='highlight-container margin-left'>
+                      <h4>
+                        Aulas: {totalWorkload}/{!subject ? 'Carregando...' : subject.workload}
+                      </h4>
+                    </div>
                   </div>
-
-                  {
-                    showLesson ?
-                      <Lesson
-                        term={term}
-                        handleCloseLesson={() => handleCloseLesson()}
-                        onAddLesson={(lesson) => onAddLesson(lesson)}
-                        onEditLesson={(lesson) => onEditLesson(lesson)}
-                        selectedLesson={selectedLesson}
-                        editingLesson={editingLesson}
-                        loading={loading} /> :
-                      <div />
-                  }
-
-                  {
-                    expandedTerms[term._id] &&
-                    <>
-                      {
-                        (!term.lessons || term.lessons.length < 1) ? (
-                          <p>Nenhuma aula registrada nesse bimestre</p>
-                        ) : (
-                          term.lessons.map((lesson, index) =>
-                            <div key={lesson._id} className={`single-lesson-container  ${index % 2 === 0 ? "even" : "odd"}`}>
-
-                              <div>
-                                <FaTrash className='remove-lesson-icon' onClick={() => onDeleteLesson(term, lesson)} />
-                                {dateToString(lesson.date)} - Assunto:
-                                <pre className='lesson-topic'>{lesson.topic}</pre>
-                              </div>
-                              <div className='lesson-actions'>
-                                <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
-
-                                {
-                                  lesson.attendance?.length > 0 ?
-                                    <button onClick={() => handleOpenAttendance(term, lesson, true)}>Editar chamada</button> :
-                                    <button onClick={() => handleOpenAttendance(term, lesson, false)}>Nova chamada</button>
-                                }
-
-                              </div>
-                            </div>
-                          )
-                        )
-                      }
-                      {
-                        term.lessons.length > 0 &&
-                        <div className='term-bottom-button'>
-                          <button className='primary-button' onClick={() => handleOpenStudentGrades(term)}>INSTRUMENTO DE AVALIAÇÃO DO PROFESSOR</button>
-                        </div>
-                      }
-                    </>
-                  }
+                  <button className='add-lesson-button' onClick={() => handleOpenLesson(term)}>
+                    <MdAdd />
+                  </button>
                 </div>
-            )
-        }
 
-        {
-          termModal ?
-            <TermModal
-              handleTermModal={(isOpen) => handleTermModal(isOpen)}
-              onSaveTerm={(term) => onSaveTerm(term)}
-              onEditTerm={(term) => onEditTerm(term)}
-              selectedTerm={selectedTerm}
-              onDeleteTerm={(term) => onDeleteTerm(term)}
-              loading={loading} /> :
-            <div />
-        }
+                {showLesson ? (
+                  <Lesson
+                    term={term}
+                    handleCloseLesson={() => handleCloseLesson()}
+                    onAddLesson={(lesson) => onAddLesson(lesson)}
+                    onEditLesson={(lesson) => onEditLesson(lesson)}
+                    selectedLesson={selectedLesson}
+                    editingLesson={editingLesson}
+                    loading={loading}
+                  />
+                ) : (
+                  <div />
+                )}
+
+                {expandedTerms[term._id] && (
+                  <>
+                    {!term.lessons || term.lessons.length < 1 ? (
+                      <p>Nenhuma aula registrada nesse bimestre</p>
+                    ) : (
+                      term.lessons.map((lesson, index) => (
+                        <div
+                          key={lesson._id}
+                          className={`single-lesson-container ${index % 2 === 0 ? 'even' : 'odd'}`}
+                        >
+                          <div className='row-container'>
+                            <div className='circular-container'>ch: {lesson.workload}</div>
+                            <div>
+                              {dateToString(lesson.date)}
+                              <p className='lesson-topic'>Assunto: {lesson.topic}</p>
+                            </div>
+                          </div>
+                          <div className='lesson-actions'>
+                            <button onClick={() => onDeleteLesson(term, lesson)}>Deletar aula</button>
+                            <button onClick={() => handleEditLesson(term, lesson)}>Editar aula</button>
+
+                            {lesson.attendance?.length > 0 ? (
+                              <button onClick={() => handleOpenAttendance(term, lesson, true)}>
+                                Editar chamada
+                              </button>
+                            ) : (
+                              <button onClick={() => handleOpenAttendance(term, lesson, false)}>
+                                Nova chamada
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      ))
+                    )}
+                    {term.lessons.length > 0 && (
+                      <div className='term-bottom-button'>
+                        <button
+                          className='primary-button'
+                          onClick={() => handleOpenStudentGrades(term)}
+                        >
+                          INSTRUMENTO DE AVALIAÇÃO DO PROFESSOR
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            );
+          })
+        )}
+
+        {termModal ? (
+          <TermModal
+            handleTermModal={(isOpen) => handleTermModal(isOpen)}
+            onSaveTerm={(term) => onSaveTerm(term)}
+            onEditTerm={(term) => onEditTerm(term)}
+            selectedTerm={selectedTerm}
+            onDeleteTerm={(term) => onDeleteTerm(term)}
+            loading={loading}
+          />
+        ) : (
+          <div />
+        )}
       </div>
 
       <div className='gradebook-section'>
@@ -583,35 +632,31 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
           </button>
         </div>
 
-        {
-          isAnnualRegistrationVisible && learningRecords &&
+        {isAnnualRegistrationVisible && learningRecords && (
           <AnnualRegistration
             handleCloseAnnualRegistration={() => setIsAnnualRegistrationVisible(false)}
             learningRecords={learningRecords}
           />
-        }
+        )}
       </div>
 
       <div className='gradebook-section danger-zone'>
         <div className='row-container'>
           <h3>Zona de perigo</h3>
-          <button onClick={() => handleDeleteGB(true)}>
-            Deletar caderneta
-          </button>
+          <button onClick={() => handleDeleteGB(true)}>Deletar caderneta</button>
         </div>
 
-        {
-          confirmDeleteGB ?
-            <div className='confirm-delete-container'>
-              Essa ação não poderá ser desfeita. Deseja continuar com a exclusão?
-              <div className='row-container confirm-buttons'>
-                <button onClick={() => handleDeleteGB(false)}>CANCELAR</button>
-                <button onClick={() => onDeleteGB()}>PROSSEGUIR</button>
-              </div>
-            </div> :
-            <div />
-        }
-
+        {confirmDeleteGB ? (
+          <div className='confirm-delete-container'>
+            Essa ação não poderá ser desfeita. Deseja continuar com a exclusão?
+            <div className='row-container confirm-buttons'>
+              <button onClick={() => handleDeleteGB(false)}>CANCELAR</button>
+              <button onClick={() => onDeleteGB()}>PROSSEGUIR</button>
+            </div>
+          </div>
+        ) : (
+          <div />
+        )}
       </div>
 
       {statusMessage && (
@@ -622,7 +667,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
         />
       )}
     </div>
-  )
+  );
 }
 
 export default SelectedGradebook

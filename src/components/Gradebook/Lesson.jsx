@@ -13,6 +13,7 @@ const Lesson = ({ term, handleCloseLesson, onAddLesson, editingLesson, loading, 
     const [error, setError] = useState('');
     // const [maxLengthTextArea, setMaxLengthTextArea] = useState(120);
     const [textAreaCounter, setTextAreaCounter] = useState(maxLengthTextArea);
+    const [lessonWorkload, setLessonWorkLoad] = useState(1);
 
     useEffect(() => {
         if (!editingLesson) {
@@ -21,7 +22,7 @@ const Lesson = ({ term, handleCloseLesson, onAddLesson, editingLesson, loading, 
         } else if (selectedLesson) {
             setTopic(selectedLesson.topic);
             setDate(dateToString(selectedLesson.date));
-
+            setLessonWorkLoad(!selectedLesson.lessonWorkload ? 1 : selectedLesson.lessonWorkload);
             // Corrigindo o cálculo do contador
             setTextAreaCounter(maxLengthTextArea - selectedLesson.topic.length);
         }
@@ -35,13 +36,13 @@ const Lesson = ({ term, handleCloseLesson, onAddLesson, editingLesson, loading, 
     }
 
     const handleAddLesson = () => {
-        if (!topic || !date) {
+        if (!topic || !date || !lessonWorkload) {
             handleError('Preencha todos os campos');
         } else if (!editingLesson) {
-            onAddLesson({ topic, date });
+            onAddLesson({ topic, date, lessonWorkload });
             clearFields();
         } else {
-            onEditLesson({ id: selectedLesson._id, topic, date });
+            onEditLesson({ id: selectedLesson._id, topic, date, lessonWorkload });
             clearFields();
         }
     }
@@ -70,7 +71,7 @@ const Lesson = ({ term, handleCloseLesson, onAddLesson, editingLesson, loading, 
                 </div>
 
                 <div className='term-form'>
-                    <h3>Nova aula</h3>
+                    <h3>{!editingLesson ? 'Nova aula' : 'Editar aula'}</h3>
                     <label>
                         <div className='row-container'>
                             Assunto da aula
@@ -92,6 +93,15 @@ const Lesson = ({ term, handleCloseLesson, onAddLesson, editingLesson, loading, 
                         mask="99/99/9999"
                         onChange={(e) => setDate(e.target.value)}
                         value={date} />
+
+                    <label>Carga horária</label>
+                    <select name="lesson-workload" value={lessonWorkload} onChange={(e) => setLessonWorkLoad(e.target.value)}>
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                    </select>
 
                     {
                         error ?

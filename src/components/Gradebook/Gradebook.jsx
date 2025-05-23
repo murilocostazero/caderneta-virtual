@@ -293,22 +293,22 @@ const Gradebook = ({ globalSchool, userInfo }) => {
                       <p>Turma</p>
                       <p>Matéria</p>
                       <p>Professor</p>
-                      <p>Gerar PDF</p>
+                      {/* <p>Gerar PDF</p> */}
                     </div>
                     {
                       gradebooks.length < 1 ?
                         <h3>Nenhuma caderneta cadastrada até o momento</h3> :
                         filteredGradebooks.map((gradebook) => (
-                          <div key={gradebook._id} className="gradebook-list-item">
-                            <p onClick={() => handleSelectGradebook(gradebook)}>
+                          <div key={gradebook._id} className="gradebook-list-item" onClick={() => handleSelectGradebook(gradebook)}>
+                            <p>
                               {classroomTypeToPT(gradebook.classroom.classroomType)} {gradebook.classroom.grade} {gradebook.classroom.name} - {gradebook.classroom.shift}
                             </p>
                             <p>{!gradebook.subject ? 'Todas as matérias' : gradebook.subject.name}</p>
                             <p>{gradebook.teacher.name}</p>
-                            <div className='generate-pdf-bt' onClick={() => handleDownload(gradebook)}>
+                            {/* <div className='generate-pdf-bt' onClick={() => handleDownload(gradebook)}>
                               <img src={generatePDF} alt="pdf-image" />
                               baixar
-                            </div>
+                            </div> */}
                           </div>
                         ))
                     }
