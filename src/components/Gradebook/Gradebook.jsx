@@ -293,7 +293,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
                       <p>Turma</p>
                       <p>Matéria</p>
                       <p>Professor</p>
-                      {/* <p>Gerar PDF</p> */}
+                      <p>Gerar PDF</p>
                     </div>
                     {
                       gradebooks.length < 1 ?
@@ -305,10 +305,10 @@ const Gradebook = ({ globalSchool, userInfo }) => {
                             </p>
                             <p>{!gradebook.subject ? 'Todas as matérias' : gradebook.subject.name}</p>
                             <p>{gradebook.teacher.name}</p>
-                            {/* <div className='generate-pdf-bt' onClick={() => handleDownload(gradebook)}>
+                            <div className='generate-pdf-bt' onClick={() => handleDownload(gradebook)}>
                               <img src={generatePDF} alt="pdf-image" />
                               baixar
-                            </div> */}
+                            </div>
                           </div>
                         ))
                     }

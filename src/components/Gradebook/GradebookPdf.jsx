@@ -69,7 +69,7 @@ const GradebookPDF = ({ gradebook }) => (
           {/* Aulas Dadas */}
           <Text style={[styles.bold, { marginTop: 10 }]}>Aulas Ministradas:</Text>
           {term.lessons.map((lesson, index) => (
-            <Text key={index}>- {lesson.topic} ({new Date(lesson.date).toLocaleDateString()})</Text>
+            <Text key={index}>- {lesson.topic} Data: ({new Date(lesson.date).toLocaleDateString()}) - CH: {lesson.workload}</Text>
           ))}
         </View>
       ))}
