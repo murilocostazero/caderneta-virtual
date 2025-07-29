@@ -539,7 +539,7 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
         }
       </div>
 
-      <div className='gradebook-section'>
+      {/* <div className='gradebook-section'>
         <div className='row-container'>
           <h3>Registro Geral da avaliação da aprendizagem</h3>
           <button className='primary-button' onClick={() => handleOpenAnnualRegistration()}>
@@ -579,7 +579,7 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
             <div />
         }
 
-      </div>
+      </div> */}
 
       {statusMessage && (
         <StatusBar

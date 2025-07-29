@@ -8,11 +8,8 @@ import axiosInstance from '../../utils/axiosInstance';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import StatusBar from '../StatusBar/StatusBar';
 import SelectedGradebook from './SelectedGradebook';
-import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
-import GradebookPDF from './GradebookPdf';
 import { classroomTypeToPT } from '../../utils/helper';
 import SelectedKindergarten from './SelectedKindergarten';
-import KindergartenGBPdf from './KindergartenGBPdf';
 
 const Gradebook = ({ globalSchool, userInfo }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -231,21 +228,6 @@ const Gradebook = ({ globalSchool, userInfo }) => {
     setLoading(false);
   }
 
-  const handleDownload = async (gbook) => {
-    const blob = gbook.classroom.classroomType !== 'kindergarten' ?
-      await pdf(<GradebookPDF gradebook={gbook} />).toBlob() :
-      await pdf(<KindergartenGBPdf gradebook={gbook} experienceFields={experienceFields} />).toBlob();
-
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "caderneta_escolar.pdf";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }
-
   return (
     <div>
       {
@@ -304,10 +286,6 @@ const Gradebook = ({ globalSchool, userInfo }) => {
                             </p>
                             <p>{!gradebook.subject ? 'Todas as matérias' : gradebook.subject.name}</p>
                             <p>{gradebook.teacher.name}</p>
-                            {/* <div className='generate-pdf-bt' onClick={() => handleDownload(gradebook)}>
-                              <img src={generatePDF} alt="pdf-image" />
-                              baixar
-                            </div> */}
                           </div>
                         ))
                     }
