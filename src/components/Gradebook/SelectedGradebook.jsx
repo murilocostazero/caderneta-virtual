@@ -11,6 +11,7 @@ import gbef from '../../assets/images/subjects/gb-ef.jpg';
 import gbefc from '../../assets/images/subjects/gb-efc.jpg';
 import kindergarten from '../../assets/images/subjects/kindergarten.jpg'
 import otherImg from '../../assets/images/subjects/other.jpg'
+import generatePDF from '../../assets/images/pdf.png';
 import './Gradebook.css';
 import { classroomTypeToPT, dateToString, normalizeString, stringToDate } from '../../utils/helper';
 import StatusBar from '../StatusBar/StatusBar';
@@ -21,7 +22,8 @@ import Lesson from './Lesson';
 import Attendance from './Attendance';
 import StudentGrades from './StudentGrades';
 import AnnualRegistration from './AnnualRegistration';
-import { FaTrash } from 'react-icons/fa';
+import { PDFDownloadLink, pdf } from '@react-pdf/renderer';
+import TermToPDF from './TermToPDF';
 
 const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
   const [subjectImg, setSubjectImg] = useState(null);
@@ -429,6 +431,19 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     setLoading(false);
   }
 
+  const handleCreatePDF = async (term) => {
+    // console.log(term)
+    const blob = await pdf(<TermToPDF gradebook={gradebook} term={term} />).toBlob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "caderneta_escolar.pdf";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <div className='gradebook-container'>
       <div className='subject-header'>
@@ -538,6 +553,10 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
                       <h4>
                         Aulas: {totalWorkload}/{!subject ? 'Carregando...' : subject.workload}
                       </h4>
+                    </div>
+
+                    <div className='highlight-container margin-left'>
+                      <img src={generatePDF} alt="pdf-image" onClick={() => handleCreatePDF(term)} />
                     </div>
                   </div>
                   <button className='add-lesson-button' onClick={() => handleOpenLesson(term)}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MdAdd, MdArrowBack, MdEdit, MdKeyboardArrowDown, MdKeyboardArrowUp, MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
 import kindergartenImg from '../../assets/images/subjects/kindergarten.jpg'
 import './Gradebook.css';
@@ -11,7 +11,9 @@ import Lesson from './Lesson';
 import Attendance from './Attendance';
 import KindergartenGrades from './KindergartenGrades';
 import KGAnnualRegistration from './KGAnnualRegistration';
-import { FaTrash } from 'react-icons/fa';
+import generatePDF from '../../assets/images/pdf.png';
+import { PDFDownloadLink, pdf } from '@react-pdf/renderer';
+import TermKGToPDF from './TermKGToPDF';
 
 const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
   const [skill, setSkill] = useState(gradebook.skill ? gradebook.skill : '');
@@ -345,6 +347,19 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
     setConfirmDeleteGB(confirm);
   }
 
+  const handleCreatePDF = async (term) => {
+    // console.log(term)
+    const blob = await pdf(<TermKGToPDF gradebook={gradebook} term={term} />).toBlob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "caderneta_escolar.pdf";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <div className='gradebook-container'>
       <div className='subject-header'>
@@ -447,6 +462,10 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
                     <div className='highlight-container'>
                       <h4>{term.name}</h4>
                       <MdEdit onClick={() => handleEditTerm(term)} className='edit-term-button' />
+                    </div>
+
+                    <div className='highlight-container margin-left'>
+                      <img src={generatePDF} alt="pdf-image" onClick={() => handleCreatePDF(term)} />
                     </div>
 
                   </div>

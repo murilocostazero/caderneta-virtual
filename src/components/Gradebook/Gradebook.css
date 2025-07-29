@@ -182,10 +182,11 @@
   width: fit-content;
 }
 
-.generate-pdf-bt img {
+.highlight-container img {
   width: 30px;
   /* Ajuste o tamanho conforme necessário */
   height: 30px;
+  cursor: pointer;
 }
 
 .skill-container {
