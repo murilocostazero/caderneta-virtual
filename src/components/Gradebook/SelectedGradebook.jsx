@@ -580,6 +580,24 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
 
                 {expandedTerms[term._id] && (
                   <>
+                  {/* //CUIDADO PRA FAZER FUNCIONAR PROS 4 BIMESTRES
+                    <div className='coordinator-approval-container'>
+                      <div>
+                        Visto da coordenação:
+
+                        <div className='coordinator-approval-buttons'>
+                          <button>
+                            Não aprovado
+                          </button>
+                          <button>
+                            Aprovado
+                          </button>
+                        </div>
+                      </div>
+
+                      Comentário:
+                    </div> */}
+
                     {!term.lessons || term.lessons.length < 1 ? (
                       <p>Nenhuma aula registrada nesse bimestre</p>
                     ) : (

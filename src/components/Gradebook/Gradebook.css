@@ -666,3 +666,30 @@ table input {
   padding: 4px;
   border-radius: 8px;
 }
+
+.coordinator-approval-container {
+  margin-bottom: 12px;
+}
+
+.coordinator-approval-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.coordinator-approval-buttons button {
+  padding: 10px 20px;
+  border: 2px solid #ccc;
+  background-color: #f4f4f4;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  font-weight: bold;
+  opacity: 0.5;
+}
+
+.coordinator-approval-buttons button.active {
+  background-color: #ffe066; /* cor de "luz acesa" */
+  border-color: #ffcc00;
+  opacity: 1;
+}
