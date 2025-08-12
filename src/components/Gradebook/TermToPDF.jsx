@@ -102,9 +102,9 @@ const TermToPDF = ({ gradebook, term }) => (
             <Text style={styles.studentItem}>Nota mensal: {evaluation.monthlyExam}</Text>
             <Text style={styles.studentItem}>Avaliação bimestral: {evaluation.bimonthlyExam}</Text>
             <Text style={styles.studentItem}>Qualitativo: {evaluation.qualitativeAssessment}</Text>
+            <Text style={styles.studentItem}>Nota bimestral: {evaluation.bimonthlyGrade}</Text>
             <Text style={styles.studentItem}>Recuperação bimestral: {evaluation.bimonthlyRecovery}</Text>
             <Text style={styles.studentItem}>Média bimestral: {evaluation.bimonthlyAverage}</Text>
-            <Text style={styles.studentItem}>Nota bimestral: {evaluation.bimonthlyGrade}</Text>
             <Text style={styles.studentItem}>Faltas: {evaluation.totalAbsences}</Text>
           </View>
         ))}
