@@ -234,7 +234,8 @@ const Gradebook = ({ globalSchool, userInfo }) => {
         selectedGradebook && gradebookType === 'elementary' ?
           <SelectedGradebook
             handleSelectGradebook={(gradebook) => handleSelectGradebook(gradebook)}
-            gradebook={selectedGradebook} /> :
+            gradebook={selectedGradebook}
+            userInfo={userInfo} /> :
           selectedGradebook && gradebookType === 'kindergarten' ?
             <SelectedKindergarten
               handleSelectGradebook={(gradebook) => handleSelectGradebook(gradebook)}

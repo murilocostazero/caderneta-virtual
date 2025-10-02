@@ -693,3 +693,21 @@ table input {
   border-color: #ffcc00;
   opacity: 1;
 }
+
+.approve-term {
+  border: 0px;
+  padding: 2px;
+  border-radius: 8px;
+}
+
+.approve-manager {
+  cursor: pointer;
+}
+
+.approve-icon :hover {
+  color: #0166ff;
+}
+
+.approve-teacher {
+  cursor: not-allowed;
+}

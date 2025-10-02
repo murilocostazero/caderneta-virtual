@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MdAdd, MdArrowBack, MdEdit, MdKeyboardArrowDown, MdKeyboardArrowUp, MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
+import { MdAdd, MdArrowBack, MdEdit, MdKeyboardArrowDown, MdKeyboardArrowUp, MdArrowDropDown, MdArrowDropUp, MdLock, MdLockOpen } from 'react-icons/md';
 import gbpt from '../../assets/images/subjects/gb-pt.png';
 import gbmt from '../../assets/images/subjects/gb-mt.png';
 import gbht from '../../assets/images/subjects/gb-ht.png';
@@ -25,7 +25,7 @@ import AnnualRegistration from './AnnualRegistration';
 import { PDFDownloadLink, pdf } from '@react-pdf/renderer';
 import TermToPDF from './TermToPDF';
 
-const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
+const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
   const [subjectImg, setSubjectImg] = useState(null);
   const [skill, setSkill] = useState(gradebook.skill ? gradebook.skill : '');
   const [statusMessage, setStatusMessage] = useState(null);
@@ -444,6 +444,29 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
     URL.revokeObjectURL(url);
   }
 
+  const changeTermApproval = async (termId) => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.put(`/gradebook/${gradebook._id}/terms/${termId}/approve`, {
+        timeout: 20000
+      });
+
+      if (response.status === 200) {
+        handleSelectGradebook(response.data.gradebook);
+      } else {
+        showStatusBar({ message: 'Erro ao aprovar/abrir bimestre', type: 'error' });
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+      } else {
+        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+      }
+    }
+    setLoading(false);
+  }
+
   return (
     <div className='gradebook-container'>
       <div className='subject-header'>
@@ -540,7 +563,11 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
               <div key={term._id} className='lesson-container'>
                 <div className='row-container lesson-container-header'>
                   <div className='row-container'>
-                    <div className='dropdown-button' onClick={() => toggleLessons(term._id)}>
+                    <div 
+                      className='dropdown-button' onClick={() =>  
+                        userInfo.userType === 'manager' ? toggleLessons(term._id) :
+                        term.approved === false ? toggleLessons(term._id) : {}
+                      }>
                       {expandedTerms[term._id] ? <MdKeyboardArrowUp size={24} /> : <MdKeyboardArrowDown size={24} />}
                     </div>
 
@@ -558,9 +585,25 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
                     <div className='highlight-container margin-left'>
                       <img src={generatePDF} alt="pdf-image" onClick={() => handleCreatePDF(term)} />
                     </div>
+
+                    <div className='highlight-container margin-left'>
+                      <button 
+                        disabled={userInfo.userType === 'manager' ? false : true}
+                        className={userInfo.userType === 'manager' ? 'approve-term approve-manager' : 'approve-term approve-teacher' }
+                        onClick={() => changeTermApproval(term._id)} >
+                          {
+                            term.approved === true ? 
+                              <MdLock className='approve-icon' size={24} /> : 
+                              <MdLockOpen className='approve-icon' size={24} />
+                          }
+                      </button>
+                    </div>
                   </div>
-                  <button className='add-lesson-button' onClick={() => handleOpenLesson(term)}>
-                    <MdAdd />
+                  <button 
+                    disabled={ term.approved === true ? true : false }
+                    className='add-lesson-button' 
+                    onClick={() => handleOpenLesson(term)}>
+                    <MdAdd style={term.approved ? {cursor: 'not-allowed'} : {cursor: 'pointer'}} />
                   </button>
                 </div>
 
@@ -580,7 +623,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
 
                 {expandedTerms[term._id] && (
                   <>
-                  {/* //CUIDADO PRA FAZER FUNCIONAR PROS 4 BIMESTRES
+                    {/* //CUIDADO PRA FAZER FUNCIONAR PROS 4 BIMESTRES
                     <div className='coordinator-approval-container'>
                       <div>
                         Visto da coordenação:
