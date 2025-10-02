@@ -54,7 +54,7 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
     } else {
       setLoading(true);
       try {
-        const response = await axiosInstance.put(`/gradebook/${gradebook._id}`, {
+        const response = await axiosInstance.put(`/kindergarten/${gradebook._id}`, {
           skill: skill
         }, {
           timeout: 20000
