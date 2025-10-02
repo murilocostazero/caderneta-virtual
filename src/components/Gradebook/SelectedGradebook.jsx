@@ -607,7 +607,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook }) => {
                           className={`single-lesson-container ${index % 2 === 0 ? 'even' : 'odd'}`}
                         >
                           <div className='row-container'>
-                            <div className='circular-container'>ch: {lesson.workload}</div>
+                            {/* <div className='circular-container'>ch: {lesson.workload}</div> */}
                             <div>
                               {dateToString(lesson.date)}
                               <p className='lesson-topic'>Assunto: {lesson.topic}</p>
