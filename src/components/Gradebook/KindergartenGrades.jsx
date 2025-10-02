@@ -5,7 +5,7 @@ import { dateToString } from '../../utils/helper';
 import axiosInstance from '../../utils/axiosInstance';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
-const KindergartenGrades = ({ handleClose, term, gradebook, classroomType }) => {
+const KindergartenGrades = ({ handleClose, term, gradebook, classroomType, newGradebook }) => {
   const [loading, setLoading] = useState(false);
   const [loadingSave, setLoadingSave] = useState(false);
   const [error, setError] = useState('');
@@ -107,8 +107,8 @@ const KindergartenGrades = ({ handleClose, term, gradebook, classroomType }) => 
       });
 
       if (response.status === 200) {
-        // setEvaluations(response.data);
         getEvaluation();
+        newGradebook(response.data.gradebook);
       } else {
         handleError('Erro ao salvar notas');
       }

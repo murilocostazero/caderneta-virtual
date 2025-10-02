@@ -366,7 +366,7 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
         <div className='subject-image-container'>
           <img src={kindergartenImg} alt="Imagem da matéria" className='subject-background' />
 
-          <div class="subject-name">
+          <div className="subject-name">
             <div className='back-button-container'>
               <MdArrowBack
                 onClick={() => handleSelectGradebook(null)}
@@ -434,7 +434,8 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
             handleClose={() => setIsStudentGradesVisible(false)}
             gradebook={gradebook}
             term={selectedTerm}
-            classroomType={gradebook.classroom.classroomType} />
+            classroomType={gradebook.classroom.classroomType}
+            newGradebook={(newGradebook) => handleSelectGradebook(newGradebook)} />
         }
 
         {

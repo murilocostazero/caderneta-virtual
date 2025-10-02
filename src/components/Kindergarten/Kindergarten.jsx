@@ -127,7 +127,7 @@ const Kindergarten = ({ globalSchool }) => {
                 !experiences || experiences.length < 1 ?
                     <p>Clique em NOVO CAMPO para adicionar um novo Campo de Experiência</p> :
                     experiences.map((experience) => (
-                        <div className='kg-list-item'>
+                        <div className='kg-list-item' key={experience._id}>
                             <div>
                                 <label><label className='bold-label'>Campo: </label>{experience.name}</label>
                                 <label><label className='bold-label'>Descrição: </label>{experience.description}</label>
