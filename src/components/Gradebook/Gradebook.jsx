@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MdAdd, MdClose } from 'react-icons/md';
 import { FaChalkboardTeacher, FaBook } from "react-icons/fa";
 import { FaPeopleLine } from "react-icons/fa6";
@@ -20,8 +20,18 @@ const Gradebook = ({ globalSchool, userInfo }) => {
   const [selectedGradebook, setSelectedGradebook] = useState(null);
   const [gradebookType, setGradebookType] = useState('elementary');
   const [experienceFields, setExperienceFields] = useState([]);
+  const [skip, setSkip] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  const lastGradebookRef = useRef(null);
+  const topRef = useRef(null);
 
   useEffect(() => {
+    // Zera a lista e o skip ao trocar de tipo
+    setGradebooks([]);
+    setSkip(0);
+
     if (userInfo.userType === 'manager') {
       if (gradebookType === 'elementary') {
         getGradebooks();
@@ -37,6 +47,13 @@ const Gradebook = ({ globalSchool, userInfo }) => {
         getExperienceFields();
       }
     }
+
+    const checkScroll = () => {
+      setShowScrollTop(window.scrollY > 300);
+    };
+
+    window.addEventListener('scroll', checkScroll);
+    return () => window.removeEventListener('scroll', checkScroll);
   }, [selectedGradebook, gradebookType]);
 
   const showStatusBar = (status) => {
@@ -79,27 +96,34 @@ const Gradebook = ({ globalSchool, userInfo }) => {
     setLoading(false);
   }
 
-  const getGradebooks = async () => {
+  const getGradebooks = async (currentSkip = 0) => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`/gradebook/school/${globalSchool._id}`, {
-        timeout: 20000
-      });
+      const response = await axiosInstance.get(
+        `/gradebook/school/${globalSchool._id}?skip=${currentSkip}&limit=10`,
+        { timeout: 20000 }
+      );
 
       if (response.status === 200) {
-        setGradebooks(response.data);
+        // Se for a primeira página (skip 0), substitui a lista
+        // Se for "Load More", concatena os novos items
+        setGradebooks(prevGradebooks =>
+          currentSkip === 0 ? response.data.data : [...prevGradebooks, ...response.data.data]
+        );
+
+        // Atualiza total (caso venha do backend)
+        if (response.data.total !== undefined) {
+          setTotal(response.data.total);
+        }
       } else {
         showStatusBar({ message: 'Erro ao buscar cadernetas', type: 'error' });
       }
     } catch (error) {
-      if (error.code === 'ERR_NETWORK') {
-        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
-      } else {
-        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
-      }
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  }
+  };
 
   const getTeacherGradebooks = async () => {
     setLoading(true);
@@ -124,27 +148,34 @@ const Gradebook = ({ globalSchool, userInfo }) => {
   }
 
   //-----------Kindergarten
-
-  const getKindergartenGB = async () => {
+  const getKindergartenGB = async (currentSkip = 0) => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`/kindergarten/school/${globalSchool._id}`, {
-        timeout: 20000
-      });
+      const response = await axiosInstance.get(
+        `/kindergarten/school/${globalSchool._id}?skip=${currentSkip}&limit=10`,
+        { timeout: 20000 }
+      );
+
       if (response.status === 200) {
-        setGradebooks(response.data);
+        // Se for a primeira página (skip 0), substitui a lista
+        // Se for "Load More", concatena os novos items
+        setGradebooks(prevGradebooks =>
+          currentSkip === 0 ? response.data.data : [...prevGradebooks, ...response.data.data]
+        );
+
+        // Atualiza total (caso venha do backend)
+        if (response.data.total !== undefined) {
+          setTotal(response.data.total);
+        }
       } else {
         showStatusBar({ message: 'Erro ao buscar cadernetas', type: 'error' });
       }
     } catch (error) {
-      if (error.code === 'ERR_NETWORK') {
-        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
-      } else {
-        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
-      }
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  }
+  };
 
   const onSaveKindergarten = async (gradebook) => {
     setLoading(true);
@@ -228,8 +259,47 @@ const Gradebook = ({ globalSchool, userInfo }) => {
     setLoading(false);
   }
 
+  const handleLoadMore = async () => {
+    if (gradebooks.length >= total) return;
+
+    const newSkip = gradebooks.length;
+    setSkip(newSkip);
+
+    if (gradebookType === 'elementary') {
+      await getGradebooks(newSkip);
+    } else {
+      await getKindergartenGB(newSkip);
+    }
+
+    // Pequeno timeout para garantir que o DOM já atualizou
+    setTimeout(() => {
+      lastGradebookRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+
+  const scrollToTop = () => {
+    // Tenta várias abordagens diferentes
+    if (topRef.current) {
+      topRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest'
+      });
+    }
+
+    // Fallback para scroll da página
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+
+    // Fallback adicional para o body/html
+    document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+    document.body.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <div>
+    <div ref={topRef}>
       {
         selectedGradebook && gradebookType === 'elementary' ?
           <SelectedGradebook
@@ -278,18 +348,51 @@ const Gradebook = ({ globalSchool, userInfo }) => {
                       {/* <p>Gerar PDF</p> */}
                     </div>
                     {
-                      gradebooks.length < 1 ?
-                        <h3>Nenhuma caderneta cadastrada até o momento</h3> :
-                        filteredGradebooks.map((gradebook) => (
-                          <div key={gradebook._id} className="gradebook-list-item" onClick={() => handleSelectGradebook(gradebook)}>
-                            <p>
-                              {classroomTypeToPT(gradebook.classroom.classroomType)} {gradebook.classroom.grade} {gradebook.classroom.name} - {gradebook.classroom.shift}
-                            </p>
-                            <p>{!gradebook.subject ? 'Todas as matérias' : gradebook.subject.name}</p>
-                            <p>{gradebook.teacher.name}</p>
-                          </div>
-                        ))
+                      gradebooks.length < 1 ? (
+                        <h3>Nenhuma caderneta cadastrada até o momento</h3>
+                      ) : (
+                        filteredGradebooks.map((gradebook, index) => {
+                          const isLast = index === filteredGradebooks.length - 1;
+                          return (
+                            <div
+                              key={gradebook._id}
+                              ref={isLast ? lastGradebookRef : null}
+                              className="gradebook-list-item"
+                              onClick={() => handleSelectGradebook(gradebook)}
+                            >
+                              <p>
+                                {classroomTypeToPT(gradebook.classroom.classroomType)} {gradebook.classroom.grade} {gradebook.classroom.name} - {gradebook.classroom.shift}
+                              </p>
+                              <p>{!gradebook.subject ? 'Todas as matérias' : gradebook.subject.name}</p>
+                              <p>{gradebook.teacher.name}</p>
+                            </div>
+                          );
+                        })
+                      )
                     }
+
+                    {gradebooks.length > 0 && (
+                      <div className="load-more-wrapper">
+                        <p className="load-more-text">
+                          Mostrando {gradebooks.length} de {total}
+                        </p>
+                        {gradebooks.length < total && (
+                          <button
+                            className="load-more-btn"
+                            onClick={handleLoadMore}
+                            disabled={loading}
+                          >
+                            {loading ? 'Carregando...' : 'CARREGAR MAIS'}
+                          </button>
+                        )}
+                        <button className="scroll-top-btn" onClick={scrollToTop}>
+                          ^ IR PARA O TOPO ^
+                        </button>
+                      </div>
+                    )}
+
+
+
                   </div>
               }
 

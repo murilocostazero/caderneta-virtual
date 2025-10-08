@@ -81,6 +81,10 @@
   outline: none;
 }
 
+.gradebooks-container {
+  overflow-y: auto;
+}
+
 .gradebooks-container h3 {
   text-align: center;
   margin-top: 12px;
@@ -239,10 +243,14 @@
 .lesson-topic {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto';
   font-size: 14px;
-  white-space: pre-wrap; /* Mantém quebras de linha, mas permite quebra automática */
-  word-wrap: break-word; /* Quebra palavras longas */
-  overflow-wrap: break-word; /* Garante compatibilidade */
-  max-width: 100%; /* Garante que não ultrapasse o componente pai */
+  white-space: pre-wrap;
+  /* Mantém quebras de linha, mas permite quebra automática */
+  word-wrap: break-word;
+  /* Quebra palavras longas */
+  overflow-wrap: break-word;
+  /* Garante compatibilidade */
+  max-width: 100%;
+  /* Garante que não ultrapasse o componente pai */
 }
 
 .circular-container {
@@ -659,7 +667,7 @@ table input {
 }
 
 .highlight-container {
-  background-color: rgba(100,100,100,0.1);
+  background-color: rgba(100, 100, 100, 0.1);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -689,7 +697,8 @@ table input {
 }
 
 .coordinator-approval-buttons button.active {
-  background-color: #ffe066; /* cor de "luz acesa" */
+  background-color: #ffe066;
+  /* cor de "luz acesa" */
   border-color: #ffcc00;
   opacity: 1;
 }
@@ -710,4 +719,65 @@ table input {
 
 .approve-teacher {
   cursor: not-allowed;
+}
+
+.load-more-container {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.load-more-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.load-more-text {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.load-more-btn {
+  background-color: #0166ff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.load-more-btn:hover {
+  background-color: #1d4ed8;
+}
+
+.load-more-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.scroll-top-btn {
+  background-color: transparent;
+  border: none;
+  margin-top: 8px;
+  padding: 8px;
+  font-size: 18px;
+  color:#777;
+  cursor: pointer;
+}
+
+.scroll-top-btn:hover {
+  color: #0166ff;
 }
