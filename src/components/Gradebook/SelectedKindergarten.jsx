@@ -540,12 +540,16 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
         }
       </div>
 
-      {/* <div className='gradebook-section'>
+      <div className='gradebook-section'>
         <div className='row-container'>
           <h3>Registro Geral da avaliação da aprendizagem</h3>
-          <button className='primary-button' onClick={() => handleOpenAnnualRegistration()}>
-            GERAR
-          </button>
+          {
+            loading ?
+              <h6>Aguarde</h6> :
+              <button className='primary-button' onClick={() => handleOpenAnnualRegistration()}>
+                GERAR
+              </button>
+          }
         </div>
 
         {
@@ -560,7 +564,7 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
 
       </div>
 
-      <div className='gradebook-section danger-zone'>
+      {/* ZONA DE PERIGO ---> <div className='gradebook-section danger-zone'>
         <div className='row-container'>
           <h3>Zona de perigo</h3>
           <button onClick={() => handleDeleteGB(true)}>

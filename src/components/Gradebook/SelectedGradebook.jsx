@@ -563,10 +563,10 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
               <div key={term._id} className='lesson-container'>
                 <div className='row-container lesson-container-header'>
                   <div className='row-container'>
-                    <div 
-                      className='dropdown-button' onClick={() =>  
+                    <div
+                      className='dropdown-button' onClick={() =>
                         userInfo.userType === 'manager' ? toggleLessons(term._id) :
-                        term.approved === false ? toggleLessons(term._id) : {}
+                          term.approved === false ? toggleLessons(term._id) : {}
                       }>
                       {expandedTerms[term._id] ? <MdKeyboardArrowUp size={24} /> : <MdKeyboardArrowDown size={24} />}
                     </div>
@@ -587,23 +587,23 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
                     </div>
 
                     <div className='highlight-container margin-left'>
-                      <button 
+                      <button
                         disabled={userInfo.userType === 'manager' ? false : true}
-                        className={userInfo.userType === 'manager' ? 'approve-term approve-manager' : 'approve-term approve-teacher' }
+                        className={userInfo.userType === 'manager' ? 'approve-term approve-manager' : 'approve-term approve-teacher'}
                         onClick={() => changeTermApproval(term._id)} >
-                          {
-                            term.approved === true ? 
-                              <MdLock className='approve-icon' size={24} /> : 
-                              <MdLockOpen className='approve-icon' size={24} />
-                          }
+                        {
+                          term.approved === true ?
+                            <MdLock className='approve-icon' size={24} /> :
+                            <MdLockOpen className='approve-icon' size={24} />
+                        }
                       </button>
                     </div>
                   </div>
-                  <button 
-                    disabled={ term.approved === true ? true : false }
-                    className='add-lesson-button' 
+                  <button
+                    disabled={term.approved === true ? true : false}
+                    className='add-lesson-button'
                     onClick={() => handleOpenLesson(term)}>
-                    <MdAdd style={term.approved ? {cursor: 'not-allowed'} : {cursor: 'pointer'}} />
+                    <MdAdd style={term.approved ? { cursor: 'not-allowed' } : { cursor: 'pointer' }} />
                   </button>
                 </div>
 
@@ -704,12 +704,16 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
         )}
       </div>
 
-      {/* <div className='gradebook-section'>
+      <div className='gradebook-section'>
         <div className='row-container'>
           <h3>Registro Geral da avaliação da aprendizagem</h3>
-          <button className='primary-button' onClick={() => handleOpenAnnualRegistration()}>
-            GERAR
-          </button>
+          {
+            loading ?
+              <h6>Aguarde</h6> :
+              <button className='primary-button' onClick={() => handleOpenAnnualRegistration()}>
+                GERAR
+              </button>
+          }
         </div>
 
         {isAnnualRegistrationVisible && learningRecords && (
@@ -720,7 +724,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
         )}
       </div>
 
-      <div className='gradebook-section danger-zone'>
+      {/* ZONA DE PERIGO ----> <div className='gradebook-section danger-zone'>
         <div className='row-container'>
           <h3>Zona de perigo</h3>
           <button onClick={() => handleDeleteGB(true)}>Deletar caderneta</button>
