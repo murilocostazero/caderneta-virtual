@@ -85,35 +85,47 @@ const Attendance = ({
         setAttendance(initializeAttendance(students));
     }
 
-    const initializeAttendance = (students) => {
-        return students.map(student => ({
+  const initializeAttendance = (students) => {
+    return students
+        // 1️⃣ Ordena por nome (convertendo para maiúsculas na comparação)
+        .sort((a, b) => 
+            a.name.toUpperCase().localeCompare(b.name.toUpperCase(), 'pt', { sensitivity: 'base' })
+        )
+        // 2️⃣ Cria o objeto de presença com o nome em maiúsculas
+        .map(student => ({
             _id: student._id,
             studentId: student._id,
-            name: student.name,
+            name: student.name ? student.name.toUpperCase() : '',
             cpf: student.cpf,
             birthDate: student.birthDate,
             contact: student.contact,
             address: student.address,
             guardian: {
-                name: student.guardian.name,
-                contact: student.guardian.contact,
-                address: student.guardian.address
+                name: student.guardian?.name ? student.guardian.name.toUpperCase() : '',
+                contact: student.guardian?.contact || '',
+                address: student.guardian?.address || ''
             },
             studentSituation: student.studentSituation,
             classroom: student.classroom,
             present: true
         }));
-    }
+};
 
-    const initializeLessonAttendance = (lessonAttendance) => {
-        return lessonAttendance.attendance.map(lessonAtt => ({
+const initializeLessonAttendance = (lessonAttendance) => {
+    return lessonAttendance.attendance
+        // 1️⃣ Ordena os alunos pelo nome (em maiúsculas)
+        .sort((a, b) => 
+            a.studentId.name.toUpperCase().localeCompare(b.studentId.name.toUpperCase(), 'pt', { sensitivity: 'base' })
+        )
+        // 2️⃣ Cria o objeto de presença da aula com o nome em maiúsculas
+        .map(lessonAtt => ({
             _id: lessonAtt.studentId._id,
             studentId: lessonAtt.studentId._id,
-            name: lessonAtt.studentId.name,
+            name: lessonAtt.studentId.name ? lessonAtt.studentId.name.toUpperCase() : '',
             present: lessonAtt.present,
             studentSituation: lessonAtt.studentId.studentSituation
         }));
-    }
+};
 
     // Função para alternar o valor de present
     const changePresence = (studentId) => {
