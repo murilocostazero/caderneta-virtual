@@ -259,6 +259,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
   );
 
   const handleSelectGradebook = (gradebook) => {
+    if(!gradebook) setSearchQuery('');
     setSelectedGradebook(gradebook);
   }
 

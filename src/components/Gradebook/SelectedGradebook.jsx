@@ -45,6 +45,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
   const [confirmDeleteGB, setConfirmDeleteGB] = useState(false);
   const [loadingRemoveLesson, setLoadingRemoveLesson] = useState(false);
   const [subject, setSubject] = useState(null);
+  const [workload, setWorkload] = useState('');
 
   const showStatusBar = (status) => {
     setStatusMessage({ message: status.message, type: status.type });
@@ -115,8 +116,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
 
       if (response.status === 200) {
         setSubject(response.data);
-
-        handleWorkload(response.data, gradebook.classroom);
+        handleWorkload(response.data);
       } else {
         showStatusBar({ message: 'Erro ao buscar disciplina', type: 'error' });
       }
@@ -129,10 +129,6 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
       }
     }
     setLoading(false);
-  }
-
-  const handleWorkload = () => {
-
   }
 
   const handleSaveSkill = async () => {
@@ -473,6 +469,18 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
     setLoading(false);
   }
 
+  const handleWorkload = (selectedSubjet) => {
+    if (selectedSubjet.workloads) {
+      if (gradebook.classroom.classroomType === 'elementary') {
+        setWorkload(selectedSubjet.workloads.elementary);
+      } else {
+        setWorkload(selectedSubjet.workloads.highSchool);
+      }
+    } else {
+      setWorkload(selectedSubjet.workload);
+    }
+  }
+
   return (
     <div className='gradebook-container'>
       <div className='subject-header'>
@@ -584,7 +592,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
 
                     <div className='highlight-container margin-left'>
                       <h4>
-                        Aulas: {totalWorkload}/{!subject ? 'Carregando...' : gradebook.classroom.classroomType === 'elementary' ? subject.workload : subject.workloads.highSchool}
+                        Aulas: {totalWorkload}/{!subject ? 'Carregando...' : workload}
                       </h4>
                     </div>
 
