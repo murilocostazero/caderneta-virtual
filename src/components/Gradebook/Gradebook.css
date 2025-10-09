@@ -757,6 +757,7 @@ table input {
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s ease, opacity 0.2s ease;
+  margin-left: 4px;
 }
 
 .load-more-btn:hover {

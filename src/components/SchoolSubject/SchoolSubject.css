@@ -112,7 +112,7 @@
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;
-    width: 300px;
+    /* width: 300px; */
     max-width: 90%;
 }
 
@@ -126,14 +126,33 @@
     font-size: 14px;
 }
 
+.workloads-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 15px 0;
+}
+
 .load-hour-input {
     display: flex;
-    flex-direction: row;
     align-items: center;
+    gap: 10px;
+}
+
+.load-hour-input label {
+    min-width: 200px;
+    font-weight: 500;
+    color: #333;
 }
 
 .load-hour-input input {
-    margin-right: 4px;
+    width: 100px;
+    text-align: center;
+}
+
+.load-hour-input span {
+    color: #666;
+    font-size: 14px;
 }
 
 .modal-actions {
@@ -168,4 +187,15 @@
 .remove-icon:hover {
     fill: #f44336;
     font-size: 16px;
+}
+
+.workload-info {
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+.subject-info h4 {
+    margin-bottom: 5px;
 }

@@ -115,6 +115,8 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
 
       if (response.status === 200) {
         setSubject(response.data);
+
+        handleWorkload(response.data, gradebook.classroom);
       } else {
         showStatusBar({ message: 'Erro ao buscar disciplina', type: 'error' });
       }
@@ -127,6 +129,10 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
       }
     }
     setLoading(false);
+  }
+
+  const handleWorkload = () => {
+
   }
 
   const handleSaveSkill = async () => {
@@ -578,7 +584,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
 
                     <div className='highlight-container margin-left'>
                       <h4>
-                        Aulas: {totalWorkload}/{!subject ? 'Carregando...' : subject.workload}
+                        Aulas: {totalWorkload}/{!subject ? 'Carregando...' : gradebook.classroom.classroomType === 'elementary' ? subject.workload : subject.workloads.highSchool}
                       </h4>
                     </div>
 

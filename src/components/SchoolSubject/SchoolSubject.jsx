@@ -103,7 +103,7 @@ const SchoolSubject = ({ globalSchool }) => {
         try {
             const response = await axiosInstance.post(`/subject`, {
                 name: subject.name,
-                workload: subject.workload,
+                workloads: subject.workloads,
                 schoolId: globalSchool._id
             }, {
                 timeout: 10000
@@ -131,7 +131,7 @@ const SchoolSubject = ({ globalSchool }) => {
         try {
             const response = await axiosInstance.put(`/subject/${subject._id}`, {
                 name: subject.name,
-                workload: subject.workload
+                workloads: subject.workloads
             }, {
                 timeout: 20000
             });
@@ -161,7 +161,6 @@ const SchoolSubject = ({ globalSchool }) => {
             const response = await axiosInstance.get(`/school/teachers/${globalSchool._id}`, {
                 timeout: 20000
             });
-            // console.log(response.data.teachers)
             setSelectedSubject(subject);
             setMyTeachers(response.data.teachers);
             setShowTeachersToSelect(true);
@@ -216,6 +215,17 @@ const SchoolSubject = ({ globalSchool }) => {
         setShowTeachersToSelect(false);
     }
 
+    // Função para obter a carga horária formatada
+    const getWorkloadDisplay = (subject) => {
+        // Para compatibilidade com dados antigos
+        if (subject.workloads) {
+            return `Fundamental: ${subject.workloads.elementary}h | Médio: ${subject.workloads.highSchool}h`;
+        } else if (subject.workload) {
+            return `${subject.workload} horas`;
+        }
+        return 'Carga horária não definida';
+    }
+
     return (
         <div className="school-subject-container">
             <input
@@ -243,7 +253,7 @@ const SchoolSubject = ({ globalSchool }) => {
                                         <div className='row-container'>
                                             <div className="subject-info">
                                                 <h4>{subject.name}</h4>
-                                                <p>Carga Horária: {subject.workload} horas</p>
+                                                <p className="workload-info">{getWorkloadDisplay(subject)}</p>
                                             </div>
                                             <div className="subject-actions">
                                                 <button onClick={() => {
@@ -283,7 +293,6 @@ const SchoolSubject = ({ globalSchool }) => {
             </button>
 
             {/* Modal para selecionar um professor */}
-
             {
                 showTeachersToSelect &&
                 myTeachers &&

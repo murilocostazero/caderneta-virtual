@@ -96,6 +96,32 @@ const Gradebook = ({ globalSchool, userInfo }) => {
     setLoading(false);
   }
 
+  const getAllGradebooks = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get(
+        `/gradebook/school-allgb/${globalSchool._id}`,
+        { timeout: 20000 }
+      );
+
+      if (response.status === 200) {
+        // Como não há mais paginação, simplesmente define a lista completa
+        setGradebooks(response.data.data);
+
+        // Atualiza total (caso venha do backend)
+        if (response.data.total !== undefined) {
+          setTotal(response.data.total);
+        }
+      } else {
+        showStatusBar({ message: 'Erro ao buscar cadernetas', type: 'error' });
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const getGradebooks = async (currentSkip = 0) => {
     setLoading(true);
     try {
@@ -123,7 +149,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const getTeacherGradebooks = async () => {
     setLoading(true);
@@ -377,13 +403,16 @@ const Gradebook = ({ globalSchool, userInfo }) => {
                           Mostrando {gradebooks.length} de {total}
                         </p>
                         {gradebooks.length < total && (
-                          <button
-                            className="load-more-btn"
-                            onClick={handleLoadMore}
-                            disabled={loading}
-                          >
-                            {loading ? 'Carregando...' : 'CARREGAR MAIS'}
-                          </button>
+                          <div className='row-container'>
+                            <button
+                              className="load-more-btn"
+                              onClick={handleLoadMore}
+                              disabled={loading}
+                            >
+                              {loading ? 'Carregando...' : 'CARREGAR +10'}
+                            </button>
+                            <button disabled={loading} onClick={() => getAllGradebooks()} className='load-more-btn'>CARREGAR TODAS</button>
+                          </div>
                         )}
                         <button className="scroll-top-btn" onClick={scrollToTop}>
                           ^ IR PARA O TOPO ^
