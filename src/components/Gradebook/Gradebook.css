@@ -782,3 +782,9 @@ table input {
 .scroll-top-btn:hover {
   color: #0166ff;
 }
+
+.row-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}

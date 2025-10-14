@@ -578,10 +578,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
                 <div className='row-container lesson-container-header'>
                   <div className='row-container'>
                     <div
-                      className='dropdown-button' onClick={() =>
-                        userInfo.userType === 'manager' ? toggleLessons(term._id) :
-                          term.approved === false ? toggleLessons(term._id) : {}
-                      }>
+                      className='dropdown-button' onClick={() => toggleLessons(term._id)}>
                       {expandedTerms[term._id] ? <MdKeyboardArrowUp size={24} /> : <MdKeyboardArrowDown size={24} />}
                     </div>
 
@@ -602,8 +599,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
 
                     <div className='highlight-container margin-left'>
                       <button
-                        disabled={userInfo.userType === 'manager' ? false : true}
-                        className={userInfo.userType === 'manager' ? 'approve-term approve-manager' : 'approve-term approve-teacher'}
+                        className='approve-term approve-manager'
                         onClick={() => changeTermApproval(term._id)} >
                         {
                           term.approved === true ?
