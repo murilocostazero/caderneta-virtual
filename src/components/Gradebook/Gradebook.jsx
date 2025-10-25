@@ -23,7 +23,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
   const [skip, setSkip] = useState(0);
   const [total, setTotal] = useState(0);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [filterSelect, setFilterSelect] = useState('');
+  const [filterSelect, setFilterSelect] = useState('teacher');
 
   const lastGradebookRef = useRef(null);
   const topRef = useRef(null);
