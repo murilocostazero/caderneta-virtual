@@ -18,7 +18,7 @@ const AnnualRegistration = ({ handleCloseAnnualRegistration, learningRecords }) 
                         <thead>
                             <tr>
                                 <th>Aluno</th>
-                                <th>CPF</th>
+                                {/* <th>CPF</th> */}
                                 <th>1º Bimestre</th>
                                 <th>2º Bimestre</th>
                                 <th>3º Bimestre</th>
@@ -31,7 +31,7 @@ const AnnualRegistration = ({ handleCloseAnnualRegistration, learningRecords }) 
                             {learningRecords.map((record, index) => (
                                 <tr key={record.student._id} className={index % 2 === 0 ? "linha-par" : "linha-impar"}>
                                     <td>{record.student.name}</td>
-                                    <td>{record.student.cpf}</td>
+                                    {/* <td>{record.student.cpf}</td> */}
                                     {record.bimonthlyAverages.map((term, termIndex) => (
                                         <td key={termIndex} className="text-center">
                                             {term.average.toFixed(2)}
