@@ -23,6 +23,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
   const [skip, setSkip] = useState(0);
   const [total, setTotal] = useState(0);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [filterSelect, setFilterSelect] = useState('');
 
   const lastGradebookRef = useRef(null);
   const topRef = useRef(null);
@@ -254,12 +255,16 @@ const Gradebook = ({ globalSchool, userInfo }) => {
     setLoading(false);
   }
 
-  const filteredGradebooks = gradebooks.filter(gradebook =>
+  const filteredGradebooks = filterSelect === 'teacher' ? gradebooks.filter(gradebook =>
     gradebook.teacher.name.toString().includes(searchQuery)
+  ) : filterSelect === 'subject' ? gradebooks.filter(gradebook =>
+    gradebook.subject.name.toString().includes(searchQuery)
+  ) : gradebooks.filter(gradebook =>
+    gradebook.classroom.grade.toString().includes(searchQuery)
   );
 
   const handleSelectGradebook = (gradebook) => {
-    if(!gradebook) setSearchQuery('');
+    if (!gradebook) setSearchQuery('');
     setSelectedGradebook(gradebook);
   }
 
@@ -359,12 +364,27 @@ const Gradebook = ({ globalSchool, userInfo }) => {
                       </div>
                       {
                         userInfo && userInfo.userType === 'manager' &&
-                        <div className='gb-filter-container'>
-                          <input
-                            placeholder='Filtrar por professor(a)'
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)} />
-                          <MdClose className='clear-icon' onClick={() => setSearchQuery('')} />
+                        <div>
+                          <div className='row-container'>
+                            <h4>Filtrar por:</h4>
+                            <select
+                              onChange={(e) => {
+                                setSearchQuery('');
+                                setFilterSelect(e.target.value);
+                              }}
+                              value={filterSelect}>
+                              <option value="teacher">Professor(a)</option>
+                              <option value="subject">Matéria</option>
+                              <option value="classroom">Turma</option>
+                            </select>
+                          </div>
+                          <div className='gb-filter-container'>
+                            <input
+                              placeholder={`Filtrar por ${filterSelect === 'teacher' ? 'professor(a)' : filterSelect === 'subject' ? 'matéria' : 'turma'}`}
+                              value={searchQuery}
+                              onChange={(e) => setSearchQuery(e.target.value)} />
+                            <MdClose className='clear-icon' onClick={() => setSearchQuery('')} />
+                          </div>
                         </div>
                       }
                     </div>
