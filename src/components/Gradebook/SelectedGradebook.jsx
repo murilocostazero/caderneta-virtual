@@ -481,6 +481,14 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
     }
   }
 
+  const reloadRecords = (newGradebook) => {
+    setLoading(true);
+    //Buscar novamente o loading records
+    handleSelectGradebook(newGradebook);
+    //Abrir o modal novamente
+    setLoading(false);
+  }
+
   return (
     <div className='gradebook-container'>
       <div className='subject-header'>
@@ -541,7 +549,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
       <div className='gradebook-section'>
         <div className='row-container'>
           <h3>Bimestres</h3>
-          <button onClick={() => handleTermModal(true)} className='primary-button'>
+          <button onClick={() => gradebook.terms.length < 4 ? handleTermModal(true) : {}} className='primary-button'>
             NOVO BIMESTRE
           </button>
         </div>
@@ -730,6 +738,9 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
           <AnnualRegistration
             handleCloseAnnualRegistration={() => setIsAnnualRegistrationVisible(false)}
             learningRecords={learningRecords}
+            reloadRecords={(newGradebook) => reloadRecords(newGradebook)}
+            loading={loading}
+            gradebookId={gradebook._id}
           />
         )}
       </div>

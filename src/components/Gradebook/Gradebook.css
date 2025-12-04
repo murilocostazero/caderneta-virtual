@@ -788,3 +788,9 @@ table input {
   flex-direction: row;
   align-items: center;
 }
+
+.input-recuperacao {
+    width: 60px;
+    padding: 4px;
+    text-align: center;
+}
