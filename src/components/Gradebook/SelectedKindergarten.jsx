@@ -295,23 +295,22 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
   const handleOpenAnnualRegistration = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`/kindergarten/${gradebook._id}/general-record`, {
-        timeout: 20000
-      });
+      const response = await axiosInstance.get(
+        `/kindergarten/${gradebook._id}/learning-record`,
+        { timeout: 20000 }
+      );
 
       if (response.status === 200) {
-        //RECEBE O REGISTRO GERAL DO BACKEND
-        console.log(response.data.generalRecord)
-        setLearningRecords(response.data.generalRecord);
+        setLearningRecords(response.data);
       } else {
-        showStatusBar({ message: 'Erro ao gerar o registro geral', type: 'error' });
+        showStatusBar({ message: 'Erro ao buscar o registro', type: 'error' });
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       if (error.code === 'ERR_NETWORK') {
         showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
       } else {
-        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+        showStatusBar({ message: 'Tente novamente', type: 'error' });
       }
     }
     setLoading(false);
