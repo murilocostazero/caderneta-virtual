@@ -745,7 +745,8 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
         )}
       </div>
 
-      {/* ZONA DE PERIGO ----> <div className='gradebook-section danger-zone'>
+      {/* DANGER ZONE */}
+      <div className='gradebook-section danger-zone'>
         <div className='row-container'>
           <h3>Zona de perigo</h3>
           <button onClick={() => handleDeleteGB(true)}>Deletar caderneta</button>
@@ -762,7 +763,7 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
         ) : (
           <div />
         )}
-      </div> */}
+      </div>
 
       {statusMessage && (
         <StatusBar
