@@ -36,7 +36,7 @@ export function getCurrentDate() {
 export function classroomTypeToPT(classroomType) {
     switch (classroomType) {
         case 'kindergarten':
-            return 'Maternal';
+            return 'Educação Infantil';
         case 'elementary':
             return 'Ensino Fundamental';
         case 'high':

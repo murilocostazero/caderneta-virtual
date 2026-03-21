@@ -44,7 +44,7 @@ const ClassroomModal = ({ onClose, handleSaveClassroom, currentClassroom, handle
                             name="classroomType"
                             value={classroomType}
                             onChange={(e) => setClassroomType(e.target.value)}>
-                            <option value="kindergarten">Maternal</option>
+                            <option value="kindergarten">Enducação Infantil</option>
                             <option value="elementary">Ensino Fundamental</option>
                             <option value="high">Ensino Médio</option>
                         </select>

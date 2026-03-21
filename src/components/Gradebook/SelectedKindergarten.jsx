@@ -377,7 +377,7 @@ const SelectedKindergarten = ({ gradebook, handleSelectGradebook }) => {
             <div className='subject-info-container'>
               <h2>Todas as matérias</h2>
               <h3>{gradebook.academicYear}</h3>
-              <h3>{classroomTypeToPT(gradebook.classroom.classroomType)} {gradebook.classroom.grade} {gradebook.classroom.name} - {gradebook.classroom.shift}</h3>
+              <h3>{classroomTypeToPT(gradebook.classroom.classroomType)} - {gradebook.classroom.grade} {gradebook.classroom.name} - {gradebook.classroom.shift}</h3>
             </div>
           </div>
         </div>

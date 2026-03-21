@@ -408,7 +408,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
                               onClick={() => handleSelectGradebook(gradebook)}
                             >
                               <p>
-                                {classroomTypeToPT(gradebook.classroom.classroomType)} {gradebook.classroom.grade} {gradebook.classroom.name} - {gradebook.classroom.shift}
+                                {classroomTypeToPT(gradebook.classroom.classroomType)} - {gradebook.classroom.grade} {gradebook.classroom.name} - {gradebook.classroom.shift}
                               </p>
                               <p>{!gradebook.subject ? 'Todas as matérias' : gradebook.subject.name}</p>
                               <p>{gradebook.teacher.name}</p>
