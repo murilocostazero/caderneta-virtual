@@ -746,24 +746,29 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
       </div>
 
       {/* DANGER ZONE */}
-      <div className='gradebook-section danger-zone'>
-        <div className='row-container'>
-          <h3>Zona de perigo</h3>
-          <button onClick={() => handleDeleteGB(true)}>Deletar caderneta</button>
-        </div>
-
-        {confirmDeleteGB ? (
-          <div className='confirm-delete-container'>
-            Essa ação não poderá ser desfeita. Deseja continuar com a exclusão?
-            <div className='row-container confirm-buttons'>
-              <button onClick={() => handleDeleteGB(false)}>CANCELAR</button>
-              <button onClick={() => onDeleteGB()}>PROSSEGUIR</button>
+      {
+        userInfo.userType === 'manager' ?
+          <div className='gradebook-section danger-zone'>
+            <div className='row-container'>
+              <h3>Zona de perigo</h3>
+              <button onClick={() => handleDeleteGB(true)}>Deletar caderneta</button>
             </div>
-          </div>
-        ) : (
+
+            {confirmDeleteGB ? (
+              <div className='confirm-delete-container'>
+                Essa ação não poderá ser desfeita. Deseja continuar com a exclusão?
+                <div className='row-container confirm-buttons'>
+                  <button onClick={() => handleDeleteGB(false)}>CANCELAR</button>
+                  <button onClick={() => onDeleteGB()}>PROSSEGUIR</button>
+                </div>
+              </div>
+            ) : (
+              <div />
+            )}
+          </div> :
           <div />
-        )}
-      </div>
+      }
+
 
       {statusMessage && (
         <StatusBar
