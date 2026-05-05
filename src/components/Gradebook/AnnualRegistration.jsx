@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdClose } from "react-icons/md";
 import axiosInstance from "../../utils/axiosInstance";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const AnnualRegistration = ({ handleCloseAnnualRegistration, learningRecords, gradebookId, reloadRecords, loading }) => {
-
     // Normalizar records ao iniciar
     const normalize = (records) =>
         records.map(r => ({
@@ -96,15 +95,21 @@ const AnnualRegistration = ({ handleCloseAnnualRegistration, learningRecords, gr
                                         <tr key={record.student._id} className={index % 2 === 0 ? "linha-par" : "linha-impar"}>
                                             <td>{record.student.name}</td>
 
-                                            {record.bimonthlyAverages.map((term, i) => (
+                                            {/* {record.bimonthlyAverages.map((term, i) => (
                                                 <td key={i} className="text-center">
-                                                    {term.average.toFixed(2)}
+                                                    {term.average !== null ? term.average.toFixed(2) : "-"}
                                                 </td>
-                                            ))}
+                                            ))} */}
 
-                                            {Array(4 - record.bimonthlyAverages.length).map((_, i) => (
-                                                <td key={`empty-${i}`} className="text-center">-</td>
-                                            ))}
+                                            {[0, 1, 2, 3].map((i) => {
+                                                const term = record.bimonthlyAverages[i];
+
+                                                return (
+                                                    <td key={`term-${i}`} className="text-center">
+                                                        {term && term.average != null ? term.average.toFixed(2) : "-"}
+                                                    </td>
+                                                );
+                                            })}
 
                                             <td className="text-center">{record.annualAverage.toFixed(2)}</td>
 
