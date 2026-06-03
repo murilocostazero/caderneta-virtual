@@ -24,28 +24,28 @@ const Gradebook = ({ globalSchool, userInfo }) => {
   const [total, setTotal] = useState(0);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [filterSelect, setFilterSelect] = useState('teacher');
+  const [hasLoadedAll, setHasLoadedAll] = useState(false); // NOVO: indica se já carregou todas
 
   const lastGradebookRef = useRef(null);
   const topRef = useRef(null);
 
   useEffect(() => {
-    // Zera a lista e o skip ao trocar de tipo
-    setGradebooks([]);
-    setSkip(0);
-
-    if (userInfo.userType === 'manager') {
-      if (gradebookType === 'elementary') {
-        getGradebooks();
+    // Só carrega se não tiver cadernetas E não tiver selecionada uma
+    if (!selectedGradebook && gradebooks.length === 0) {
+      if (userInfo.userType === 'manager') {
+        if (gradebookType === 'elementary') {
+          getGradebooks();
+        } else {
+          getKindergartenGB();
+          getExperienceFields();
+        }
       } else {
-        getKindergartenGB();
-        getExperienceFields();
-      }
-    } else {
-      if (gradebookType === 'elementary') {
-        getTeacherGradebooks();
-      } else {
-        getTeacherKindergarten();
-        getExperienceFields();
+        if (gradebookType === 'elementary') {
+          getTeacherGradebooks();
+        } else {
+          getTeacherKindergarten();
+          getExperienceFields();
+        }
       }
     }
 
@@ -55,7 +55,32 @@ const Gradebook = ({ globalSchool, userInfo }) => {
 
     window.addEventListener('scroll', checkScroll);
     return () => window.removeEventListener('scroll', checkScroll);
-  }, [selectedGradebook, gradebookType]);
+  }, [selectedGradebook, gradebookType]); // REMOVI gradebooks.length daqui
+
+  // NOVO: useEffect para limpar o estado quando trocar de tipo
+  useEffect(() => {
+    if (!selectedGradebook) {
+      setGradebooks([]);
+      setSkip(0);
+      setHasLoadedAll(false);
+
+      if (userInfo.userType === 'manager') {
+        if (gradebookType === 'elementary') {
+          getGradebooks();
+        } else {
+          getKindergartenGB();
+          getExperienceFields();
+        }
+      } else {
+        if (gradebookType === 'elementary') {
+          getTeacherGradebooks();
+        } else {
+          getTeacherKindergarten();
+          getExperienceFields();
+        }
+      }
+    }
+  }, [gradebookType]);
 
   const showStatusBar = (status) => {
     setStatusMessage({ message: status.message, type: status.type });
@@ -83,7 +108,12 @@ const Gradebook = ({ globalSchool, userInfo }) => {
 
       if (response.status === 201) {
         onCloseModal();
-        getGradebooks();
+        // Recarrega mantendo o estado atual
+        if (hasLoadedAll) {
+          getAllGradebooks();
+        } else {
+          getGradebooks();
+        }
       } else {
         showStatusBar({ message: 'Erro ao buscar escolas', type: 'error' });
       }
@@ -106,10 +136,9 @@ const Gradebook = ({ globalSchool, userInfo }) => {
       );
 
       if (response.status === 200) {
-        // Como não há mais paginação, simplesmente define a lista completa
         setGradebooks(response.data.data);
+        setHasLoadedAll(true); // Marca que carregou todas
 
-        // Atualiza total (caso venha do backend)
         if (response.data.total !== undefined) {
           setTotal(response.data.total);
         }
@@ -132,13 +161,11 @@ const Gradebook = ({ globalSchool, userInfo }) => {
       );
 
       if (response.status === 200) {
-        // Se for a primeira página (skip 0), substitui a lista
-        // Se for "Load More", concatena os novos items
         setGradebooks(prevGradebooks =>
           currentSkip === 0 ? response.data.data : [...prevGradebooks, ...response.data.data]
         );
+        setHasLoadedAll(false); // Reseta flag de "todas carregadas"
 
-        // Atualiza total (caso venha do backend)
         if (response.data.total !== undefined) {
           setTotal(response.data.total);
         }
@@ -161,6 +188,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
 
       if (response.status === 200) {
         setGradebooks(response.data);
+        setHasLoadedAll(true); // Professor sempre carrega todas
       } else {
         showStatusBar({ message: 'Erro ao buscar cadernetas', type: 'error' });
       }
@@ -184,13 +212,11 @@ const Gradebook = ({ globalSchool, userInfo }) => {
       );
 
       if (response.status === 200) {
-        // Se for a primeira página (skip 0), substitui a lista
-        // Se for "Load More", concatena os novos items
         setGradebooks(prevGradebooks =>
           currentSkip === 0 ? response.data.data : [...prevGradebooks, ...response.data.data]
         );
+        setHasLoadedAll(false);
 
-        // Atualiza total (caso venha do backend)
         if (response.data.total !== undefined) {
           setTotal(response.data.total);
         }
@@ -218,7 +244,11 @@ const Gradebook = ({ globalSchool, userInfo }) => {
 
       if (response.status === 201) {
         onCloseModal();
-        getKindergartenGB();
+        if (hasLoadedAll) {
+          getAllKindergarten();
+        } else {
+          getKindergartenGB();
+        }
       } else {
         showStatusBar({ message: 'Erro ao buscar escolas', type: 'error' });
       }
@@ -232,6 +262,32 @@ const Gradebook = ({ globalSchool, userInfo }) => {
     setLoading(false);
   }
 
+  // NOVO: carregar todas as kindergarten
+  const getAllKindergarten = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get(
+        `/kindergarten/school-all/${globalSchool._id}`,
+        { timeout: 20000 }
+      );
+
+      if (response.status === 200) {
+        setGradebooks(response.data.data);
+        setHasLoadedAll(true);
+
+        if (response.data.total !== undefined) {
+          setTotal(response.data.total);
+        }
+      } else {
+        showStatusBar({ message: 'Erro ao buscar cadernetas', type: 'error' });
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const getTeacherKindergarten = async () => {
     setLoading(true);
     try {
@@ -241,6 +297,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
 
       if (response.status === 200) {
         setGradebooks(response.data);
+        setHasLoadedAll(true);
       } else {
         showStatusBar({ message: 'Erro ao buscar cadernetas', type: 'error' });
       }
@@ -303,14 +360,12 @@ const Gradebook = ({ globalSchool, userInfo }) => {
       await getKindergartenGB(newSkip);
     }
 
-    // Pequeno timeout para garantir que o DOM já atualizou
     setTimeout(() => {
       lastGradebookRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
   }
 
   const scrollToTop = () => {
-    // Tenta várias abordagens diferentes
     if (topRef.current) {
       topRef.current.scrollIntoView({
         behavior: 'smooth',
@@ -319,13 +374,11 @@ const Gradebook = ({ globalSchool, userInfo }) => {
       });
     }
 
-    // Fallback para scroll da página
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
 
-    // Fallback adicional para o body/html
     document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
     document.body.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -392,7 +445,6 @@ const Gradebook = ({ globalSchool, userInfo }) => {
                       <p>Turma</p>
                       <p>Matéria</p>
                       <p>Professor</p>
-                      {/* <p>Gerar PDF</p> */}
                     </div>
                     {
                       gradebooks.length < 1 ? (
@@ -423,7 +475,7 @@ const Gradebook = ({ globalSchool, userInfo }) => {
                         <p className="load-more-text">
                           Mostrando {gradebooks.length} de {total}
                         </p>
-                        {gradebooks.length < total && (
+                        {gradebooks.length < total && !hasLoadedAll && (
                           <div className='row-container'>
                             <button
                               className="load-more-btn"
@@ -440,8 +492,6 @@ const Gradebook = ({ globalSchool, userInfo }) => {
                         </button>
                       </div>
                     )}
-
-
 
                   </div>
               }
