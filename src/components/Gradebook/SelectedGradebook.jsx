@@ -46,6 +46,8 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
   const [loadingRemoveLesson, setLoadingRemoveLesson] = useState(false);
   const [subject, setSubject] = useState(null);
   const [workload, setWorkload] = useState('');
+  const [openTransfer, setOpenTransfer] = useState(false);
+  const [teachers, setTeachers] = useState([]);
 
   const showStatusBar = (status) => {
     setStatusMessage({ message: status.message, type: status.type });
@@ -489,6 +491,76 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
     setLoading(false);
   }
 
+  // Adicione estas funções dentro do componente SelectedGradebook
+
+  const handleOpenTransfer = async () => {
+    if (openTransfer) {
+      setOpenTransfer(false);
+    } else {
+      setLoading(true);
+      setOpenTransfer(true);
+
+      try {
+        const response = await axiosInstance.get(`/get-team/${gradebook.school._id}`, {
+          timeout: 20000
+        });
+
+        if (response.status === 200) {
+          console.log(response.data)
+          setTeachers(response.data);
+        } else {
+          showStatusBar({ message: 'Erro ao buscar professores', type: 'error' });
+        }
+      } catch (error) {
+        console.log(error)
+        if (error.code === 'ERR_NETWORK') {
+          showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+        } else {
+          showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+        }
+      }
+      setLoading(false);
+    }
+  }
+
+  const handleTransferGradebook = async (newTeacherId) => {
+    if (!window.confirm('Tem certeza que deseja transferir esta caderneta para o professor selecionado?')) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axiosInstance.put(`/gradebook/transfer/${gradebook._id}`, {
+        newTeacherId: newTeacherId
+      }, {
+        timeout: 20000
+      });
+
+      if (response.status === 200) {
+        showStatusBar({
+          message: `Caderneta transferida com sucesso para ${response.data.transferDetails.toTeacher.name}!`,
+          type: 'success'
+        });
+
+        // Atualiza a caderneta com os novos dados
+        handleSelectGradebook(response.data.gradebook);
+        setOpenTransfer(false);
+      } else {
+        showStatusBar({ message: response.data.message || 'Erro ao transferir caderneta', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Erro ao transferir caderneta:', error);
+      if (error.response?.data?.message) {
+        showStatusBar({ message: error.response.data.message, type: 'error' });
+      } else if (error.code === 'ERR_NETWORK') {
+        showStatusBar({ message: 'Verifique sua conexão com a internet', type: 'error' });
+      } else {
+        showStatusBar({ message: 'Um erro inesperado aconteceu. Tente novamente.', type: 'error' });
+      }
+    }
+    setLoading(false);
+  }
+
   return (
     <div className='gradebook-container'>
       <div className='subject-header'>
@@ -751,7 +823,12 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
           <div className='gradebook-section danger-zone'>
             <div className='row-container'>
               <h3>Zona de perigo</h3>
-              <button onClick={() => handleDeleteGB(true)}>Deletar caderneta</button>
+              <div>
+                <button style={{ marginRight: '8px' }} onClick={() => handleOpenTransfer()}>
+                  {!openTransfer ? "Transferir caderneta" : "Cancelar transferência"}
+                </button>
+                <button onClick={() => handleDeleteGB(true)}>Deletar caderneta</button>
+              </div>
             </div>
 
             {confirmDeleteGB ? (
@@ -765,10 +842,53 @@ const SelectedGradebook = ({ gradebook, handleSelectGradebook, userInfo }) => {
             ) : (
               <div />
             )}
+
+            {openTransfer && (
+              <div className='transfer-container'>
+                <h4>Transferir para qual professor?</h4>
+                <p className='transfer-warning'>
+                  <strong>Atenção:</strong> Todos os dados da caderneta (aulas, chamadas, notas, etc.)
+                  serão mantidos. O professor atual perderá o acesso a esta caderneta.
+                </p>
+
+                <div className='teacher-list-container'>
+                  {teachers.length === 0 ? (
+                    <div className='loading-teachers'>
+                      <LoadingSpinner />
+                      <p>Carregando lista de professores...</p>
+                    </div>
+                  ) : (
+                    <div className='teacher-grid'>
+                      {teachers
+                        .filter(teacher => teacher._id !== gradebook.teacher._id)
+                        .map((teacher) => (
+                          <div key={teacher._id} className='teacher-card'>
+                            <div className='teacher-info'>
+                              <h5>{teacher.name}</h5>
+                            </div>
+                            <button
+                              className='primary-button transfer-button'
+                              onClick={() => handleTransferGradebook(teacher._id)}
+                            >
+                              Transferir
+                            </button>
+                          </div>
+                        ))
+                      }
+                    </div>
+                  )}
+
+                  {teachers.filter(teacher => teacher._id !== gradebook.teacher._id).length === 0 && teachers.length > 0 && (
+                    <p className='no-teachers-message'>
+                      Nenhum outro professor disponível para transferência nesta escola.
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
           </div> :
           <div />
       }
-
 
       {statusMessage && (
         <StatusBar

@@ -94,7 +94,6 @@
 .gradebook-list-item {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  /* Três colunas de largura igual */
   padding: 10px;
   border-bottom: 1px solid #ddd;
   cursor: pointer;
@@ -110,7 +109,6 @@
   padding: 5px;
 }
 
-/* Estilos opcionais para alinhamento e espaçamento */
 .gradebook-list-item:hover {
   background-color: rgba(1, 102, 255, 0.2);
 }
@@ -125,11 +123,8 @@
 .subject-header {
   position: relative;
   width: 100%;
-  /* Largura da imagem */
   height: 200px;
-  /* Altura da imagem */
   overflow: hidden;
-  /* Para garantir que nada "vaze" fora do container */
   background-color: green;
   border-top-right-radius: 12px;
   border-top-left-radius: 12px;
@@ -150,14 +145,11 @@
   right: 0px;
   bottom: 0px;
   padding: 8px;
-
   display: flex;
   flex-direction: column;
-
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
   text-align: center;
-
   background-color: rgba(0, 0, 0, 0.6);
 }
 
@@ -188,7 +180,6 @@
 
 .highlight-container img {
   width: 30px;
-  /* Ajuste o tamanho conforme necessário */
   height: 30px;
   cursor: pointer;
 }
@@ -210,7 +201,6 @@
 .term-form {
   display: flex;
   flex-direction: column;
-
 }
 
 .term-form select {
@@ -233,7 +223,6 @@
   margin: 4px;
   padding: 4px;
   border-top: 1px solid rgba(0, 0, 0, 0.2);
-  /* Definição completa da borda */
 }
 
 .lesson-container-header {
@@ -244,13 +233,9 @@
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto';
   font-size: 14px;
   white-space: pre-wrap;
-  /* Mantém quebras de linha, mas permite quebra automática */
   word-wrap: break-word;
-  /* Quebra palavras longas */
   overflow-wrap: break-word;
-  /* Garante compatibilidade */
   max-width: 100%;
-  /* Garante que não ultrapasse o componente pai */
 }
 
 .circular-container {
@@ -311,7 +296,6 @@
   border: none;
   padding: 8px;
   border-radius: 4px;
-  color: #fff;
   color: #FFF;
   font-weight: bold;
   font-size: 12px;
@@ -393,16 +377,11 @@
 
 .evaluations-list {
   max-width: 100%;
-  /* Defina a largura máxima do contêiner */
   overflow-x: auto;
-  /* Habilita a rolagem horizontal */
   margin: 0 auto;
-  /* Centraliza a div, se necessário */
   border-radius: 8px;
-  /* Arredonda as bordas do contêiner */
 }
 
-/* Estilos para a tabela */
 table {
   width: 100%;
   border-collapse: separate;
@@ -442,7 +421,6 @@ tbody td {
   padding: 12px 15px;
 }
 
-/* Estilo dos cantos arredondados */
 table th:first-child,
 table td:first-child {
   border-radius: 8px 0 0 8px;
@@ -557,19 +535,44 @@ table input {
 
 .confirm-delete-container {
   margin-top: 12px;
-  max-width: 20%;
+  max-width: 100%;
   text-align: justify;
-  padding: 8px;
+  padding: 16px;
   border-radius: 8px;
-  border: 1px solid rgba(154, 155, 156, 0.925)
+  border: 1px solid rgba(154, 155, 156, 0.925);
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
-.confirm-buttons> :nth-child(1) {}
+.confirm-delete-container .confirm-buttons {
+  margin-top: 12px;
+  gap: 8px;
+}
 
-.confirm-buttons> :nth-child(1) {
-  background-color: #0166ff;
-  color: #FFF;
+.confirm-delete-container .confirm-buttons button {
+  padding: 8px 16px;
   border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.confirm-delete-container .confirm-buttons button:first-child {
+  background-color: #6c757d;
+  color: #FFF;
+}
+
+.confirm-delete-container .confirm-buttons button:first-child:hover {
+  background-color: #5a6268;
+}
+
+.confirm-delete-container .confirm-buttons button:last-child {
+  background-color: #dc3545;
+  color: #FFF;
+}
+
+.confirm-delete-container .confirm-buttons button:last-child:hover {
+  background-color: #c82333;
 }
 
 .remove-button {
@@ -616,7 +619,451 @@ table input {
 }
 
 .remove-lesson-icon :hover {
-  color: #e41313
+  color: #e41313;
+}
+
+.load-more-container {
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.load-more-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.load-more-text {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.load-more-btn {
+  background-color: #0166ff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  margin-left: 4px;
+}
+
+.load-more-btn:hover {
+  background-color: #1d4ed8;
+}
+
+.load-more-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.scroll-top-btn {
+  background-color: transparent;
+  border: none;
+  margin-top: 8px;
+  padding: 8px;
+  font-size: 18px;
+  color: #777;
+  cursor: pointer;
+}
+
+.scroll-top-btn:hover {
+  color: #0166ff;
+}
+
+.row-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.input-recuperacao {
+  width: 60px;
+  padding: 4px;
+  text-align: center;
+}
+
+.highlight-container {
+  background-color: rgba(100, 100, 100, 0.1);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.coordinator-approval-container {
+  margin-bottom: 12px;
+}
+
+.coordinator-approval-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.coordinator-approval-buttons button {
+  padding: 10px 20px;
+  border: 2px solid #ccc;
+  background-color: #f4f4f4;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  font-weight: bold;
+  opacity: 0.5;
+}
+
+.coordinator-approval-buttons button.active {
+  background-color: #ffe066;
+  border-color: #ffcc00;
+  opacity: 1;
+}
+
+.approve-term {
+  border: 0px;
+  padding: 2px;
+  border-radius: 8px;
+}
+
+.approve-manager {
+  cursor: pointer;
+}
+
+.approve-icon :hover {
+  color: #0166ff;
+}
+
+.approve-teacher {
+  cursor: not-allowed;
+}
+
+/* ========== TRANSFERÊNCIA DE CADERNETA ========== */
+
+.transfer-container {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  border: 2px solid #dee2e6;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  animation: slideDown 0.3s ease-out;
+  color: #333;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.transfer-container h4 {
+  color: #2d3748;
+  margin-bottom: 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.transfer-container h4::before {
+  content: '🔄';
+  font-size: 1.3rem;
+}
+
+.transfer-warning {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+  border: 1px solid #f59f00;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  color: #856404;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  box-shadow: 0 2px 4px rgba(245, 159, 0, 0.1);
+}
+
+.transfer-warning strong {
+  color: #6c4a00;
+  font-weight: 700;
+}
+
+.teacher-list-container {
+  max-height: 450px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.teacher-list-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.teacher-list-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.teacher-list-container::-webkit-scrollbar-thumb {
+  background: #c1c7cd;
+  border-radius: 10px;
+}
+
+.teacher-list-container::-webkit-scrollbar-thumb:hover {
+  background: #a0a7ae;
+}
+
+.loading-teachers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+  gap: 1rem;
+}
+
+.loading-teachers p {
+  color: #6c757d;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.teacher-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  padding: 0.25rem 0;
+}
+
+.teacher-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  position: relative;
+  overflow: hidden;
+}
+
+.teacher-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: #4CAF50;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.teacher-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  border-color: #4CAF50;
+}
+
+.teacher-card:hover::before {
+  opacity: 1;
+}
+
+.teacher-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.teacher-info h5 {
+  margin: 0 0 0.3rem 0;
+  color: #2d3748;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.teacher-info h5::before {
+  content: '👨‍🏫';
+  font-size: 1.1rem;
+}
+
+.teacher-email {
+  margin: 0 0 0.25rem 0;
+  color: #6c757d;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.teacher-email::before {
+  content: '📧';
+  font-size: 0.9rem;
+}
+
+.teacher-subjects {
+  margin: 0;
+  color: #868e96;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.teacher-subjects::before {
+  content: '📚';
+  font-size: 0.9rem;
+}
+
+.teacher-subjects .badge {
+  background: #e9ecef;
+  padding: 0.1rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  color: #495057;
+  margin-left: 0.25rem;
+}
+
+.transfer-button {
+  padding: 0.5rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  min-width: 110px;
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 6px !important;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 4px rgba(76, 175, 80, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.transfer-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: width 0.6s ease, height 0.6s ease;
+  transform: translate(-50%, -50%);
+}
+
+.transfer-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  background: linear-gradient(135deg, #43a047 0%, #388e3c 100%) !important;
+  color: white !important;
+}
+
+.transfer-button:hover:not(:disabled)::after {
+  width: 300px;
+  height: 300px;
+}
+
+.transfer-button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.transfer-button:disabled {
+  background: #ccc !important;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.6;
+}
+
+.no-teachers-message {
+  text-align: center;
+  color: #6c757d;
+  padding: 2rem;
+  background: white;
+  border-radius: 10px;
+  border: 2px dashed #dee2e6;
+  margin: 1rem 0;
+}
+
+.no-teachers-message::before {
+  content: '😅';
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.current-teacher-badge {
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 0.2rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+.danger-zone .transfer-toggle-btn {
+  border: 2px solid #f59f00 !important;
+  background-color: transparent !important;
+  color: #f59f00 !important;
+  padding: 8px 16px !important;
+  border-radius: 8px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+.danger-zone .transfer-toggle-btn:hover {
+  background-color: #f59f00 !important;
+  color: #FFF !important;
+}
+
+.danger-zone .transfer-toggle-btn.cancel {
+  border-color: #6c757d !important;
+  color: #6c757d !important;
+}
+
+.danger-zone .transfer-toggle-btn.cancel:hover {
+  background-color: #6c757d !important;
+  color: #FFF !important;
+}
+
+.transfer-success {
+  animation: pulseGreen 0.5s ease;
+}
+
+@keyframes pulseGreen {
+  0% {
+    background-color: #d4edda;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+/* Responsividade para transferência */
+@media (max-width: 992px) {
+  .teacher-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
@@ -664,133 +1111,92 @@ table input {
     width: 70%;
     margin-top: 12px;
   }
+
+  .transfer-container {
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+
+  .teacher-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .teacher-card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.9rem 1rem;
+  }
+
+  .teacher-info {
+    margin-bottom: 0.75rem;
+  }
+
+  .transfer-button {
+    width: 100%;
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .transfer-warning {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .transfer-container h4 {
+    font-size: 1rem;
+  }
+
+  .teacher-list-container {
+    max-height: 350px;
+  }
+
+  .danger-zone .row-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .danger-zone .row-container > div {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .danger-zone .row-container button {
+    width: 100%;
+  }
+
+  .confirm-delete-container .confirm-buttons {
+    flex-direction: column;
+  }
+
+  .confirm-delete-container .confirm-buttons button {
+    width: 100%;
+  }
 }
 
-.highlight-container {
-  background-color: rgba(100, 100, 100, 0.1);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 4px;
-  border-radius: 8px;
-}
+@media (max-width: 480px) {
+  .transfer-container {
+    padding: 0.75rem;
+  }
 
-.coordinator-approval-container {
-  margin-bottom: 12px;
-}
+  .teacher-card {
+    padding: 0.75rem;
+  }
 
-.coordinator-approval-buttons {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
+  .teacher-info h5 {
+    font-size: 0.9rem;
+  }
 
-.coordinator-approval-buttons button {
-  padding: 10px 20px;
-  border: 2px solid #ccc;
-  background-color: #f4f4f4;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 6px;
-  font-weight: bold;
-  opacity: 0.5;
-}
+  .teacher-email {
+    font-size: 0.8rem;
+  }
 
-.coordinator-approval-buttons button.active {
-  background-color: #ffe066;
-  /* cor de "luz acesa" */
-  border-color: #ffcc00;
-  opacity: 1;
-}
+  .teacher-subjects {
+    font-size: 0.75rem;
+  }
 
-.approve-term {
-  border: 0px;
-  padding: 2px;
-  border-radius: 8px;
-}
-
-.approve-manager {
-  cursor: pointer;
-}
-
-.approve-icon :hover {
-  color: #0166ff;
-}
-
-.approve-teacher {
-  cursor: not-allowed;
-}
-
-.load-more-container {
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.load-more-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 16px;
-}
-
-.load-more-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 16px;
-}
-
-.load-more-text {
-  margin-bottom: 8px;
-  font-size: 14px;
-  color: #333;
-}
-
-.load-more-btn {
-  background-color: #0166ff;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease, opacity 0.2s ease;
-  margin-left: 4px;
-}
-
-.load-more-btn:hover {
-  background-color: #1d4ed8;
-}
-
-.load-more-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.scroll-top-btn {
-  background-color: transparent;
-  border: none;
-  margin-top: 8px;
-  padding: 8px;
-  font-size: 18px;
-  color:#777;
-  cursor: pointer;
-}
-
-.scroll-top-btn:hover {
-  color: #0166ff;
-}
-
-.row-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.input-recuperacao {
-    width: 60px;
-    padding: 4px;
-    text-align: center;
+  .transfer-button {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
 }
